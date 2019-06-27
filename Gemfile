@@ -33,7 +33,7 @@ gem 'bootsnap', '~> 1.4', require: false
 gem 'browser'
 gem 'charlock_holmes', '~> 0.7.7'
 gem 'iso-639'
-gem 'chewy', '~> 5.1'
+gem 'chewy', git: 'https://github.com/noellabo/chewy.git', ref: 'bce53720beaab36d0cb8cfbd0bc98fb0e44ddaf0'
 gem 'cld3', '~> 3.2.6'
 gem 'devise', '~> 4.7'
 gem 'devise-two-factor', '~> 3.1'
