@@ -52,11 +52,7 @@ class Pubsubhubbub::DeliveryWorker
   end
 
   def link_header
-    LinkHeader.new([hub_link_header, self_link_header]).to_s
-  end
-
-  def hub_link_header
-    [api_push_url, [%w(rel hub)]]
+    LinkHeader.new([self_link_header]).to_s
   end
 
   def self_link_header

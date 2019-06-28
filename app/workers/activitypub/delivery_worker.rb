@@ -18,7 +18,9 @@ class ActivityPub::DeliveryWorker
     @source_account = Account.find(source_account_id)
     @inbox_url      = inbox_url
 
-    perform_request
+    ActiveSupport::Notifications.instrument('activitypub.egress', domain: Addressable::URI.parse(@inbox_url).normalized_host) do
+      perform_request
+    end
 
     failure_tracker.track_success!
   rescue => e

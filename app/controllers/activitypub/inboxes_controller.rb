@@ -5,6 +5,7 @@ class ActivityPub::InboxesController < Api::BaseController
   include JsonLdHelper
 
   before_action :set_account
+  around_action :instrument_ingress
 
   def create
     if unknown_deleted_account?
@@ -50,5 +51,11 @@ class ActivityPub::InboxesController < Api::BaseController
 
   def process_payload
     ActivityPub::ProcessingWorker.perform_async(signed_request_account.id, body, @account&.id)
+  end
+
+  def instrument_ingress
+    ActiveSupport::Notifications.instrument('activitypub.ingress', domain: signed_request_account.domain, ip: request.remote_ip) do
+      yield
+    end
   end
 end
