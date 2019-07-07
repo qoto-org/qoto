@@ -74,6 +74,11 @@ class FanOutOnWriteService < BaseService
     status.tags.pluck(:name).each do |hashtag|
       Redis.current.publish("timeline:hashtag:#{hashtag.mb_chars.downcase}", @payload)
       Redis.current.publish("timeline:hashtag:#{hashtag.mb_chars.downcase}:local", @payload) if status.local?
+      List.where('title ILIKE ?', "%##{hashtag}%").select(:id).reorder(nil).find_in_batches do |lists|
+        FeedInsertWorker.push_bulk(lists) do |list|
+          [status.id, list.id, :list]
+        end
+      end
     end
   end
 
