@@ -98,11 +98,10 @@ class GettingStarted extends ImmutablePureComponent {
     if (multiColumn) {
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.discover)} />,
-        <ColumnLink key={i++} icon='users' text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />,
         <ColumnLink key={i++} icon='globe' text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />,
       );
 
-      height += 34 + 48*2;
+      height += 34 + 48;
 
       if (profile_directory) {
         navItems.push(
@@ -123,6 +122,13 @@ class GettingStarted extends ImmutablePureComponent {
       );
 
       height += 48;
+
+      navItems.push(
+        <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
+        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+      );
+
+      height += 48*2;
     }
 
     navItems.push(
