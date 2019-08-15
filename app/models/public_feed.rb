@@ -43,7 +43,7 @@ class PublicFeed < Feed
   end
 
   def local_only?
-    @options[:local]
+    false
   end
 
   def remote_only?

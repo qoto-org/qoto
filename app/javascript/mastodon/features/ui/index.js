@@ -28,7 +28,6 @@ import {
   GettingStarted,
   KeyboardShortcuts,
   PublicTimeline,
-  CommunityTimeline,
   DomainTimeline,
   AccountTimeline,
   AccountGallery,
@@ -92,7 +91,6 @@ const keyMap = {
   back: 'backspace',
   goToHome: 'g h',
   goToNotifications: 'g n',
-  goToLocal: 'g l',
   goToFederated: 'g t',
   goToDirect: 'g d',
   goToStart: 'g s',
@@ -189,7 +187,6 @@ class SwitchingColumnsArea extends React.PureComponent {
           <WrappedRoute path='/keyboard-shortcuts' component={KeyboardShortcuts} content={children} />
           <WrappedRoute path='/timelines/home' component={HomeTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/public' exact component={PublicTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
-          <WrappedRoute path='/timelines/public/local' exact component={CommunityTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/public/domain/:domain' exact component={DomainTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/direct' component={DirectTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/tag/:id' component={HashtagTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
@@ -475,10 +472,6 @@ class UI extends React.PureComponent {
     this.context.router.history.push('/notifications');
   }
 
-  handleHotkeyGoToLocal = () => {
-    this.context.router.history.push('/timelines/public/local');
-  }
-
   handleHotkeyGoToFederated = () => {
     this.context.router.history.push('/timelines/public');
   }
@@ -529,7 +522,6 @@ class UI extends React.PureComponent {
       back: this.handleHotkeyBack,
       goToHome: this.handleHotkeyGoToHome,
       goToNotifications: this.handleHotkeyGoToNotifications,
-      goToLocal: this.handleHotkeyGoToLocal,
       goToFederated: this.handleHotkeyGoToFederated,
       goToDirect: this.handleHotkeyGoToDirect,
       goToStart: this.handleHotkeyGoToStart,
