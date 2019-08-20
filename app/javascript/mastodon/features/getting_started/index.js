@@ -36,6 +36,9 @@ const messages = defineMessages({
   security: { id: 'navigation_bar.security', defaultMessage: 'Security' },
   menu: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
   profile_directory: { id: 'getting_started.directory', defaultMessage: 'Profile directory' },
+  information: { id: 'navigation_bar.information', defaultMessage: 'Information' },
+  information_acct: { id: 'navigation_bar.information_acct', defaultMessage: 'Fedibird info' },
+  hashtag_fedibird: { id: 'navigation_bar.hashtag_fedibird', defaultMessage: 'fedibird' },
 });
 
 const mapStateToProps = state => ({
@@ -110,6 +113,14 @@ class GettingStarted extends ImmutablePureComponent {
 
         height += 48;
       }
+
+      navItems.push(
+        <ColumnSubheading key={i++} text={intl.formatMessage(messages.information)} />,
+        <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
+        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+      );
+
+      height += 34 + 48*2;
 
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.personal)} />
