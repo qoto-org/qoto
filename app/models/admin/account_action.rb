@@ -19,10 +19,14 @@ class Admin::AccountAction
                 :report_id,
                 :warning_preset_id
 
-  attr_reader :warning, :send_email_notification
+  attr_reader :warning, :send_email_notification, :include_statuses
 
   def send_email_notification=(value)
     @send_email_notification = ActiveModel::Type::Boolean.new.cast(value)
+  end
+
+  def include_statuses=(value)
+    @include_statuses = ActiveModel::Type::Boolean.new.cast(value)
   end
 
   def save!
@@ -124,11 +128,15 @@ class Admin::AccountAction
   def queue_email!
     return unless warnable?
 
-    UserMailer.warning(target_account.user, warning).deliver_later!
+    UserMailer.warning(target_account.user, warning, status_ids).deliver_later!
   end
 
   def warnable?
     send_email_notification && target_account.local?
+  end
+
+  def status_ids
+    @report.status_ids if @report && include_statuses
   end
 
   def warning_preset

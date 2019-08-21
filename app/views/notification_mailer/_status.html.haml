@@ -1,4 +1,5 @@
 - i ||= 0
+- highlighted ||= false
 
 %table.email-table{ cellspacing: 0, cellpadding: 0, dir: 'ltr' }
   %tbody
@@ -14,7 +15,7 @@
                       %table.column{ cellspacing: 0, cellpadding: 0 }
                         %tbody
                           %tr
-                            %td.column-cell.padded.status
+                            %td.column-cell.padded.status{ class: highlighted ? 'status--highlighted' : '' }
                               %table.status-header{ cellspacing: 0, cellpadding: 0 }
                                 %tbody
                                   %tr
