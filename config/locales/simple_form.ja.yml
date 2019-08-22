@@ -138,6 +138,8 @@ ja:
         username: ユーザー名
         username_or_email: ユーザー名またはメールアドレス
         whole_word: 単語全体にマッチ
+      favourite_tag:
+        name: ハッシュタグ
       featured_tag:
         name: ハッシュタグ
       interactions:

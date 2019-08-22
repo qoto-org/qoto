@@ -302,6 +302,15 @@ ActiveRecord::Schema.define(version: 2020_01_19_112504) do
     t.index ["domain"], name: "index_email_domain_blocks_on_domain", unique: true
   end
 
+  create_table "favourite_tags", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_favourite_tags_on_account_id"
+    t.index ["tag_id"], name: "index_favourite_tags_on_tag_id"
+  end
+
   create_table "favourites", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -827,6 +836,8 @@ ActiveRecord::Schema.define(version: 2020_01_19_112504) do
   add_foreign_key "conversation_mutes", "accounts", name: "fk_225b4212bb", on_delete: :cascade
   add_foreign_key "conversation_mutes", "conversations", on_delete: :cascade
   add_foreign_key "custom_filters", "accounts", on_delete: :cascade
+  add_foreign_key "favourite_tags", "accounts", on_delete: :cascade
+  add_foreign_key "favourite_tags", "tags", on_delete: :cascade
   add_foreign_key "favourites", "accounts", name: "fk_5eb6c2b873", on_delete: :cascade
   add_foreign_key "favourites", "statuses", name: "fk_b0e856845e", on_delete: :cascade
   add_foreign_key "featured_tags", "accounts", on_delete: :cascade
