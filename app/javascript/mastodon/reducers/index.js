@@ -37,6 +37,7 @@ import missed_updates from './missed_updates';
 import announcements from './announcements';
 import markers from './markers';
 import picture_in_picture from './picture_in_picture';
+import favourite_tags from './favourite_tags';
 
 const reducers = {
   announcements,
@@ -77,6 +78,7 @@ const reducers = {
   missed_updates,
   markers,
   picture_in_picture,
+  favourite_tags,
 };
 
 export default combineReducers(reducers);
