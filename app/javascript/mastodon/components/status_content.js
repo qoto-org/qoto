@@ -5,6 +5,9 @@ import { isRtl } from '../rtl';
 import { FormattedMessage } from 'react-intl';
 import Permalink from './permalink';
 import classnames from 'classnames';
+import PollContainer from 'mastodon/containers/poll_container';
+import Icon from 'mastodon/components/icon';
+import { autoPlayGif } from 'mastodon/initial_state';
 
 const MAX_HEIGHT = 642; // 20px * 32 (+ 2px padding at the top)
 
@@ -71,12 +74,35 @@ export default class StatusContent extends React.PureComponent {
     }
   }
 
+  _updateStatusEmojis () {
+    const node = this.node;
+
+    if (!node || autoPlayGif) {
+      return;
+    }
+
+    const emojis = node.querySelectorAll('.custom-emoji');
+
+    for (var i = 0; i < emojis.length; i++) {
+      let emoji = emojis[i];
+      if (emoji.classList.contains('status-emoji')) {
+        continue;
+      }
+      emoji.classList.add('status-emoji');
+
+      emoji.addEventListener('mouseenter', this.handleEmojiMouseEnter, false);
+      emoji.addEventListener('mouseleave', this.handleEmojiMouseLeave, false);
+    }
+  }
+
   componentDidMount () {
     this._updateStatusLinks();
+    this._updateStatusEmojis();
   }
 
   componentDidUpdate () {
     this._updateStatusLinks();
+    this._updateStatusEmojis();
   }
 
   onMentionClick = (mention, e) => {
@@ -95,6 +121,14 @@ export default class StatusContent extends React.PureComponent {
     }
   }
 
+  handleEmojiMouseEnter = ({ target }) => {
+    target.src = target.getAttribute('data-original');
+  }
+
+  handleEmojiMouseLeave = ({ target }) => {
+    target.src = target.getAttribute('data-static');
+  }
+
   handleMouseDown = (e) => {
     this.startXY = [e.clientX, e.clientY];
   }
@@ -107,8 +141,12 @@ export default class StatusContent extends React.PureComponent {
     const [ startX, startY ] = this.startXY;
     const [ deltaX, deltaY ] = [Math.abs(e.clientX - startX), Math.abs(e.clientY - startY)];
 
-    if (e.target.localName === 'button' || e.target.localName === 'a' || (e.target.parentNode && (e.target.parentNode.localName === 'button' || e.target.parentNode.localName === 'a'))) {
-      return;
+    let element = e.target;
+    while (element) {
+      if (element.localName === 'button' || element.localName === 'a' || element.localName === 'label') {
+        return;
+      }
+      element = element.parentNode;
     }
 
     if (deltaX + deltaY < 5 && e.button === 0 && this.props.onClick) {
@@ -127,11 +165,6 @@ export default class StatusContent extends React.PureComponent {
     } else {
       this.setState({ hidden: !this.state.hidden });
     }
-  }
-
-  handleCollapsedClick = (e) => {
-    e.preventDefault();
-    this.setState({ collapsed: !this.state.collapsed });
   }
 
   setRef = (c) => {
@@ -162,7 +195,7 @@ export default class StatusContent extends React.PureComponent {
 
     const readMoreButton = (
       <button className='status__content__read-more-button' onClick={this.props.onClick} key='read-more'>
-        <FormattedMessage id='status.read_more' defaultMessage='Read more' /><i className='fa fa-fw fa-angle-right' />
+        <FormattedMessage id='status.read_more' defaultMessage='Read more' /><Icon id='angle-right' fixedWidth />
       </button>
     );
 
@@ -184,28 +217,25 @@ export default class StatusContent extends React.PureComponent {
       return (
         <div className={classNames} ref={this.setRef} tabIndex='0' style={directionStyle} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
           <p style={{ marginBottom: hidden && status.get('mentions').isEmpty() ? '0px' : null }}>
-            <span dangerouslySetInnerHTML={spoilerContent} />
+            <span dangerouslySetInnerHTML={spoilerContent} lang={status.get('language')} />
             {' '}
             <button tabIndex='0' className={`status__content__spoiler-link ${hidden ? 'status__content__spoiler-link--show-more' : 'status__content__spoiler-link--show-less'}`} onClick={this.handleSpoilerClick}>{toggleText}</button>
           </p>
 
           {mentionsPlaceholder}
 
-          <div tabIndex={!hidden ? 0 : null} className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''}`} style={directionStyle} dangerouslySetInnerHTML={content} />
+          <div tabIndex={!hidden ? 0 : null} className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''}`} style={directionStyle} dangerouslySetInnerHTML={content} lang={status.get('language')} />
+
+          {!hidden && !!status.get('poll') && <PollContainer pollId={status.get('poll')} />}
         </div>
       );
     } else if (this.props.onClick) {
       const output = [
-        <div
-          ref={this.setRef}
-          tabIndex='0'
-          key='content'
-          className={classNames}
-          style={directionStyle}
-          dangerouslySetInnerHTML={content}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
-        />,
+        <div className={classNames} ref={this.setRef} tabIndex='0' style={directionStyle} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+          <div className='status__content__text status__content__text--visible' style={directionStyle} dangerouslySetInnerHTML={content} lang={status.get('language')} />
+
+          {!!status.get('poll') && <PollContainer pollId={status.get('poll')} />}
+        </div>,
       ];
 
       if (this.state.collapsed) {
@@ -215,13 +245,11 @@ export default class StatusContent extends React.PureComponent {
       return output;
     } else {
       return (
-        <div
-          tabIndex='0'
-          ref={this.setRef}
-          className='status__content'
-          style={directionStyle}
-          dangerouslySetInnerHTML={content}
-        />
+        <div className={classNames} ref={this.setRef} tabIndex='0' style={directionStyle}>
+          <div className='status__content__text status__content__text--visible' style={directionStyle} dangerouslySetInnerHTML={content} lang={status.get('language')} />
+
+          {!!status.get('poll') && <PollContainer pollId={status.get('poll')} />}
+        </div>
       );
     }
   }
