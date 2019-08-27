@@ -37,8 +37,6 @@ export default class StatusContent extends React.PureComponent {
       return;
     }
 
-    MathJax.Hub.Queue(['Typeset',MathJax.Hub,node]);
-
     const links = node.querySelectorAll('a');
 
     for (var i = 0; i < links.length; ++i) {
@@ -95,8 +93,14 @@ export default class StatusContent extends React.PureComponent {
     }
   }
 
+  _renderMathJax () {
+    const node = this.node;
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, node]);
+  }
+
   componentDidMount () {
     this._updateStatusLinks();
+    this._renderMathJax();
     this._updateStatusEmojis();
   }
 
