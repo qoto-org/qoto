@@ -25,6 +25,7 @@ public/packs-test
 .env.production
 node_modules/
 build/
+*.log
 
 # Ignore Vagrant files
 .vagrant/
