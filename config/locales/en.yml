@@ -1021,7 +1021,7 @@ en:
     mastodon-wide-light: Mastodon Default Theme, Full Width (light)
     mastodon-wide-dark: Mastodon Default Theme, Full Width (dark)
     contrast: Mastodon (High contrast)
-    default: Mastodon (Dark)
+    default: QOTO Default Theme
     mastodon-light: Mastodon (Light)
   time:
     formats:
