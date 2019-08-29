@@ -9,6 +9,11 @@ class Feed
   end
 
   def get(limit, max_id = nil, since_id = nil, min_id = nil)
+    limit    = limit.to_i
+    max_id   = max_id.to_i unless max_id.blank?
+    since_id = since_id.to_i unless since_id.blank?
+    min_id   = min_id.to_i unless min_id.blank?
+
     from_redis(limit, max_id, since_id, min_id)
   end
 
