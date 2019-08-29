@@ -21,9 +21,10 @@ class ApplicationController < ActionController::Base
   helper_method :whitelist_mode?
 
   rescue_from ActionController::RoutingError, with: :not_found
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from ActionController::InvalidAuthenticityToken, with: :unprocessable_entity
   rescue_from ActionController::UnknownFormat, with: :not_acceptable
+  rescue_from ActionController::ParameterMissing, with: :bad_request
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from Mastodon::NotPermittedError, with: :forbidden
   rescue_from HTTP::Error, OpenSSL::SSL::SSLError, with: :internal_server_error
 
@@ -94,6 +95,10 @@ class ApplicationController < ActionController::Base
 
   def not_acceptable
     respond_with_error(406)
+  end
+
+  def bad_request
+    respond_with_error(400)
   end
 
   def internal_server_error
