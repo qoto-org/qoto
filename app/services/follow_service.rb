@@ -54,6 +54,7 @@ class FollowService < BaseService
   def direct_follow(source_account, target_account, reblogs: true)
     follow = source_account.follow!(target_account, reblogs: reblogs)
 
+    UnsubscribeAccountService.new.call(source_account, target_account) if source_account.subscribing?(target_account)
     LocalNotificationWorker.perform_async(target_account.id, follow.id, follow.class.name)
     MergeWorker.perform_async(target_account.id, source_account.id)
 
