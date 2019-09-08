@@ -66,5 +66,80 @@ module Mastodon
         say("Removed #{processed} media attachments (approx. #{number_to_human_size(size)}) #{dry_run}", :green, true)
       end
     end
+
+    option :account, type: :string
+    option :domain, type: :string
+    option :status, type: :numeric
+    option :background, type: :boolean, default: false
+    option :verbose, type: :boolean, default: false
+    option :dry_run, type: :boolean, default: false
+    desc 'refresh', 'Fetch remote media files'
+    long_desc <<-DESC
+      Re-downloads media attachments from other servers. You must specify the
+      source of media attachments with one of the following options:
+
+      Use the --status option to download attachments from a specific status,
+      using the status local numeric ID.
+
+      Use the --account option to download attachments from a specific account,
+      using username@domain handle of the account.
+
+      Use the --domain option to download attachments from a specific domain.
+
+      With the --background option, instead of downloading the files sequentially,
+      they will be queued into Sidekiq and the command will exit as soon as
+      possible. In Sidekiq they will be processed with higher concurrency, but
+      it may impact other operations of the Mastodon server, and it may overload
+      the underlying file storage.
+
+      With the --dry-run option, no work will be done.
+
+      With the --verbose option, when media attachments are processed sequentially in the
+      foreground, the IDs of the media attachments will be printed.
+    DESC
+    def refresh
+      queued    = 0
+      processed = 0
+      dry_run   = options[:dry_run] ? '(DRY RUN)' : ''
+
+      if options[:status]
+        scope = MediaAttachment.where(status_id: options[:status])
+      elsif options[:account]
+        username, domain = username.split('@')
+        account = Account.find_remote(username, domain)
+
+        if account.nil?
+          say('No such account', :red)
+          exit(1)
+        end
+
+        scope = MediaAttachment.where(account_id: account.id)
+      elsif options[:domain]
+        scope = MediaAttachment.joins(:account).merge(Account.by_domain_and_subdomains(options[:domain]))
+      else
+        exit(1)
+      end
+
+      scope.reorder(nil).find_in_batches do |media_attachments|
+        if options[:background]
+          queued += media_attachments.size
+          Maintenance::RedownloadMediaWorker.push_bulk(media_attachments.map(&:id)) unless options[:dry_run]
+        else
+          media_attachments.each do |media_attachment|
+            Maintenance::RedownloadMediaWorker.new.perform(media_attachment) unless options[:dry_run]
+            options[:verbose] ? say(m.id) : say('.', :green, false)
+            processed += 1
+          end
+        end
+      end
+
+      say
+
+      if options[:background]
+        say("Scheduled the download of #{queued} media attachments #{dry_run}", :green, true)
+      else
+        say("Downloaded #{processed} media attachments #{dry_run}", :green, true)
+      end
+    end
   end
 end
