@@ -12,9 +12,9 @@ module Mastodon
       true
     end
 
-    option :days, type: :numeric, default: 7
-    option :background, type: :boolean, default: false
-    option :verbose, type: :boolean, default: false
+    option :days, type: :numeric, default: 7, aliases: [:d]
+    option :concurrency, type: :numeric, default: 5, aliases: [:c]
+    option :verbose, type: :boolean, default: false, aliases: [:v]
     option :dry_run, type: :boolean, default: false
     desc 'remove', 'Remove remote media files'
     long_desc <<-DESC
@@ -23,48 +23,66 @@ module Mastodon
       The --days option specifies how old media attachments have to be before
       they are removed. It defaults to 7 days.
 
-      With the --background option, instead of deleting the files sequentially,
-      they will be queued into Sidekiq and the command will exit as soon as
-      possible. In Sidekiq they will be processed with higher concurrency, but
-      it may impact other operations of the Mastodon server, and it may overload
-      the underlying file storage.
+      The --concurrency option specifies how many media attachments to process
+      at the same time. It defaults to 5.
 
       With the --dry-run option, no work will be done.
 
-      With the --verbose option, when media attachments are processed sequentially in the
-      foreground, the IDs of the media attachments will be printed.
+      With the --verbose option the IDs of the media attachments will be printed.
     DESC
     def remove
-      time_ago  = options[:days].days.ago
-      queued    = 0
-      processed = 0
-      size      = 0
-      dry_run   = options[:dry_run] ? '(DRY RUN)' : ''
+      time_ago = options[:days].days.ago
+      dry_run  = options[:dry_run] ? '(DRY RUN)' : ''
 
-      if options[:background]
-        MediaAttachment.where.not(remote_url: '').where.not(file_file_name: nil).where('created_at < ?', time_ago).select(:id, :file_file_size).reorder(nil).find_in_batches do |media_attachments|
-          queued += media_attachments.size
-          size   += media_attachments.reduce(0) { |sum, m| sum + (m.file_file_size || 0) }
-          Maintenance::UncacheMediaWorker.push_bulk(media_attachments.map(&:id)) unless options[:dry_run]
+      processed, aggregate = parallelize_with_progress(MediaAttachment.cached.where('created_at < ?', time_ago)) do |media_attachment|
+        next if media_attachment.file.blank?
+
+        size = media_attachment.file_file_size
+
+        unless options[:dry_run]
+          media_attachment.file.destroy
+          media_attachment.save
         end
-      else
-        MediaAttachment.where.not(remote_url: '').where.not(file_file_name: nil).where('created_at < ?', time_ago).reorder(nil).find_in_batches do |media_attachments|
-          media_attachments.each do |m|
-            size += m.file_file_size || 0
-            Maintenance::UncacheMediaWorker.new.perform(m) unless options[:dry_run]
-            options[:verbose] ? say(m.id) : say('.', :green, false)
-            processed += 1
+
+        size
+      end
+
+      say("Removed #{processed} media attachments (approx. #{number_to_human_size(aggregate)}) #{dry_run}", :green, true)
+    end
+
+    private
+
+    def parallelize_with_progress(scope)
+      ActiveRecord::Base.configurations[Rails.env]['pool'] = options[:concurrency]
+
+      progress  = ProgressBar.create(total: scope.count, format: '%c/%u |%b%i| %e')
+      pool      = Concurrent::FixedThreadPool.new(options[:concurrency])
+      futures   = []
+      aggregate = 0
+
+      scope.find_each do |item|
+        progress.total = futures.size + 1 if progress.total < futures.size + 1
+
+        futures << Concurrent::Future.execute(executor: pool) do
+          begin
+            progress.log("Processing #{item.id}") if options[:verbose]
+            aggregate += yield(item) || 0
+          rescue => e
+            progress.log pastel.red("Error processing #{item.id}: #{e}")
+          ensure
+            progress.increment
           end
         end
       end
 
-      say
+      futures.map(&:value)
+      progress.finish
 
-      if options[:background]
-        say("Scheduled the deletion of #{queued} media attachments (approx. #{number_to_human_size(size)}) #{dry_run}", :green, true)
-      else
-        say("Removed #{processed} media attachments (approx. #{number_to_human_size(size)}) #{dry_run}", :green, true)
-      end
+      [futures.size, aggregate]
+    end
+
+    def pastel
+      @pastel ||= Pastel.new
     end
   end
 end
