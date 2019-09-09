@@ -248,6 +248,10 @@ Rails.application.routes.draw do
         post :enable
         post :disable
       end
+
+      collection do
+        post :batch
+      end
     end
 
     resources :account_moderation_notes, only: [:create, :destroy]
