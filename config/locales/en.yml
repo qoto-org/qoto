@@ -605,6 +605,7 @@ en:
       confirming: Waiting for e-mail confirmation to be completed.
       functional: Your account is fully operational.
       pending: Your application is pending review by our staff. This may take some time. You will receive an e-mail if your application is approved.
+      redirecting_to: Your account is inactive because it is currently redirecting to %{acct}.
     trouble_logging_in: Trouble logging in?
   authorize_follow:
     already_following: You are already following this account
@@ -804,10 +805,29 @@ en:
       images_and_video: Cannot attach a video to a status that already contains images
       too_many: Cannot attach more than 4 files
   migrations:
-    acct: username@domain of the new account
-    currently_redirecting: 'Your profile is set to redirect to:'
-    proceed: Save
-    updated_msg: Your account migration setting successfully updated!
+    acct: Moved to
+    cancel: Cancel redirect
+    cancel_explanation: Cancelling the redirect will re-activate your current account, but will not bring back followers that have been moved to that account.
+    cancelled_msg: Successfully cancelled the redirect.
+    errors:
+      already_moved: is the same account you have already moved to
+      missing_also_known_as: is not back-referencing this account
+      not_found: could not be found
+      on_cooldown: You are on cooldown
+    followers_count: Followers at time of move
+    moved_msg: Your account is now redirecting to %{acct} and your followers are being moved over.
+    not_redirecting: Your account is not redirecting to any other account currently.
+    on_cooldown: You have recently migrated your account. This function will become available again in %{time_left}.
+    past_migrations: Past migrations
+    proceed_with_move: Move followers
+    redirecting_to: Your account is redirecting to %{acct}.
+    warning:
+      backreference_required: The new account must first be configured to back-reference this one
+      before: 'Before proceeding, please read these notes carefully:'
+      cooldown: After moving there is a cooldown period during which you will not be able to move again
+      disabled_account: Your current account will not be fully usable afterwards. However, you will have access to data export as well as re-activation.
+      followers: This action will move all followers from the current account to the new account
+      other_data: No other data will be moved automatically
   moderation:
     title: Moderation
   notification_mailer:

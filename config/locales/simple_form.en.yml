@@ -2,6 +2,8 @@
 en:
   simple_form:
     hints:
+      account_migration:
+        acct: Specify the username@domain of the account you want to move to
       account_warning_preset:
         text: You can use toot syntax, such as URLs, hashtags and mentions
       admin_account_action:
@@ -15,6 +17,8 @@ en:
         avatar: PNG, GIF or JPG. At most %{size}. Will be downscaled to %{dimensions}px
         bot: This account mainly performs automated actions and might not be monitored
         context: One or multiple contexts where the filter should apply
+        current_password: For security purposes please enter the password of the current account
+        current_username: To confirm, please enter the username of the current account
         digest: Only sent after a long period of inactivity and only if you have received any personal messages in your absence
         discoverable: The profile directory is another way by which your account can reach a wider audience
         email: You will be sent a confirmation e-mail
@@ -58,6 +62,8 @@ en:
         fields:
           name: Label
           value: Content
+      account_migration:
+        acct: Handle of the new account
       account_warning_preset:
         text: Preset text
       admin_account_action:
