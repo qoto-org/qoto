@@ -1,0 +1,13 @@
+- challenge = current_user.encrypted_password.present? ? :password : :username
+
+- content_for :page_title do
+  = t('challenge.prompt', challenge: challenge)
+
+= simple_form_for Form::Challenge.new, url: '' do |f|
+  .field-group
+    = f.input "current_#{challenge}".to_sym, wrapper: :with_block_label, input_html: { :autocomplete => 'off' }, hint: t('challenge.prompt', challenge: challenge), required: true
+
+  .actions
+    = f.button :button, t('challenge.confirm', challenge: challenge), type: :submit
+
+.form-footer= render 'auth/shared/links'

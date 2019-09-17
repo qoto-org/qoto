@@ -621,6 +621,9 @@ en:
       return: Show the user's profile
       web: Go to web
     title: Follow %{acct}
+  challenge:
+    confirm: Confirm %{challenge}
+    prompt: Confirm %{challenge} to continue
   datetime:
     distance_in_words:
       about_x_hours: "%{count}h"
