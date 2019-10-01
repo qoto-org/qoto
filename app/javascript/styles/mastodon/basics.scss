@@ -157,3 +157,63 @@ button {
     height: 100%;
   }
 }
+
+.error-boundary {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: $error-red;
+
+  & > div {
+    max-width: 500px;
+  }
+
+  p {
+    margin-bottom: .85em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    color: $dark-text-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: none;
+    }
+  }
+
+  &__footer {
+    color: $dark-text-color;
+    font-size: 13px;
+  }
+
+  button {
+    display: inline;
+    border: 0;
+    background: transparent;
+    color: $dark-text-color;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+    line-height: inherit;
+    cursor: pointer;
+    outline: 0;
+    transition: color 300ms linear;
+    text-decoration: underline;
+
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: none;
+    }
+
+    &.copied {
+      color: $valid-value-color;
+      transition: none;
+    }
+  }
+}
