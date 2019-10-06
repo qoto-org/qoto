@@ -120,24 +120,20 @@ class FeedManager
   end
 
   def populate_feed(account)
-    added  = 0
-    limit  = FeedManager::MAX_ITEMS / 2
-    max_id = nil
+    limit     = FeedManager::MAX_ITEMS / 2
+    aggregate = account.user&.aggregates_reblogs?
 
-    loop do
-      statuses = Status.as_home_timeline(account)
-                       .paginate_by_max_id(limit, max_id)
+    account.statuses.where.not(visibility: :direct).limit(limit).each do |status|
+      add_to_feed(:home, account.id, status, aggregate)
+    end
 
-      break if statuses.empty?
-
-      statuses.each do |status|
+    account.active_relationships.find_each do |follow|
+      Status.where(account_id: follow.target_account_id).where(visibility: [:public, :unlisted, :private]).limit(limit).each do |status|
         next if filter_from_home?(status, account)
-        added += 1 if add_to_feed(:home, account.id, status, account.user&.aggregates_reblogs?)
+        add_to_feed(:home, account.id, status, aggregate)
       end
 
-      break unless added.zero?
-
-      max_id = statuses.last.id
+      trim(:home, account.id)
     end
   end
 
