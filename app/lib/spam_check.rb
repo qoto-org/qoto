@@ -44,7 +44,6 @@ class SpamCheck
   end
 
   def flag!
-    auto_silence_account!
     auto_report_status!
   end
 
@@ -132,10 +131,6 @@ class SpamCheck
 
   def remove_whitespace(text)
     text.gsub(/\s+/, ' ').strip
-  end
-
-  def auto_silence_account!
-    @account.silence!
   end
 
   def auto_report_status!
