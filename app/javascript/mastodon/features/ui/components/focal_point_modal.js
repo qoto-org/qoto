@@ -41,6 +41,36 @@ const removeExtraLineBreaks = str => str.replace(/\n\n/g, '******')
 
 const assetHost = process.env.CDN_HOST || '';
 
+class ImageLoader extends React.PureComponent {
+
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number,
+  };
+
+  state = {
+    loading: true,
+  };
+
+  componentDidMount() {
+    const image = new Image();
+    image.addEventListener('load', () => this.setState({ loading: false }));
+    image.src = this.props.src;
+  }
+
+  render () {
+    const { loading } = this.state;
+
+    if (loading) {
+      return <canvas width={this.props.width} height={this.props.height} />;
+    } else {
+      return <img {...this.props} />;
+    }
+  }
+
+}
+
 export default @connect(mapStateToProps, mapDispatchToProps)
 @injectIntl
 class FocalPointModal extends ImmutablePureComponent {
@@ -60,6 +90,7 @@ class FocalPointModal extends ImmutablePureComponent {
     description: '',
     dirty: false,
     progress: 0,
+    loading: true,
   };
 
   componentWillMount () {
@@ -242,7 +273,7 @@ class FocalPointModal extends ImmutablePureComponent {
           <div className='focal-point-modal__content'>
             {focals && (
               <div className={classNames('focal-point', { dragging })} ref={this.setRef} onMouseDown={this.handleMouseDown} onTouchStart={this.handleTouchStart}>
-                {media.get('type') === 'image' && <img src={media.get('url')} width={width} height={height} alt='' />}
+                {media.get('type') === 'image' && <ImageLoader src={media.get('url')} width={width} height={height} alt='' />}
                 {media.get('type') === 'gifv' && <video src={media.get('url')} width={width} height={height} loop muted autoPlay />}
 
                 <div className='focal-point__preview'>
