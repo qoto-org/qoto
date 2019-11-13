@@ -307,6 +307,16 @@ class Status < ApplicationRecord
       apply_timeline_filters(query, account, local_only)
     end
 
+    def as_domain_timeline(account = nil, domain)
+      query = Status.includes(:account)
+        .where(accounts: {domain: domain}).select('statuses.*, accounts.*')
+        .with_public_visibility
+        .without_reblogs
+        .without_replies
+
+      apply_timeline_filters(query, account, false)
+    end
+
     def as_tag_timeline(tag, account = nil, local_only = false)
       query = timeline_scope(local_only).tagged_with(tag)
 

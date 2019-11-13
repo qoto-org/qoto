@@ -167,12 +167,14 @@ class FanOutOnWriteService < BaseService
     Rails.logger.debug "Delivering status #{status.id} to public timeline"
 
     Redis.current.publish('timeline:public', @payload)
+    Redis.current.publish("timeline:public:remote:#{status.account.domain.mb_chars.downcase}", @payload) unless status.local?
   end
 
   def deliver_to_media(status)
     Rails.logger.debug "Delivering status #{status.id} to media timeline"
 
     Redis.current.publish('timeline:public:media', @payload)
+    Redis.current.publish("timeline:public:remote:media:#{status.account.domain.mb_chars.downcase}", @payload) unless status.local?
   end
 
   def deliver_to_own_conversation(status)

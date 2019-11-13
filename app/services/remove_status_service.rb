@@ -141,6 +141,7 @@ class RemoveStatusService < BaseService
 
     redis.publish('timeline:public', @payload)
     redis.publish('timeline:public:local', @payload) if @status.local?
+    redis.publish("timeline:public:remote:#{@account.domain.mb_chars.downcase}", @payload) unless @status.local?
   end
 
   def remove_from_media
@@ -148,6 +149,7 @@ class RemoveStatusService < BaseService
 
     redis.publish('timeline:public:media', @payload)
     redis.publish('timeline:public:local:media', @payload) if @status.local?
+    redis.publish("timeline:public:remote:media:#{@account.domain.mb_chars.downcase}", @payload) unless @status.local?
   end
 
   def remove_media
