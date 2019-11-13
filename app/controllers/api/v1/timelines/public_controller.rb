@@ -37,6 +37,7 @@ class Api::V1::Timelines::PublicController < Api::BaseController
       current_account,
       local: truthy_param?(:local),
       remote: truthy_param?(:remote),
+      domain: params[:domain],
       only_media: truthy_param?(:only_media)
     )
   end
@@ -46,7 +47,7 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   end
 
   def pagination_params(core_params)
-    params.slice(:local, :remote, :limit, :only_media).permit(:local, :remote, :limit, :only_media).merge(core_params)
+    params.slice(:local, :remote, :domain, :limit, :only_media).permit(:local, :remote, :domain, :limit, :only_media).merge(core_params)
   end
 
   def next_path
