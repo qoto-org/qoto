@@ -1,36 +1,39 @@
 module.exports = (api) => {
   const env = api.env();
 
+  const reactOptions = {
+    development: false,
+  };
+
   const envOptions = {
-    debug: false,
     loose: true,
     modules: false,
+    debug: false,
   };
 
   const config = {
     presets: [
-      '@babel/react',
+      ['@babel/react', reactOptions],
       ['@babel/env', envOptions],
     ],
     plugins: [
-      '@babel/syntax-dynamic-import',
-      ['@babel/proposal-object-rest-spread', { useBuiltIns: true }],
       ['@babel/proposal-decorators', { legacy: true }],
       '@babel/proposal-class-properties',
       ['react-intl', { messagesDir: './build/messages' }],
       'preval',
     ],
-    overrides: [{
-      test: /tesseract\.js/,
-      presets: [
-        ['@babel/env', { ...envOptions, modules: 'commonjs' }],
-      ],
-    }],
+    overrides: [
+      {
+        test: /tesseract\.js/,
+        presets: [
+          ['@babel/env', { ...envOptions, modules: 'commonjs' }],
+        ],
+      },
+    ],
   };
 
   switch (env) {
   case 'production':
-    envOptions.debug = false;
     config.plugins.push(...[
       'lodash',
       [
@@ -43,7 +46,6 @@ module.exports = (api) => {
           ],
         },
       ],
-      '@babel/transform-react-inline-elements',
       [
         '@babel/transform-runtime',
         {
@@ -52,14 +54,12 @@ module.exports = (api) => {
           useESModules: true,
         },
       ],
+      '@babel/transform-react-inline-elements',
     ]);
     break;
   case 'development':
+    reactOptions.development = true;
     envOptions.debug = true;
-    config.plugins.push(...[
-      '@babel/transform-react-jsx-source',
-      '@babel/transform-react-jsx-self',
-    ]);
     break;
   case 'test':
     envOptions.modules = 'commonjs';
