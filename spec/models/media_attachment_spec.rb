@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MediaAttachment, type: :model do
   describe 'local?' do
-    let(:media_attachment) { Fabricate(:media_attachment, remote_url: remote_url) }
+    let(:media_attachment) { Fabricate(:media_attachment, remote_url: remote_url, file: attachment_fixture('attachment.jpg')) }
 
     subject { media_attachment.local? }
 
@@ -30,14 +30,6 @@ RSpec.describe MediaAttachment, type: :model do
 
     context 'file is blank' do
       let(:file) { nil }
-
-      context 'remote_url is blank' do
-        let(:remote_url) { '' }
-
-        it 'returns false' do
-          is_expected.to be false
-        end
-      end
 
       context 'remote_url is present' do
         let(:remote_url) { 'remote_url' }
@@ -70,7 +62,7 @@ RSpec.describe MediaAttachment, type: :model do
   end
 
   describe '#to_param' do
-    let(:media_attachment) { Fabricate(:media_attachment) }
+    let(:media_attachment) { Fabricate(:media_attachment, file: attachment_fixture('attachment.jpg')) }
     let(:shortcode)        { media_attachment.shortcode }
 
     it 'returns shortcode' do
@@ -133,6 +125,11 @@ RSpec.describe MediaAttachment, type: :model do
       expect(media.file.meta["small"]["height"]).to eq 327
       expect(media.file.meta["small"]["aspect"]).to eq 490.0 / 327
     end
+  end
+
+  it 'is invalid without file' do
+    media = MediaAttachment.new(account: Fabricate(:account))
+    expect(media.valid?).to be false
   end
 
   describe 'descriptions for remote attachments' do
