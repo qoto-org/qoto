@@ -6,6 +6,8 @@ import {
   FOLLOWERS_EXPAND_SUCCESS,
   FOLLOWING_FETCH_SUCCESS,
   FOLLOWING_EXPAND_SUCCESS,
+  SUBSCRIBING_FETCH_SUCCESS,
+  SUBSCRIBING_EXPAND_SUCCESS,
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
   FOLLOW_REQUEST_AUTHORIZE_SUCCESS,
@@ -36,6 +38,7 @@ import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 const initialState = ImmutableMap({
   followers: ImmutableMap(),
   following: ImmutableMap(),
+  subscribing: ImmutableMap(),
   reblogged_by: ImmutableMap(),
   favourited_by: ImmutableMap(),
   follow_requests: ImmutableMap(),
@@ -72,6 +75,10 @@ export default function userLists(state = initialState, action) {
     return normalizeList(state, 'following', action.id, action.accounts, action.next);
   case FOLLOWING_EXPAND_SUCCESS:
     return appendToList(state, 'following', action.id, action.accounts, action.next);
+  case SUBSCRIBING_FETCH_SUCCESS:
+    return normalizeList(state, 'subscribing', action.id, action.accounts, action.next);
+  case SUBSCRIBING_EXPAND_SUCCESS:
+    return appendToList(state, 'subscribing', action.id, action.accounts, action.next);
   case REBLOGS_FETCH_SUCCESS:
     return state.setIn(['reblogged_by', action.id], ImmutableList(action.accounts.map(item => item.id)));
   case FAVOURITES_FETCH_SUCCESS:
