@@ -6591,3 +6591,47 @@ noscript {
     }
   }
 }
+
+.announcements {
+  background: $primary-text-color;
+  border-radius: 4px;
+  color: $inverted-text-color;
+  font-size: 13px;
+
+  &__item {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    padding-right: 15px + 18px;
+    position: relative;
+
+    &__range {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    &__dismiss-icon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+  }
+
+  &__pagination {
+    padding: 12px;
+    padding-top: 3px;
+    color: $ui-base-color;
+
+    &__domain {
+      display: block;
+      color: lighten($ui-base-color, 26%);
+      float: right;
+      padding: 0 3px;
+    }
+  }
+}
+
+.navigation-panel .announcements {
+  margin-top: 20px;
+}
