@@ -1257,6 +1257,7 @@ en:
     instance-ticker-type-2-light: Mastodon (Light / Instance Ticker Type-2 favicon v2)
     instance-ticker-type-2: Mastodon (Dark / Instance Ticker Type-2 favicon v2)
     mastodon-light: Mastodon (Light)
+    mobile-small: Mobile Small / Mastodon (Dark)
   time:
     formats:
       default: "%b %d, %Y, %H:%M"
