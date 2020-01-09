@@ -104,10 +104,16 @@ class Request
 
   def set_common_headers!
     @headers[REQUEST_TARGET]    = "#{@verb} #{@url.path}"
-    @headers['User-Agent']      = Mastodon::Version.user_agent
+    @headers['User-Agent']      = smuggling? ? Mastodon::Version.pseudo_user_agent : Mastodon::Version.user_agent
     @headers['Host']            = @url.host
     @headers['Date']            = Time.now.utc.httpdate
     @headers['Accept-Encoding'] = 'gzip' if @verb != :head
+    @headers['Referer']         = "https://#{@url.host}" if smuggling?
+  end
+
+  def smuggling?
+    should = @url.host.end_with?('mstdn.jp')
+    return !!should
   end
 
   def set_digest!
