@@ -59,3 +59,5 @@ yarn-debug.log
 # Ignore Docker option files
 docker-compose.override.yml
 
+# Ignore files produced building from docker
+dump.rdb
