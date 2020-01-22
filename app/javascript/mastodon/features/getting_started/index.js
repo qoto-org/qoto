@@ -37,8 +37,9 @@ const messages = defineMessages({
   menu: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
   group_directory: { id: 'getting_started.group_directory', defaultMessage: 'Group directory' },
   profile_directory: { id: 'getting_started.directory', defaultMessage: 'Profile directory' },
-  information_acct: { id: 'navigation_bar.information_acct', defaultMessage: 'Fedibird info' },
-  hashtag_fedibird: { id: 'navigation_bar.hashtag_fedibird', defaultMessage: 'fedibird' },
+  information: { id: 'navigation_bar.information', defaultMessage: 'Information' },
+  information_acct: { id: 'navigation_bar.information_acct', defaultMessage: 'QOTO Announcements' },
+  hashtag_qoto_journal: { id: 'navigation_bar.hashtag_qoto_journal', defaultMessage: 'QOTO Journal' },
 });
 
 const mapStateToProps = state => ({
@@ -121,8 +122,9 @@ class GettingStarted extends ImmutablePureComponent {
       }
 
       navItems.push(
-        <ColumnLink key='information_acct' icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
-        <ColumnLink key='hashtag_fedibird' icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+        <ColumnSubheading key='information' text={intl.formatMessage(messages.information)} />,
+        <ColumnLink key='information_acct' icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/95378' />,
+        <ColumnLink key='hashtag_qoto_journal' icon='hashtag' text={intl.formatMessage(messages.hashtag_qoto_journal)} to='/timelines/tag/QOTOJournal' />,
       );
 
       height += 34 + 48*2;
@@ -148,8 +150,8 @@ class GettingStarted extends ImmutablePureComponent {
       }
 
       navItems.push(
-        <ColumnLink key='information_acct' icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
-        <ColumnLink key='hashtag_fedibird' icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+        <ColumnLink key='information_acct' icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/95378' />,
+        <ColumnLink key='hashtag_qoto_journal' icon='hashtag' text={intl.formatMessage(messages.hashtag_qoto_journal)} to='/timelines/tag/QOTOJornal' />,
       );
 
       height += 48*2;
