@@ -8,6 +8,7 @@ export const autoPlayGif = getMeta('auto_play_gif');
 export const displayMedia = getMeta('display_media');
 export const expandSpoilers = getMeta('expand_spoilers');
 export const unfollowModal = getMeta('unfollow_modal');
+export const unsubscribeModal = getMeta('unsubscribe_modal');
 export const boostModal = getMeta('boost_modal');
 export const deleteModal = getMeta('delete_modal');
 export const me = getMeta('me');
@@ -24,5 +25,9 @@ export const useBlurhash = getMeta('use_blurhash');
 export const usePendingItems = getMeta('use_pending_items');
 export const showTrends = getMeta('trends');
 export const title = getMeta('title');
+export const cropImages = getMeta('crop_images');
+export const show_follow_button_on_timeline = getMeta('show_follow_button_on_timeline');
+export const show_subscribe_button_on_timeline = getMeta('show_subscribe_button_on_timeline');
+export const show_target = getMeta('show_target');
 
 export default initialState;

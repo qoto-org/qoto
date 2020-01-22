@@ -1,8 +1,13 @@
 import {
+  NOTIFICATIONS_UPDATE,
+} from '../actions/notifications';
+import {
   FOLLOWERS_FETCH_SUCCESS,
   FOLLOWERS_EXPAND_SUCCESS,
   FOLLOWING_FETCH_SUCCESS,
   FOLLOWING_EXPAND_SUCCESS,
+  SUBSCRIBING_FETCH_SUCCESS,
+  SUBSCRIBING_EXPAND_SUCCESS,
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
   FOLLOW_REQUEST_AUTHORIZE_SUCCESS,
@@ -33,6 +38,7 @@ import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 const initialState = ImmutableMap({
   followers: ImmutableMap(),
   following: ImmutableMap(),
+  subscribing: ImmutableMap(),
   reblogged_by: ImmutableMap(),
   favourited_by: ImmutableMap(),
   follow_requests: ImmutableMap(),
@@ -53,6 +59,12 @@ const appendToList = (state, type, id, accounts, next) => {
   });
 };
 
+const normalizeFollowRequest = (state, notification) => {
+  return state.updateIn(['follow_requests', 'items'], list => {
+    return list.filterNot(item => item === notification.account.id).unshift(notification.account.id);
+  });
+};
+
 export default function userLists(state = initialState, action) {
   switch(action.type) {
   case FOLLOWERS_FETCH_SUCCESS:
@@ -63,10 +75,16 @@ export default function userLists(state = initialState, action) {
     return normalizeList(state, 'following', action.id, action.accounts, action.next);
   case FOLLOWING_EXPAND_SUCCESS:
     return appendToList(state, 'following', action.id, action.accounts, action.next);
+  case SUBSCRIBING_FETCH_SUCCESS:
+    return normalizeList(state, 'subscribing', action.id, action.accounts, action.next);
+  case SUBSCRIBING_EXPAND_SUCCESS:
+    return appendToList(state, 'subscribing', action.id, action.accounts, action.next);
   case REBLOGS_FETCH_SUCCESS:
     return state.setIn(['reblogged_by', action.id], ImmutableList(action.accounts.map(item => item.id)));
   case FAVOURITES_FETCH_SUCCESS:
     return state.setIn(['favourited_by', action.id], ImmutableList(action.accounts.map(item => item.id)));
+  case NOTIFICATIONS_UPDATE:
+    return action.notification.type === 'follow_request' ? normalizeFollowRequest(state, action.notification) : state;
   case FOLLOW_REQUESTS_FETCH_SUCCESS:
     return state.setIn(['follow_requests', 'items'], ImmutableList(action.accounts.map(item => item.id))).setIn(['follow_requests', 'next'], action.next);
   case FOLLOW_REQUESTS_EXPAND_SUCCESS:

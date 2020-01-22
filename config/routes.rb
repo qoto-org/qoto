@@ -2,6 +2,13 @@
 
 require 'sidekiq/web'
 require 'sidekiq-scheduler/web'
+require 'sinatra/stoplight_admin'
+
+class StoplightAdmin < Sinatra::Base
+  register Sinatra::StoplightAdmin
+  set :data_store, Stoplight::Light.default_data_store
+  set :haml, :escape_html => false
+end
 
 Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
 
@@ -15,6 +22,7 @@ Rails.application.routes.draw do
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web, at: 'sidekiq', as: :sidekiq
     mount PgHero::Engine, at: 'pghero', as: :pghero
+    mount StoplightAdmin, at: 'stoplights', as: :stoplights
   end
 
   use_doorkeeper do
@@ -146,6 +154,11 @@ Rails.application.routes.draw do
     resources :aliases, only: [:index, :create, :destroy]
     resources :sessions, only: [:destroy]
     resources :featured_tags, only: [:index, :create, :destroy]
+    resources :favourite_tags, only: [:index, :create, :destroy]
+    resources :follow_tags, except: [:show]
+    resources :account_subscribes, except: [:show]
+    resources :domain_subscribes, except: [:show]
+    resources :keyword_subscribes, except: [:show]
   end
 
   resources :media, only: [:show] do
@@ -231,7 +244,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :role do
+      resource :role, only: [] do
         member do
           post :promote
           post :demote
@@ -289,6 +302,9 @@ Rails.application.routes.draw do
           resource :favourite, only: :create
           post :unfavourite, to: 'favourites#destroy'
 
+          resource :bookmark, only: :create
+          post :unbookmark, to: 'bookmarks#destroy'
+
           resource :mute, only: :create
           post :unmute, to: 'mutes#destroy'
 
@@ -324,6 +340,7 @@ Rails.application.routes.draw do
       resources :blocks,       only: [:index]
       resources :mutes,        only: [:index]
       resources :favourites,   only: [:index]
+      resources :bookmarks,    only: [:index]
       resources :reports,      only: [:create]
       resources :trends,       only: [:index]
       resources :filters,      only: [:index, :create, :show, :update, :destroy]
@@ -366,6 +383,7 @@ Rails.application.routes.draw do
         patch :update_credentials, to: 'credentials#update'
         resource :search, only: :show, controller: :search
         resources :relationships, only: :index
+        resources :subscribing, only: :index, controller: 'subscribing_accounts'
       end
 
       resources :accounts, only: [:create, :show] do
@@ -374,10 +392,13 @@ Rails.application.routes.draw do
         resources :following, only: :index, controller: 'accounts/following_accounts'
         resources :lists, only: :index, controller: 'accounts/lists'
         resources :identity_proofs, only: :index, controller: 'accounts/identity_proofs'
+        resources :featured_tags, only: :index, controller: 'accounts/featured_tags'
 
         member do
           post :follow
           post :unfollow
+          post :subscribe
+          post :unsubscribe
           post :block
           post :unblock
           post :mute
@@ -397,6 +418,10 @@ Rails.application.routes.draw do
       end
 
       resources :featured_tags, only: [:index, :create, :destroy]
+      resources :favourite_tags, only: [:index, :create, :show, :update, :destroy]
+      resources :follow_tags, only: [:index, :create, :show, :update, :destroy]
+      resources :domain_subscribes, only: [:index, :create, :show, :update, :destroy]
+      resources :keyword_subscribes, only: [:index, :create, :show, :update, :destroy]
 
       resources :polls, only: [:create, :show] do
         resources :votes, only: :create, controller: 'polls/votes'

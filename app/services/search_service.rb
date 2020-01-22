@@ -2,7 +2,7 @@
 
 class SearchService < BaseService
   def call(query, account, limit, options = {})
-    @query   = query.strip
+    @query   = query&.strip
     @account = account
     @options = options
     @limit   = limit.to_i
@@ -10,6 +10,8 @@ class SearchService < BaseService
     @resolve = options[:resolve] || false
 
     default_results.tap do |results|
+      next if @query.blank?
+
       if url_query?
         results.merge!(url_resource_results) unless url_resource.nil? || (@options[:type].present? && url_resource_symbol != @options[:type].to_sym)
       elsif @query.present?
@@ -117,6 +119,7 @@ class SearchService < BaseService
       blocked_by: Account.blocked_by_map(account_ids, account.id),
       muting: Account.muting_map(account_ids, account.id),
       following: Account.following_map(account_ids, account.id),
+      subscribing: Account.subscribing_map(account_ids, account.id),
       domain_blocking_by_domain: Account.domain_blocking_map_by_domain(domains, account.id),
     }
   end

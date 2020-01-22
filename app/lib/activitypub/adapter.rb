@@ -22,6 +22,7 @@ class ActivityPub::Adapter < ActiveModelSerializers::Adapter::Base
     blurhash: { 'toot' => 'http://joinmastodon.org/ns#', 'blurhash' => 'toot:blurhash' },
     discoverable: { 'toot' => 'http://joinmastodon.org/ns#', 'discoverable' => 'toot:discoverable' },
     voters_count: { 'toot' => 'http://joinmastodon.org/ns#', 'votersCount' => 'toot:votersCount' },
+    quoteUrl: { 'quoteUrl' => 'as:quoteUrl' },
   }.freeze
 
   def self.default_key_transform
@@ -35,6 +36,7 @@ class ActivityPub::Adapter < ActiveModelSerializers::Adapter::Base
   def serializable_hash(options = nil)
     named_contexts     = {}
     context_extensions = {}
+
     options         = serialization_options(options)
     serialized_hash = serializer.serializable_hash(options.merge(named_contexts: named_contexts, context_extensions: context_extensions))
     serialized_hash = serialized_hash.select { |k, _| options[:fields].include?(k) } if options[:fields]

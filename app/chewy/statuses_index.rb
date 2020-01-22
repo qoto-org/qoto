@@ -2,31 +2,26 @@
 
 class StatusesIndex < Chewy::Index
   settings index: { refresh_interval: '15m' }, analysis: {
-    filter: {
-      english_stop: {
-        type: 'stop',
-        stopwords: '_english_',
-      },
-      english_stemmer: {
-        type: 'stemmer',
-        language: 'english',
-      },
-      english_possessive_stemmer: {
-        type: 'stemmer',
-        language: 'possessive_english',
+    tokenizer: {
+      sudachi_tokenizer: {
+        type: 'sudachi_tokenizer',
+        mode: 'search',
+        discard_punctuation: true,
+        resources_path: '/etc/elasticsearch',
+        settings_path: '/etc/elasticsearch/sudachi.json',
       },
     },
     analyzer: {
       content: {
-        tokenizer: 'uax_url_email',
         filter: %w(
-          english_possessive_stemmer
           lowercase
-          asciifolding
           cjk_width
-          english_stop
-          english_stemmer
+          sudachi_part_of_speech
+          sudachi_ja_stop
+          sudachi_baseform
         ),
+        tokenizer: 'sudachi_tokenizer',
+        type: 'custom',
       },
     },
   }
@@ -47,11 +42,16 @@ class StatusesIndex < Chewy::Index
       data.each.with_object({}) { |(id, name), result| (result[id] ||= []).push(name) }
     end
 
+    crutch :bookmarks do |collection|
+      data = ::Bookmark.where(status_id: collection.map(&:id)).where(account: Account.local).pluck(:status_id, :account_id)
+      data.each.with_object({}) { |(id, name), result| (result[id] ||= []).push(name) }
+    end
+
     root date_detection: false do
       field :id, type: 'long'
       field :account_id, type: 'long'
 
-      field :text, type: 'text', value: ->(status) { [status.spoiler_text, Formatter.instance.plaintext(status)].concat(status.media_attachments.map(&:description)).concat(status.preloadable_poll ? status.preloadable_poll.options : []).join("\n\n") } do
+      field :text, type: 'text', value: ->(status) { status.index_text } do
         field :stemmed, type: 'text', analyzer: 'content'
       end
 

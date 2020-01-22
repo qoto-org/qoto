@@ -26,10 +26,14 @@ export const STATUS_UNMUTE_REQUEST = 'STATUS_UNMUTE_REQUEST';
 export const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS';
 export const STATUS_UNMUTE_FAIL    = 'STATUS_UNMUTE_FAIL';
 
-export const STATUS_REVEAL = 'STATUS_REVEAL';
-export const STATUS_HIDE   = 'STATUS_HIDE';
+export const STATUS_REVEAL   = 'STATUS_REVEAL';
+export const STATUS_HIDE     = 'STATUS_HIDE';
+export const STATUS_COLLAPSE = 'STATUS_COLLAPSE';
 
 export const REDRAFT = 'REDRAFT';
+
+export const QUOTE_REVEAL = 'QUOTE_REVEAL';
+export const QUOTE_HIDE   = 'QUOTE_HIDE';
 
 export function fetchStatusRequest(id, skipLoading) {
   return {
@@ -317,6 +321,36 @@ export function revealStatus(ids) {
 
   return {
     type: STATUS_REVEAL,
+    ids,
+  };
+};
+
+export function toggleStatusCollapse(id, isCollapsed) {
+  return {
+    type: STATUS_COLLAPSE,
+    id,
+    isCollapsed,
+  };
+}
+
+export function hideQuote(ids) {
+  if (!Array.isArray(ids)) {
+    ids = [ids];
+  }
+
+  return {
+    type: QUOTE_HIDE,
+    ids,
+  };
+};
+
+export function revealQuote(ids) {
+  if (!Array.isArray(ids)) {
+    ids = [ids];
+  }
+
+  return {
+    type: QUOTE_REVEAL,
     ids,
   };
 };

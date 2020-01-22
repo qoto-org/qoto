@@ -22,7 +22,9 @@ class Tag < ApplicationRecord
   has_and_belongs_to_many :accounts
   has_and_belongs_to_many :sample_accounts, -> { local.discoverable.popular.limit(3) }, class_name: 'Account'
 
+  has_many :favourite_tags, dependent: :destroy, inverse_of: :tag
   has_many :featured_tags, dependent: :destroy, inverse_of: :tag
+  has_many :follow_tags, dependent: :destroy, inverse_of: :tag
   has_one :account_tag_stat, dependent: :destroy
 
   HASHTAG_SEPARATORS = "_\u00B7\u200c"
@@ -117,7 +119,7 @@ class Tag < ApplicationRecord
   class << self
     def find_or_create_by_names(name_or_names)
       Array(name_or_names).map(&method(:normalize)).uniq { |str| str.mb_chars.downcase.to_s }.map do |normalized_name|
-        tag = matching_name(normalized_name).first || create!(name: normalized_name)
+        tag = matching_name(normalized_name).first || create(name: normalized_name)
 
         yield tag if block_given?
 

@@ -13,6 +13,8 @@ import Column from '../ui/components/column';
 import {
   favourite,
   unfavourite,
+  bookmark,
+  unbookmark,
   reblog,
   unreblog,
   pin,
@@ -20,6 +22,7 @@ import {
 } from '../../actions/interactions';
 import {
   replyCompose,
+  quoteCompose,
   mentionCompose,
   directCompose,
 } from '../../actions/compose';
@@ -29,7 +32,17 @@ import {
   deleteStatus,
   hideStatus,
   revealStatus,
+  hideQuote,
+  revealQuote,
 } from '../../actions/statuses';
+import {
+  unblockAccount,
+  unmuteAccount,
+} from '../../actions/accounts';
+import {
+  blockDomain,
+  unblockDomain,
+} from '../../actions/domain_blocks';
 import { initMuteModal } from '../../actions/mutes';
 import { initBlockModal } from '../../actions/blocks';
 import { initReport } from '../../actions/reports';
@@ -39,7 +52,7 @@ import ColumnBackButton from '../../components/column_back_button';
 import ColumnHeader from '../../components/column_header';
 import StatusContainer from '../../containers/status_container';
 import { openModal } from '../../actions/modal';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { HotKeys } from 'react-hotkeys';
 import { boostModal, deleteModal } from '../../initial_state';
@@ -57,6 +70,7 @@ const messages = defineMessages({
   detailedStatus: { id: 'status.detailed_status', defaultMessage: 'Detailed conversation view' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
+  blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
 });
 
 const makeMapStateToProps = () => {
@@ -232,6 +246,18 @@ class Status extends ImmutablePureComponent {
     }
   }
 
+  handleBookmarkClick = (status) => {
+    if (status.get('bookmarked')) {
+      this.props.dispatch(unbookmark(status));
+    } else {
+      this.props.dispatch(bookmark(status));
+    }
+  }
+
+  handleQuoteClick = (status) => {
+    this.props.dispatch(quoteCompose(status, this.context.router.history));
+  }
+
   handleDeleteClick = (status, history, withRedraft = false) => {
     const { dispatch, intl } = this.props;
 
@@ -262,6 +288,22 @@ class Status extends ImmutablePureComponent {
     this.props.dispatch(openModal('VIDEO', { media, time }));
   }
 
+  handleHotkeyOpenMedia = e => {
+    const status = this._properStatus();
+
+    e.preventDefault();
+
+    if (status.get('media_attachments').size > 0) {
+      if (status.getIn(['media_attachments', 0, 'type']) === 'audio') {
+        // TODO: toggle play/paused?
+      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
+        this.handleOpenVideo(status.getIn(['media_attachments', 0]), 0);
+      } else {
+        this.handleOpenMedia(status.get('media_attachments'), 0);
+      }
+    }
+  }
+
   handleMuteClick = (account) => {
     this.props.dispatch(initMuteModal(account));
   }
@@ -279,6 +321,14 @@ class Status extends ImmutablePureComponent {
       this.props.dispatch(revealStatus(status.get('id')));
     } else {
       this.props.dispatch(hideStatus(status.get('id')));
+    }
+  }
+
+  handleQuoteToggleHidden = (status) => {
+    if (status.get('quote_hidden')) {
+      this.props.dispatch(revealQuote(status.get('id')));
+    } else {
+      this.props.dispatch(hideQuote(status.get('id')));
     }
   }
 
@@ -306,6 +356,27 @@ class Status extends ImmutablePureComponent {
   handleEmbed = (status) => {
     this.props.dispatch(openModal('EMBED', { url: status.get('url') }));
   }
+
+  handleUnmuteClick = account => {
+    this.props.dispatch(unmuteAccount(account.get('id')));
+  }
+
+  handleUnblockClick = account => {
+    this.props.dispatch(unblockAccount(account.get('id')));
+  }
+
+  handleBlockDomainClick = domain => {
+    this.props.dispatch(openModal('CONFIRM', {
+      message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications. Your followers from that domain will be removed.' values={{ domain: <strong>{domain}</strong> }} />,
+      confirm: this.props.intl.formatMessage(messages.blockDomainConfirm),
+      onConfirm: () => this.props.dispatch(blockDomain(domain)),
+    }));
+  }
+
+  handleUnblockDomainClick = domain => {
+    this.props.dispatch(unblockDomain(domain));
+  }
+
 
   handleHotkeyMoveUp = () => {
     this.handleMoveUp(this.props.status.get('id'));
@@ -466,6 +537,7 @@ class Status extends ImmutablePureComponent {
       openProfile: this.handleHotkeyOpenProfile,
       toggleHidden: this.handleHotkeyToggleHidden,
       toggleSensitive: this.handleHotkeyToggleSensitive,
+      openMedia: this.handleHotkeyOpenMedia,
     };
 
     return (
@@ -485,6 +557,7 @@ class Status extends ImmutablePureComponent {
             <HotKeys handlers={handlers}>
               <div className={classNames('focusable', 'detailed-status__wrapper')} tabIndex='0' aria-label={textForScreenReader(intl, status, false)}>
                 <DetailedStatus
+                  key={`details-${status.get('id')}`}
                   status={status}
                   onOpenVideo={this.handleOpenVideo}
                   onOpenMedia={this.handleOpenMedia}
@@ -492,19 +565,27 @@ class Status extends ImmutablePureComponent {
                   domain={domain}
                   showMedia={this.state.showMedia}
                   onToggleMediaVisibility={this.handleToggleMediaVisibility}
+                  onQuoteToggleHidden={this.handleQuoteToggleHidden}
                 />
 
                 <ActionBar
+                  key={`action-bar-${status.get('id')}`}
                   status={status}
                   onReply={this.handleReplyClick}
                   onFavourite={this.handleFavouriteClick}
                   onReblog={this.handleReblogClick}
+                  onBookmark={this.handleBookmarkClick}
+                  onQuote={this.handleQuoteClick}
                   onDelete={this.handleDeleteClick}
                   onDirect={this.handleDirectClick}
                   onMention={this.handleMentionClick}
                   onMute={this.handleMuteClick}
+                  onUnmute={this.handleUnmuteClick}
                   onMuteConversation={this.handleConversationMuteClick}
                   onBlock={this.handleBlockClick}
+                  onUnblock={this.handleUnblockClick}
+                  onBlockDomain={this.handleBlockDomainClick}
+                  onUnblockDomain={this.handleUnblockDomainClick}
                   onReport={this.handleReport}
                   onPin={this.handlePin}
                   onEmbed={this.handleEmbed}

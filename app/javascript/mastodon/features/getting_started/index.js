@@ -22,6 +22,7 @@ const messages = defineMessages({
   settings_subheading: { id: 'column_subheading.settings', defaultMessage: 'Settings' },
   community_timeline: { id: 'navigation_bar.community_timeline', defaultMessage: 'Local timeline' },
   direct: { id: 'navigation_bar.direct', defaultMessage: 'Direct messages' },
+  bookmarks: { id: 'navigation_bar.bookmarks', defaultMessage: 'Bookmarks' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
@@ -35,6 +36,9 @@ const messages = defineMessages({
   security: { id: 'navigation_bar.security', defaultMessage: 'Security' },
   menu: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
   profile_directory: { id: 'getting_started.directory', defaultMessage: 'Profile directory' },
+  information: { id: 'navigation_bar.information', defaultMessage: 'Information' },
+  information_acct: { id: 'navigation_bar.information_acct', defaultMessage: 'Fedibird info' },
+  hashtag_fedibird: { id: 'navigation_bar.hashtag_fedibird', defaultMessage: 'fedibird' },
 });
 
 const mapStateToProps = state => ({
@@ -97,11 +101,10 @@ class GettingStarted extends ImmutablePureComponent {
     if (multiColumn) {
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.discover)} />,
-        <ColumnLink key={i++} icon='users' text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />,
         <ColumnLink key={i++} icon='globe' text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />,
       );
 
-      height += 34 + 48*2;
+      height += 34 + 48;
 
       if (profile_directory) {
         navItems.push(
@@ -110,6 +113,14 @@ class GettingStarted extends ImmutablePureComponent {
 
         height += 48;
       }
+
+      navItems.push(
+        <ColumnSubheading key={i++} text={intl.formatMessage(messages.information)} />,
+        <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
+        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+      );
+
+      height += 34 + 48*2;
 
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.personal)} />
@@ -122,15 +133,23 @@ class GettingStarted extends ImmutablePureComponent {
       );
 
       height += 48;
+
+      navItems.push(
+        <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
+        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+      );
+
+      height += 48*2;
     }
 
     navItems.push(
       <ColumnLink key={i++} icon='envelope' text={intl.formatMessage(messages.direct)} to='/timelines/direct' />,
+      <ColumnLink key={i++} icon='bookmark' text={intl.formatMessage(messages.bookmarks)} to='/bookmarks' />,
       <ColumnLink key={i++} icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />,
       <ColumnLink key={i++} icon='list-ul' text={intl.formatMessage(messages.lists)} to='/lists' />
     );
 
-    height += 48*3;
+    height += 48*4;
 
     if (myAccount.get('locked') || unreadFollowRequests > 0) {
       navItems.push(<ColumnLink key={i++} icon='user-plus' text={intl.formatMessage(messages.follow_requests)} badge={badgeDisplay(unreadFollowRequests, 40)} to='/follow_requests' />);

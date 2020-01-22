@@ -24,6 +24,7 @@
 #  poll_id                :bigint(8)
 #  deleted_at             :datetime
 #  local_only             :boolean
+#  quote_id               :bigint(8)
 #
 
 class Status < ApplicationRecord
@@ -53,13 +54,16 @@ class Status < ApplicationRecord
 
   belongs_to :thread, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :replies, optional: true
   belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, optional: true
+  belongs_to :quote, foreign_key: 'quote_id', class_name: 'Status', inverse_of: :quoted, optional: true
 
   has_many :favourites, inverse_of: :status, dependent: :destroy
+  has_many :bookmarks, inverse_of: :status, dependent: :destroy
   has_many :reblogs, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblog, dependent: :destroy
   has_many :replies, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :thread
   has_many :mentions, dependent: :destroy, inverse_of: :status
   has_many :active_mentions, -> { active }, class_name: 'Mention', inverse_of: :status
   has_many :media_attachments, dependent: :nullify
+  has_many :quoted, foreign_key: 'quote_id', class_name: 'Status', inverse_of: :quote
 
   has_and_belongs_to_many :tags
   has_and_belongs_to_many :preview_cards
@@ -83,6 +87,7 @@ class Status < ApplicationRecord
   scope :remote, -> { where(local: false).where.not(uri: nil) }
   scope :local,  -> { where(local: true).or(where(uri: nil)) }
 
+  scope :with_accounts, ->(ids) { where(id: ids).includes(:account) }
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
   scope :without_local_only, -> { where(local_only: [false, nil]) }
@@ -139,10 +144,12 @@ class Status < ApplicationRecord
       ids += mentions.where(account: Account.local).pluck(:account_id)
       ids += favourites.where(account: Account.local).pluck(:account_id)
       ids += reblogs.where(account: Account.local).pluck(:account_id)
+      ids += bookmarks.where(account: Account.local).pluck(:account_id)
     else
       ids += preloaded.mentions[id] || []
       ids += preloaded.favourites[id] || []
       ids += preloaded.reblogs[id] || []
+      ids += preloaded.bookmarks[id] || []
     end
 
     ids.uniq
@@ -162,6 +169,10 @@ class Status < ApplicationRecord
 
   def reblog?
     !reblog_of_id.nil?
+  end
+
+  def quote?
+    !quote_id.nil? && quote
   end
 
   def within_realtime_window?
@@ -199,8 +210,12 @@ class Status < ApplicationRecord
   def title
     if destroyed?
       "#{account.acct} deleted status"
+    elsif reblog?
+      preview = sensitive ? '<sensitive>' : text.slice(0, 10).split("\n")[0]
+      "#{account.acct} shared #{reblog.account.acct}'s: #{preview}"
     else
-      reblog? ? "#{account.acct} shared a status by #{reblog.account.acct}" : "New status by #{account.acct}"
+      preview = sensitive ? '<sensitive>' : text.slice(0, 20).split("\n")[0]
+      "#{account.acct}: #{preview}"
     end
   end
 
@@ -232,7 +247,11 @@ class Status < ApplicationRecord
     fields  = [spoiler_text, text]
     fields += preloadable_poll.options unless preloadable_poll.nil?
 
-    @emojis = CustomEmoji.from_text(fields.join(' '), account.domain)
+    @emojis = CustomEmoji.from_text(fields.join(' '), account.domain) + (quote? ? CustomEmoji.from_text([quote.spoiler_text, quote.text].join(' '), quote.account.domain) : [])
+  end
+
+  def index_text
+    @index_text ||= [spoiler_text, Formatter.instance.plaintext(self)].concat(media_attachments.map(&:description)).concat(preloadable_poll ? preloadable_poll.options : []).join("\n\n")
   end
 
   def mark_for_mass_destruction!
@@ -296,6 +315,16 @@ class Status < ApplicationRecord
       apply_timeline_filters(query, account, local_only)
     end
 
+    def as_domain_timeline(account = nil, domain)
+      query = Status.includes(:account)
+        .where(accounts: {domain: domain}).select('statuses.*, accounts.*')
+        .with_public_visibility
+        .without_reblogs
+        .without_replies
+
+      apply_timeline_filters(query, account, false)
+    end
+
     def as_tag_timeline(tag, account = nil, local_only = false)
       query = timeline_scope(local_only).tagged_with(tag)
 
@@ -308,6 +337,10 @@ class Status < ApplicationRecord
 
     def favourites_map(status_ids, account_id)
       Favourite.select('status_id').where(status_id: status_ids).where(account_id: account_id).each_with_object({}) { |f, h| h[f.status_id] = true }
+    end
+
+    def bookmarks_map(status_ids, account_id)
+      Bookmark.select('status_id').where(status_id: status_ids).where(account_id: account_id).map { |f| [f.status_id, true] }.to_h
     end
 
     def reblogs_map(status_ids, account_id)
@@ -367,7 +400,7 @@ class Status < ApplicationRecord
     private
 
     def timeline_scope(local_only = false)
-      starting_scope = local_only ? Status.local : Status
+      starting_scope = local_only ? Status.none : Status
       starting_scope
         .with_public_visibility
         .without_reblogs

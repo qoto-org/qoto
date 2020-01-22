@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_07_013357) do
+ActiveRecord::Schema.define(version: 2020_01_19_112504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,20 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.datetime "updated_at", null: false
     t.datetime "last_status_at"
     t.integer "lock_version", default: 0, null: false
+    t.bigint "subscribing_count", default: 0, null: false
     t.index ["account_id"], name: "index_account_stats_on_account_id", unique: true
+  end
+
+  create_table "account_subscribes", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "target_account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "list_id"
+    t.boolean "show_reblogs", default: true, null: false
+    t.index ["account_id"], name: "index_account_subscribes_on_account_id"
+    t.index ["list_id"], name: "index_account_subscribes_on_list_id"
+    t.index ["target_account_id"], name: "index_account_subscribes_on_target_account_id"
   end
 
   create_table "account_tag_stats", force: :cascade do |t|
@@ -200,7 +213,7 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.bigint "user_id"
     t.string "dump_file_name"
     t.string "dump_content_type"
-    t.integer "dump_file_size"
+    t.bigint "dump_file_size"
     t.datetime "dump_updated_at"
     t.boolean "processed", default: false, null: false
     t.datetime "created_at", null: false
@@ -215,6 +228,16 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.string "uri"
     t.index ["account_id", "target_account_id"], name: "index_blocks_on_account_id_and_target_account_id", unique: true
     t.index ["target_account_id"], name: "index_blocks_on_target_account_id"
+  end
+
+  create_table "bookmarks", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "status_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "status_id"], name: "index_bookmarks_on_account_id_and_status_id", unique: true
+    t.index ["account_id"], name: "index_bookmarks_on_account_id"
+    t.index ["status_id"], name: "index_bookmarks_on_status_id"
   end
 
   create_table "conversation_mutes", force: :cascade do |t|
@@ -285,11 +308,52 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.index ["domain"], name: "index_domain_blocks_on_domain", unique: true
   end
 
+  create_table "domain_subscribes", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "list_id"
+    t.string "domain", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "exclude_reblog", default: true
+    t.index ["account_id"], name: "index_domain_subscribes_on_account_id"
+    t.index ["list_id"], name: "index_domain_subscribes_on_list_id"
+  end
+
+  create_table "domains", force: :cascade do |t|
+    t.string "domain", default: "", null: false
+    t.string "title", default: "", null: false
+    t.string "short_description", default: "", null: false
+    t.string "email", default: "", null: false
+    t.string "version", default: "", null: false
+    t.string "thumbnail_remote_url", default: "", null: false
+    t.string "languages", array: true
+    t.boolean "registrations"
+    t.boolean "approval_required"
+    t.bigint "contact_account_id"
+    t.string "software", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "thumbnail_file_name"
+    t.string "thumbnail_content_type"
+    t.integer "thumbnail_file_size"
+    t.datetime "thumbnail_updated_at"
+    t.index ["contact_account_id"], name: "index_domains_on_contact_account_id"
+  end
+
   create_table "email_domain_blocks", force: :cascade do |t|
     t.string "domain", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["domain"], name: "index_email_domain_blocks_on_domain", unique: true
+  end
+
+  create_table "favourite_tags", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_favourite_tags_on_account_id"
+    t.index ["tag_id"], name: "index_favourite_tags_on_tag_id"
   end
 
   create_table "favourites", force: :cascade do |t|
@@ -323,6 +387,17 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.index ["account_id", "target_account_id"], name: "index_follow_requests_on_account_id_and_target_account_id", unique: true
   end
 
+  create_table "follow_tags", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "list_id"
+    t.index ["account_id"], name: "index_follow_tags_on_account_id"
+    t.index ["list_id"], name: "index_follow_tags_on_list_id"
+    t.index ["tag_id"], name: "index_follow_tags_on_tag_id"
+  end
+
   create_table "follows", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -330,6 +405,7 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.bigint "target_account_id", null: false
     t.boolean "show_reblogs", default: true, null: false
     t.string "uri"
+    t.boolean "private", default: true, null: false
     t.index ["account_id", "target_account_id"], name: "index_follows_on_account_id_and_target_account_id", unique: true
     t.index ["target_account_id"], name: "index_follows_on_target_account_id"
   end
@@ -370,10 +446,26 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
 
+  create_table "keyword_subscribes", force: :cascade do |t|
+    t.bigint "account_id"
+    t.string "keyword", null: false
+    t.boolean "ignorecase", default: true
+    t.boolean "regexp", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", default: "", null: false
+    t.boolean "ignore_block", default: false
+    t.boolean "disabled", default: false
+    t.string "exclude_keyword", default: "", null: false
+    t.bigint "list_id"
+    t.index ["account_id"], name: "index_keyword_subscribes_on_account_id"
+    t.index ["list_id"], name: "index_keyword_subscribes_on_list_id"
+  end
+
   create_table "list_accounts", force: :cascade do |t|
     t.bigint "list_id", null: false
     t.bigint "account_id", null: false
-    t.bigint "follow_id", null: false
+    t.bigint "follow_id"
     t.index ["account_id", "list_id"], name: "index_list_accounts_on_account_id_and_list_id", unique: true
     t.index ["follow_id"], name: "index_list_accounts_on_follow_id"
     t.index ["list_id", "account_id"], name: "index_list_accounts_on_list_id_and_account_id"
@@ -677,10 +769,12 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.bigint "application_id"
     t.bigint "in_reply_to_account_id"
     t.bigint "poll_id"
+    t.bigint "quote_id"
     t.datetime "deleted_at"
     t.boolean "local_only"
     t.index ["account_id", "id", "visibility", "updated_at"], name: "index_statuses_20190820", order: { id: :desc }, where: "(deleted_at IS NULL)"
     t.index ["id", "account_id"], name: "index_statuses_local_20190824", order: { id: :desc }, where: "((local OR (uri IS NULL)) AND (deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
+    t.index ["id", "account_id"], name: "index_statuses_public_20200119", order: { id: :desc }, where: "((deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
     t.index ["in_reply_to_account_id"], name: "index_statuses_on_in_reply_to_account_id"
     t.index ["in_reply_to_id"], name: "index_statuses_on_in_reply_to_id"
     t.index ["reblog_of_id", "account_id"], name: "index_statuses_on_reblog_of_id_and_account_id"
@@ -692,30 +786,6 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
     t.bigint "tag_id", null: false
     t.index ["status_id"], name: "index_statuses_tags_on_status_id"
     t.index ["tag_id", "status_id"], name: "index_statuses_tags_on_tag_id_and_status_id", unique: true
-  end
-
-  create_table "stream_entries", force: :cascade do |t|
-    t.bigint "activity_id"
-    t.string "activity_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "hidden", default: false, null: false
-    t.bigint "account_id"
-    t.index ["account_id", "activity_type", "id"], name: "index_stream_entries_on_account_id_and_activity_type_and_id"
-    t.index ["activity_id", "activity_type"], name: "index_stream_entries_on_activity_id_and_activity_type"
-  end
-
-  create_table "subscriptions", force: :cascade do |t|
-    t.string "callback_url", default: "", null: false
-    t.string "secret"
-    t.datetime "expires_at"
-    t.boolean "confirmed", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "last_successful_delivery_at"
-    t.string "domain"
-    t.bigint "account_id", null: false
-    t.index ["account_id", "callback_url"], name: "index_subscriptions_on_account_id_and_callback_url", unique: true
   end
 
   create_table "tags", force: :cascade do |t|
@@ -827,6 +897,9 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
   add_foreign_key "account_pins", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "account_pins", "accounts", on_delete: :cascade
   add_foreign_key "account_stats", "accounts", on_delete: :cascade
+  add_foreign_key "account_subscribes", "accounts", column: "target_account_id", on_delete: :cascade
+  add_foreign_key "account_subscribes", "accounts", on_delete: :cascade
+  add_foreign_key "account_subscribes", "lists", on_delete: :cascade
   add_foreign_key "account_tag_stats", "tags", on_delete: :cascade
   add_foreign_key "account_warnings", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "account_warnings", "accounts", on_delete: :nullify
@@ -835,20 +908,32 @@ ActiveRecord::Schema.define(version: 2019_10_07_013357) do
   add_foreign_key "backups", "users", on_delete: :nullify
   add_foreign_key "blocks", "accounts", column: "target_account_id", name: "fk_9571bfabc1", on_delete: :cascade
   add_foreign_key "blocks", "accounts", name: "fk_4269e03e65", on_delete: :cascade
+  add_foreign_key "bookmarks", "accounts", on_delete: :cascade
+  add_foreign_key "bookmarks", "statuses", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", name: "fk_225b4212bb", on_delete: :cascade
   add_foreign_key "conversation_mutes", "conversations", on_delete: :cascade
   add_foreign_key "custom_filters", "accounts", on_delete: :cascade
+  add_foreign_key "domain_subscribes", "accounts", on_delete: :cascade
+  add_foreign_key "domain_subscribes", "lists", on_delete: :cascade
+  add_foreign_key "domains", "accounts", column: "contact_account_id"
+  add_foreign_key "favourite_tags", "accounts", on_delete: :cascade
+  add_foreign_key "favourite_tags", "tags", on_delete: :cascade
   add_foreign_key "favourites", "accounts", name: "fk_5eb6c2b873", on_delete: :cascade
   add_foreign_key "favourites", "statuses", name: "fk_b0e856845e", on_delete: :cascade
   add_foreign_key "featured_tags", "accounts", on_delete: :cascade
   add_foreign_key "featured_tags", "tags", on_delete: :cascade
   add_foreign_key "follow_requests", "accounts", column: "target_account_id", name: "fk_9291ec025d", on_delete: :cascade
   add_foreign_key "follow_requests", "accounts", name: "fk_76d644b0e7", on_delete: :cascade
+  add_foreign_key "follow_tags", "accounts", on_delete: :cascade
+  add_foreign_key "follow_tags", "lists", on_delete: :cascade
+  add_foreign_key "follow_tags", "tags", on_delete: :cascade
   add_foreign_key "follows", "accounts", column: "target_account_id", name: "fk_745ca29eac", on_delete: :cascade
   add_foreign_key "follows", "accounts", name: "fk_32ed1b5560", on_delete: :cascade
   add_foreign_key "identities", "users", name: "fk_bea040f377", on_delete: :cascade
   add_foreign_key "imports", "accounts", name: "fk_6db1b6e408", on_delete: :cascade
   add_foreign_key "invites", "users", on_delete: :cascade
+  add_foreign_key "keyword_subscribes", "accounts", on_delete: :cascade
+  add_foreign_key "keyword_subscribes", "lists", on_delete: :cascade
   add_foreign_key "list_accounts", "accounts", on_delete: :cascade
   add_foreign_key "list_accounts", "follows", on_delete: :cascade
   add_foreign_key "list_accounts", "lists", on_delete: :cascade

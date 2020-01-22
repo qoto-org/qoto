@@ -9,6 +9,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   attribute :favourited, if: :current_user?
   attribute :reblogged, if: :current_user?
   attribute :muted, if: :current_user?
+  attribute :bookmarked, if: :current_user?
   attribute :pinned, if: :pinnable?
 
   attribute :content, unless: :source_requested?
@@ -17,6 +18,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   belongs_to :reblog, serializer: REST::StatusSerializer
   belongs_to :application, if: :show_application?
   belongs_to :account, serializer: REST::AccountSerializer
+  belongs_to :quote, serializer: REST::StatusSerializer
 
   has_many :media_attachments, serializer: REST::MediaAttachmentSerializer
   has_many :ordered_mentions, key: :mentions
@@ -90,6 +92,14 @@ class REST::StatusSerializer < ActiveModel::Serializer
       instance_options[:relationships].mutes_map[object.conversation_id] || false
     else
       current_user.account.muting_conversation?(object.conversation)
+    end
+  end
+
+  def bookmarked
+    if instance_options && instance_options[:relationships]
+      instance_options[:relationships].bookmarks_map[object.id] || false
+    else
+      current_user.account.bookmarked?(object)
     end
   end
 

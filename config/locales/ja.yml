@@ -11,6 +11,7 @@ ja:
     apps: アプリ
     apps_platforms: iOSやAndroidなど、各種環境から利用できます
     browse_directory: ディレクトリから気になる人を探しましょう
+    browse_local_posts: このサーバーの公開タイムラインをご覧ください
     browse_public_posts: Mastodonの公開ライブストリームをご覧ください
     contact: 連絡先
     contact_missing: 未設定
@@ -73,9 +74,17 @@ ja:
     roles:
       admin: Admin
       bot: Bot
+      group: Group
       moderator: Mod
     unavailable: プロフィールは利用できません
     unfollow: フォロー解除
+  account_subscribes:
+    add_new: 追加
+    edit:
+      title: 編集
+    hint_html: "<strong>アカウントの購読とは何ですか？</strong> 指定したアカウントの公開投稿をホームタイムラインまたはリストに挿入します。サーバが受け取っている投稿（連合タイムライン）が対象です。"
+    new:
+      title: 新規アカウント購読を追加
   admin:
     account_actions:
       action: アクションを実行
@@ -113,9 +122,7 @@ ja:
       email_status: メールアドレスの状態
       enable: 有効化
       enabled: 有効
-      feed_url: フィードURL
       followers: フォロワー数
-      followers_url: Followers URL
       follows: フォロー数
       header: ヘッダー
       inbox_url: Inbox URL
@@ -143,10 +150,8 @@ ja:
       no_account_selected: 何も選択されていないため、変更されていません
       no_limits_imposed: 制限なし
       not_subscribed: 購読していない
-      outbox_url: Outbox URL
       pending: 承認待ち
       perform_full_suspension: 活動を完全に停止させる
-      profile_url: プロフィールURL
       promote: 昇格
       protocol: プロトコル
       public: パブリック
@@ -169,8 +174,8 @@ ja:
         moderator: モデレーター
         staff: スタッフ
         user: ユーザー
-      salmon_url: Salmon URL
       search: 検索
+      search_same_ip: 同じ IP のユーザーを検索
       shared_inbox_url: Shared inbox URL
       show:
         created_reports: このアカウントで作られた通報
@@ -197,10 +202,12 @@ ja:
         confirm_user: "%{name} さんが %{target} さんのメールアドレスを確認済みにしました"
         create_account_warning: "%{name} さんが %{target} さんに警告メールを送信しました"
         create_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を追加しました"
+        create_domain_allow: "%{name} さんがドメイン %{target} をドメイン用ホワイトリストに追加しました"
         create_domain_block: "%{name} さんがドメイン %{target} をブロックしました"
         create_email_domain_block: "%{name} さんがドメイン %{target} をメールアドレス用ブラックリストに追加しました"
         demote_user: "%{name} さんが %{target} さんを降格しました"
         destroy_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を削除しました"
+        destroy_domain_allow: "%{name} さんがドメイン %{target} をドメイン用ホワイトリストから外しました"
         destroy_domain_block: "%{name} さんがドメイン %{target} のブロックを外しました"
         destroy_email_domain_block: "%{name} さんがドメイン %{target} をメールアドレス用ブラックリストから外しました"
         destroy_status: "%{name} さんが %{target} さんの投稿を削除しました"
@@ -334,6 +341,7 @@ ja:
       delete: 消去
       destroyed_msg: ブラックリストから外しました
       domain: ドメイン
+      empty: メールブラックリストに登録されたドメインはありません
       new:
         create: ドメインを追加
         title: メールアドレス用ブラックリスト新規追加
@@ -389,12 +397,15 @@ ja:
       destroyed_msg: 通報メモを削除しました！
     reports:
       account:
-        note: メモ
-        report: 通報
+        notes:
+          other: "%{count} 件のメモ"
+        reports:
+          other: "%{count} 件の通報"
       action_taken_by: 通報処理者
       are_you_sure: 本当に実行しますか？
       assign_to_self: 担当になる
       assigned: 担当者
+      by_target_domain: ドメイン
       comment:
         none: なし
       created_at: 通報日時
@@ -440,6 +451,8 @@ ja:
         users: ログイン済みローカルユーザーのみ許可
       domain_blocks_rationale:
         title: コメントを表示
+      enable_bootstrap_timeline_accounts:
+        title: 新規ユーザーの自動フォローを有効にする
       hero:
         desc_html: フロントページに表示されます。サイズは600x100px以上推奨です。未設定の場合、標準のサムネイルが使用されます
         title: ヒーローイメージ
@@ -568,7 +581,12 @@ ja:
     animations_and_accessibility: アニメーションとアクセシビリティー
     confirmation_dialogs: 確認ダイアログ
     discovery: 見つける
+    localization:
+      body: Mastodonは有志によって翻訳されています。
+      guide_link: https://ja.crowdin.com/project/mastodon
+      guide_link_text: 誰でも参加することができます。
     sensitive_content: 閲覧注意コンテンツ
+    toot_layout: トゥートレイアウト
   application_mailer:
     notification_preferences: メール設定の変更
     salutation: "%{name} さん"
@@ -674,6 +692,15 @@ ja:
     directory: ディレクトリ
     explanation: 関心を軸にユーザーを発見しよう
     explore_mastodon: "%{title}を探索"
+  domain_subscribes:
+    add_new: 追加
+    edit:
+      title: 編集
+    exclude_reblog: 含めない
+    hint_html: "<strong>ドメインの購読とは何ですか？</strong> 指定したドメインの公開投稿をホームタイムラインまたはリストに挿入します。サーバが受け取っている投稿（連合タイムライン）が対象です。"
+    include_reblog: 含める
+    new:
+      title: 新規ドメイン購読を追加
   domain_validator:
     invalid_domain: は無効なドメイン名です
   errors:
@@ -705,15 +732,26 @@ ja:
     blocks: ブロック
     csv: CSV
     domain_blocks: 非表示にしたドメイン
-    follows: フォロー
     lists: リスト
     mutes: ミュート
     storage: メディア
+  favourite_tags:
+    add_new: 追加
+    errors:
+      limit: お気に入りハッシュタグの上限に達しました
+    hint_html: "<strong>お気に入りのハッシュタグとは何ですか？</strong> それらはあなた自身のためにだけ使用される、ハッシュタグを活用したブラウジングを助けるためのツールです。すばやくタイムラインを切り替えることができます。"
   featured_tags:
     add_new: 追加
     errors:
       limit: 注目のハッシュタグの上限に達しました
     hint_html: "<strong>注目のハッシュタグとは？</strong>プロフィールページに目立つ形で表示され、そのハッシュタグのついたあなたの公開投稿だけを抽出して閲覧できるようにします。クリエイティブな仕事や長期的なプロジェクトを追うのに優れた機能です。"
+  follow_tags:
+    add_new: 追加
+    edit:
+      title: 編集
+    hint_html: "<strong>ハッシュタグのフォローとは何ですか？</strong> それらはあなたがフォローするハッシュタグのコレクションです。サーバが受け取ったハッシュタグ付きの投稿の中から、ここで指定したハッシュタグのついた投稿をホームタイムラインまたはリストに挿入します。"
+    new:
+      title: ハッシュタグのフォローを追加
   filters:
     contexts:
       home: ホームタイムライン
@@ -727,6 +765,7 @@ ja:
       invalid_irreversible: この機能はホームタイムラインまたは通知と一緒に指定する場合のみ機能します
     index:
       delete: 削除
+      empty: フィルターはありません。
       title: フィルター
     new:
       title: 新規フィルターを追加
@@ -800,9 +839,34 @@ ja:
       expires_at: 有効期限
       uses: 使用
     title: 新規ユーザーの招待
+  keyword_subscribes:
+    add_new: 追加
+    disabled: 無効
+    edit:
+      title: 編集
+    enabled: 有効
+    errors:
+      duplicate: 既に同じ内容が登録されています
+      limit: キーワード購読の登録可能数の上限に達しました
+      regexp: "正規表現に誤りがあります: %{message}"
+    hint_html: "<strong>キーワードの購読とは何ですか？</strong> 指定した単語のいずれか、または正規表現に一致する公開投稿をホームタイムラインまたはリストに挿入します。サーバが受け取っている投稿（連合タイムライン）が対象です。"
+    ignorecase:
+      enabled: 無視
+      disabled: 区別
+    ignore_block: 無視
+    index:
+      delete: 削除
+      title: キーワードの購読
+    new:
+      title: 新規キーワード購読を追加
+    regexp:
+      enabled: 正規表現
+      disabled: キーワード
   lists:
+    add_new: 新しいリストを追加
     errors:
       limit: リストの上限に達しました
+    home: ホーム
   media_attachments:
     validations:
       images_and_video: 既に画像が追加されているため、動画を追加することはできません
@@ -871,6 +935,10 @@ ja:
       body: "%{name} さんにブーストされた、あなたのトゥートがあります:"
       subject: "%{name} さんにブーストされました"
       title: 新たなブースト
+  notifications:
+    email_events: メールによる通知
+    email_events_hint: '受信する通知を選択:'
+    other_settings: その他の通知設定
   number:
     human:
       decimal_units:
@@ -898,12 +966,15 @@ ja:
       too_few_options: は複数必要です
       too_many_options: は%{max}個までです
   preferences:
+    fedibird_features: Fedibirdの機能
     other: その他
     posting_defaults: デフォルトの投稿設定
     public_timelines: 公開タイムライン
   relationships:
     activity: 活動
     dormant: 非アクティブ
+    followers: フォロワー
+    following: フォロー中
     last_active: 最後の活動
     most_recent: 新着
     moved: 引っ越し済み
@@ -979,18 +1050,24 @@ ja:
   settings:
     account: アカウント
     account_settings: アカウント設定
+    account_subscribes: アカウントの購読
     aliases: アカウントエイリアス
     appearance: 外観
     authorized_apps: 認証済みアプリ
     back: Mastodon に戻る
     delete: アカウントの削除
     development: 開発
+    domain_subscribes: ドメインの購読
     edit_profile: プロフィールを編集
     export: データのエクスポート
+    favourite_tags: お気に入りハッシュタグ
     featured_tags: 注目のハッシュタグ
+    follow_and_subscriptions: フォロー・購読
+    follow_tags: ハッシュタグのフォロー
     identity_proofs: Identity proofs
     import: データのインポート
     import_and_export: インポート・エクスポート
+    keyword_subscribes: キーワードの購読
     migrate: アカウントの引っ越し
     notifications: 通知
     preferences: ユーザー設定
@@ -1126,7 +1203,26 @@ ja:
   themes:
     contrast: Mastodon (ハイコントラスト)
     default: Mastodon (ダーク)
+    instance-ticker-type-0-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-0 代替アイコン)
+    instance-ticker-type-0-light: Mastodon (ライト / インスタンス・ティッカー Type-0 代替アイコン)
+    instance-ticker-type-0: Mastodon (ダーク / インスタンス・ティッカー Type-0 代替アイコン)
+    instance-ticker-type-1-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-1 Favicon)
+    instance-ticker-type-1-light: Mastodon (ライト / インスタンス・ティッカー Type-1 Favicon)
+    instance-ticker-type-1: Mastodon (ダーク / インスタンス・ティッカー Type-1 Favicon)
+    instance-ticker-type-10-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-10 代替アイコン＋通知)
+    instance-ticker-type-10-light: Mastodon (ライト / インスタンス・ティッカー Type-10 代替アイコン＋通知)
+    instance-ticker-type-10: Mastodon (ダーク / インスタンス・ティッカー Type-10 代替アイコン＋通知)
+    instance-ticker-type-11-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-11 Favicon＋通知)
+    instance-ticker-type-11-light: Mastodon (ライト / インスタンス・ティッカー Type-11 Favicon＋通知)
+    instance-ticker-type-11: Mastodon (ダーク / インスタンス・ティッカー Type-11 Favicon＋通知)
+    instance-ticker-type-12-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-12 Favicon v2＋通知)
+    instance-ticker-type-12-light: Mastodon (ライト / インスタンス・ティッカー Type-12 Favicon v2＋通知)
+    instance-ticker-type-12: Mastodon (ダーク / インスタンス・ティッカー Type-12 Favicon v2＋通知)
+    instance-ticker-type-2-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-2 Favicon v2)
+    instance-ticker-type-2-light: Mastodon (ライト / インスタンス・ティッカー Type-2 Favicon v2)
+    instance-ticker-type-2: Mastodon (ダーク / インスタンス・ティッカー Type-2 Favicon v2)
     mastodon-light: Mastodon (ライト)
+    mobile-small: Mobile 小 / Mastodon (ダーク)
   time:
     formats:
       default: "%Y年%m月%d日 %H:%M"
@@ -1134,7 +1230,7 @@ ja:
   two_factor_authentication:
     code_hint: 続行するには認証アプリで表示されたコードを入力してください
     description_html: "<strong>二段階認証</strong>を有効にするとログイン時、認証アプリからコードを入力する必要があります。"
-    disable: 無効
+    disable: 無効化
     enable: 有効
     enabled: 二段階認証は有効になっています
     enabled_success: 二段階認証が有効になりました
@@ -1161,10 +1257,10 @@ ja:
       review_server_policies: サーバーのポリシーを確認
       statuses: '特に次のトゥート:'
       subject:
-        disable: あなたのアカウント %{acct} は凍結されています
+        disable: あなたのアカウント %{acct} は凍結されました
         none: "%{acct} に対する警告"
-        silence: あなたのアカウント %{acct} はサイレンスにされています
-        suspend: あなたのアカウント %{acct} は停止されています
+        silence: あなたのアカウント %{acct} はサイレンスにされました
+        suspend: あなたのアカウント %{acct} は停止されました
       title:
         disable: アカウントが凍結されました
         none: 警告
@@ -1175,14 +1271,14 @@ ja:
       edit_profile_step: アイコンやヘッダーの画像をアップロードしたり、表示名を変更したりして、自分のプロフィールをカスタマイズすることができます。また、誰かからの新規フォローを許可する前にその人の様子を見ておきたい場合、アカウントを承認制にすることもできます。
       explanation: 始めるにあたってのアドバイスです
       final_action: 始めましょう
-      final_step: 'さあ、始めましょう！ たとえフォロワーがまだいなくても、あなたの公開した投稿はローカルタイムラインやハッシュタグなどを通じて誰かの目にとまるはずです。自己紹介をしたいときには #introductions ハッシュタグが便利かもしれません。'
+      final_step: 'さあ、始めましょう！ たとえフォロワーがまだいなくても、あなたの公開した投稿は連合タイムラインやハッシュタグなどを通じて誰かの目にとまるはずです。自己紹介をしたいときには #fedibird ハッシュタグが便利かもしれません。'
       full_handle: あなたの正式なユーザーID
       full_handle_hint: 別のサーバーの友達とフォローやメッセージをやり取りする際には、これを伝えることになります。
       review_preferences_action: 設定の変更
       review_preferences_step: 受け取りたいメールの種類や投稿のデフォルト公開範囲など、ユーザー設定を必ず済ませておきましょう。目が回らない自信があるなら、アニメーション GIF を自動再生する設定もご検討ください。
       subject: Mastodon へようこそ
-      tip_federated_timeline: 連合タイムラインは Mastodon ネットワークの流れを見られるものです。ただしあなたと同じサーバーの人がフォローしている人だけが含まれるので、それが全てではありません。
-      tip_following: 最初は、サーバーの管理者をフォローした状態になっています。もっと興味のある人たちを見つけるには、ローカルタイムラインと連合タイムラインを確認してみましょう。
+      tip_federated_timeline: 連合タイムラインは Mastodon ネットワークの流れを見られるものです。ただしあなたと同じサーバーの人がフォローしている人や、リレーを経由して送られてくる投稿だけが含まれるので、それが全てではありません。
+      tip_following: 最初は、サーバーのインフォメーションアカウントをフォローした状態になっています。もっと興味のある人たちを見つけるには、#fedibird ハッシュタグタイムラインと連合タイムラインを確認してみましょう。
       tip_local_timeline: ローカルタイムラインは %{instance} にいる人々の流れを見られるものです。彼らはあなたと同じサーバーにいる隣人のようなものです！
       tip_mobile_webapp: お使いのモバイル端末で、ブラウザから Mastodon をホーム画面に追加できますか？ もし追加できる場合、プッシュ通知の受け取りなど、まるで「普通の」アプリのような機能が楽しめます！
       tips: 豆知識

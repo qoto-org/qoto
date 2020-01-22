@@ -28,11 +28,13 @@ import {
   KeyboardShortcuts,
   PublicTimeline,
   CommunityTimeline,
+  DomainTimeline,
   AccountTimeline,
   AccountGallery,
   HomeTimeline,
   Followers,
   Following,
+  Subscribing,
   Reblogs,
   Favourites,
   DirectTimeline,
@@ -41,6 +43,7 @@ import {
   FollowRequests,
   GenericNotFound,
   FavouritedStatuses,
+  BookmarkedStatuses,
   ListTimeline,
   Blocks,
   DomainBlocks,
@@ -87,7 +90,6 @@ const keyMap = {
   back: 'backspace',
   goToHome: 'g h',
   goToNotifications: 'g n',
-  goToLocal: 'g l',
   goToFederated: 'g t',
   goToDirect: 'g d',
   goToStart: 'g s',
@@ -99,6 +101,7 @@ const keyMap = {
   goToRequests: 'g r',
   toggleHidden: 'x',
   toggleSensitive: 'h',
+  openMedia: 'e',
 };
 
 class SwitchingColumnsArea extends React.PureComponent {
@@ -164,7 +167,9 @@ class SwitchingColumnsArea extends React.PureComponent {
   }
 
   setRef = c => {
-    this.node = c.getWrappedInstance();
+    if (c) {
+      this.node = c.getWrappedInstance();
+    }
   }
 
   render () {
@@ -181,13 +186,14 @@ class SwitchingColumnsArea extends React.PureComponent {
           <WrappedRoute path='/keyboard-shortcuts' component={KeyboardShortcuts} content={children} />
           <WrappedRoute path='/timelines/home' component={HomeTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/public' exact component={PublicTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
-          <WrappedRoute path='/timelines/public/local' exact component={CommunityTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
+          <WrappedRoute path='/timelines/public/remote/:domain' exact component={DomainTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/direct' component={DirectTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/tag/:id' component={HashtagTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/timelines/list/:id' component={ListTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
 
           <WrappedRoute path='/notifications' component={Notifications} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/favourites' component={FavouritedStatuses} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
+          <WrappedRoute path='/bookmarks' component={BookmarkedStatuses} content={children} />
           <WrappedRoute path='/pinned' component={PinnedStatuses} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
 
           <WrappedRoute path='/search' component={Search} content={children} />
@@ -202,6 +208,7 @@ class SwitchingColumnsArea extends React.PureComponent {
           <WrappedRoute path='/accounts/:accountId/with_replies' component={AccountTimeline} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll, withReplies: true }} />
           <WrappedRoute path='/accounts/:accountId/followers' component={Followers} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/accounts/:accountId/following' component={Following} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
+          <WrappedRoute path='/accounts/:accountId/subscribing' component={Subscribing} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
           <WrappedRoute path='/accounts/:accountId/media' component={AccountGallery} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
 
           <WrappedRoute path='/follow_requests' component={FollowRequests} content={children} componentParams={{ shouldUpdateScroll: this.shouldUpdateScroll }} />
@@ -460,10 +467,6 @@ class UI extends React.PureComponent {
     this.context.router.history.push('/notifications');
   }
 
-  handleHotkeyGoToLocal = () => {
-    this.context.router.history.push('/timelines/public/local');
-  }
-
   handleHotkeyGoToFederated = () => {
     this.context.router.history.push('/timelines/public');
   }
@@ -513,7 +516,6 @@ class UI extends React.PureComponent {
       back: this.handleHotkeyBack,
       goToHome: this.handleHotkeyGoToHome,
       goToNotifications: this.handleHotkeyGoToNotifications,
-      goToLocal: this.handleHotkeyGoToLocal,
       goToFederated: this.handleHotkeyGoToFederated,
       goToDirect: this.handleHotkeyGoToDirect,
       goToStart: this.handleHotkeyGoToStart,

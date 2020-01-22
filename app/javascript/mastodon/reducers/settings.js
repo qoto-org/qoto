@@ -30,6 +30,7 @@ const initialState = ImmutableMap({
   notifications: ImmutableMap({
     alerts: ImmutableMap({
       follow: true,
+      follow_request: false,
       favourite: true,
       reblog: true,
       mention: true,
@@ -44,6 +45,7 @@ const initialState = ImmutableMap({
 
     shows: ImmutableMap({
       follow: true,
+      follow_request: false,
       favourite: true,
       reblog: true,
       mention: true,
@@ -52,6 +54,7 @@ const initialState = ImmutableMap({
 
     sounds: ImmutableMap({
       follow: true,
+      follow_request: false,
       favourite: true,
       reblog: true,
       mention: true,
@@ -60,6 +63,12 @@ const initialState = ImmutableMap({
   }),
 
   community: ImmutableMap({
+    regex: ImmutableMap({
+      body: '',
+    }),
+  }),
+
+  domain: ImmutableMap({
     regex: ImmutableMap({
       body: '',
     }),

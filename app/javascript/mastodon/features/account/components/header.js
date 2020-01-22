@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import Button from 'mastodon/components/button';
+import IconButton from 'mastodon/components/icon_button';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { autoPlayGif, me, isStaff } from 'mastodon/initial_state';
 import classNames from 'classnames';
@@ -15,6 +16,8 @@ import DropdownMenuContainer from 'mastodon/containers/dropdown_menu_container';
 const messages = defineMessages({
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
   follow: { id: 'account.follow', defaultMessage: 'Follow' },
+  unsubscribe: { id: 'account.unsubscribe', defaultMessage: 'Unsubscribe' },
+  subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe' },
   cancel_follow_request: { id: 'account.cancel_follow_request', defaultMessage: 'Cancel follow request' },
   requested: { id: 'account.requested', defaultMessage: 'Awaiting approval. Click to cancel follow request' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
@@ -63,6 +66,7 @@ class Header extends ImmutablePureComponent {
     account: ImmutablePropTypes.map,
     identity_props: ImmutablePropTypes.list,
     onFollow: PropTypes.func.isRequired,
+    onSubscribe: PropTypes.func.isRequired,
     onBlock: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     domain: PropTypes.string.isRequired,
@@ -238,8 +242,33 @@ class Header extends ImmutablePureComponent {
     const content         = { __html: account.get('note_emojified') };
     const displayNameHtml = { __html: account.get('display_name_html') };
     const fields          = account.get('fields');
-    const badge           = account.get('bot') ? (<div className='account-role bot'><FormattedMessage id='account.badges.bot' defaultMessage='Bot' /></div>) : null;
     const acct            = account.get('acct').indexOf('@') === -1 && domain ? `${account.get('acct')}@${domain}` : account.get('acct');
+
+    let badge;
+
+    if (account.get('bot')) {
+      badge = (<div className='account-role bot'><FormattedMessage id='account.badges.bot' defaultMessage='Bot' /></div>);
+    } else if (account.get('group')) {
+      badge = (<div className='account-role group'><FormattedMessage id='account.badges.group' defaultMessage='Group' /></div>);
+    } else {
+      badge = null;
+    }
+
+    const following   = account.getIn(['relationship', 'following']);
+    const subscribing = account.getIn(['relationship', 'subscribing']);
+    const blockd_by   = account.getIn(['relationship', 'blocked_by']);
+    let buttons;
+
+    if(me !== account.get('id') && !blockd_by) {
+      let following_buttons, subscribing_buttons;
+      if(!account.get('moved') || subscribing) {
+        subscribing_buttons = <IconButton icon='rss-square' title={intl.formatMessage(subscribing ? messages.unsubscribe : messages.subscribe)} onClick={this.props.onSubscribe} active={subscribing} />;
+      }
+      if(!account.get('moved') || following) {
+        following_buttons = <IconButton icon={following ? 'user-times' : 'user-plus'} title={intl.formatMessage(following ? messages.unfollow : messages.follow)} onClick={this.props.onFollow} active={following} />;
+      }
+      buttons = <span>{subscribing_buttons}{following_buttons}</span>
+    }
 
     return (
       <div className={classNames('account__header', { inactive: !!account.get('moved') })} ref={this.setRef}>
@@ -253,7 +282,7 @@ class Header extends ImmutablePureComponent {
 
         <div className='account__header__bar'>
           <div className='account__header__tabs'>
-            <a className='avatar' href={account.get('url')} rel='noopener' target='_blank'>
+            <a className='avatar' href={account.get('url')} rel='noopener noreferrer' target='_blank'>
               <Avatar account={account} size={90} />
             </a>
 
@@ -271,6 +300,9 @@ class Header extends ImmutablePureComponent {
               <span dangerouslySetInnerHTML={displayNameHtml} /> {badge}
               <small>@{acct} {lockedIcon}</small>
             </h1>
+            <div className='account__header__tabs__name__relationship account__relationship'>
+              {buttons}
+            </div>
           </div>
 
           <div className='account__header__extra'>
@@ -282,10 +314,10 @@ class Header extends ImmutablePureComponent {
                       <dt dangerouslySetInnerHTML={{ __html: proof.get('provider') }} />
 
                       <dd className='verified'>
-                        <a href={proof.get('proof_url')} target='_blank' rel='noopener'><span title={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(proof.get('updated_at'), dateFormatOptions) })}>
+                        <a href={proof.get('proof_url')} target='_blank' rel='noopener noreferrer'><span title={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(proof.get('updated_at'), dateFormatOptions) })}>
                           <Icon id='check' className='verified__mark' />
                         </span></a>
-                        <a href={proof.get('profile_url')} target='_blank' rel='noopener'><span dangerouslySetInnerHTML={{ __html: ' '+proof.get('provider_username') }} /></a>
+                        <a href={proof.get('profile_url')} target='_blank' rel='noopener noreferrer'><span dangerouslySetInnerHTML={{ __html: ' '+proof.get('provider_username') }} /></a>
                       </dd>
                     </dl>
                   ))}
@@ -316,6 +348,12 @@ class Header extends ImmutablePureComponent {
               <NavLink exact activeClassName='active' to={`/accounts/${account.get('id')}/followers`} title={intl.formatNumber(account.get('followers_count'))}>
                 <strong>{shortNumberFormat(account.get('followers_count'))}</strong> <FormattedMessage id='account.followers' defaultMessage='Followers' />
               </NavLink>
+
+              { (me === account.get('id')) && (
+                <NavLink exact activeClassName='active' to={`/accounts/${account.get('id')}/subscribing`} title={intl.formatNumber(account.get('subscribing_count'))}>
+                  <strong>{shortNumberFormat(account.get('subscribing_count'))}</strong> <FormattedMessage id='account.subscribes' defaultMessage='Subscribes' />
+                </NavLink>
+              )}
             </div>
           </div>
         </div>

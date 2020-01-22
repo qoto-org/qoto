@@ -22,6 +22,10 @@ export function CommunityTimeline () {
   return import(/* webpackChunkName: "features/community_timeline" */'../../community_timeline');
 }
 
+export function DomainTimeline () {
+  return import(/* webpackChunkName: "features/domain_timeline" */'../../domain_timeline');
+}
+
 export function HashtagTimeline () {
   return import(/* webpackChunkName: "features/hashtag_timeline" */'../../hashtag_timeline');
 }
@@ -70,6 +74,10 @@ export function Following () {
   return import(/* webpackChunkName: "features/following" */'../../following');
 }
 
+export function Subscribing () {
+  return import(/* webpackChunkName: "features/subscribing" */'../../subscribing');
+}
+
 export function Reblogs () {
   return import(/* webpackChunkName: "features/reblogs" */'../../reblogs');
 }
@@ -88,6 +96,10 @@ export function GenericNotFound () {
 
 export function FavouritedStatuses () {
   return import(/* webpackChunkName: "features/favourited_statuses" */'../../favourited_statuses');
+}
+
+export function BookmarkedStatuses () {
+  return import(/* webpackChunkName: "features/bookmarked_statuses" */'../../bookmarked_statuses');
 }
 
 export function Blocks () {
