@@ -400,7 +400,7 @@ class Status < ApplicationRecord
     private
 
     def timeline_scope(local_only = false)
-      starting_scope = local_only ? Status.none : Status
+      starting_scope = local_only ? Status.local : Status
       starting_scope
         .with_public_visibility
         .without_reblogs

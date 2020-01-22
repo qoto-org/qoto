@@ -200,7 +200,7 @@
   "intervals.full.minutes": "{number}分",
   "introduction.federation.action": "次へ",
   "introduction.federation.federated.headline": "連合タイムライン",
-  "introduction.federation.federated.text": "Fediverseの様々なサーバーからの公開投稿が連合タイムラインに表示されます。",
+  "introduction.federation.federated.text": "Fediverseの他のサーバーからの公開投稿は連合タイムラインに表示されます。",
   "introduction.federation.home.headline": "ホームタイムライン",
   "introduction.federation.home.text": "フォローしている人々の投稿はホームタイムラインに表示されます。どこのサーバーの誰でもフォローできます！",
   "introduction.federation.local.headline": "ローカルタイムライン",
