@@ -37,8 +37,8 @@ const messages = defineMessages({
   menu: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
   profile_directory: { id: 'getting_started.directory', defaultMessage: 'Profile directory' },
   information: { id: 'navigation_bar.information', defaultMessage: 'Information' },
-  information_acct: { id: 'navigation_bar.information_acct', defaultMessage: 'Fedibird info' },
-  hashtag_fedibird: { id: 'navigation_bar.hashtag_fedibird', defaultMessage: 'fedibird' },
+  information_acct: { id: 'navigation_bar.information_acct', defaultMessage: 'Qoto Announcements' },
+  hashtag_qoto_journal: { id: 'navigation_bar.hashtag_qoto_journal', defaultMessage: 'Qoto Journal' },
 });
 
 const mapStateToProps = state => ({
@@ -116,8 +116,8 @@ class GettingStarted extends ImmutablePureComponent {
 
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.information)} />,
-        <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
-        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+          <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/95378' />,
+        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_qoto_journal)} to='/timelines/tag/QotoJournal' />,
       );
 
       height += 34 + 48*2;
@@ -136,7 +136,7 @@ class GettingStarted extends ImmutablePureComponent {
 
       navItems.push(
         <ColumnLink key={i++} icon='info-circle' text={intl.formatMessage(messages.information_acct)} to='/accounts/2' />,
-        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_fedibird)} to='/timelines/tag/fedibird' />,
+        <ColumnLink key={i++} icon='hashtag' text={intl.formatMessage(messages.hashtag_qoto_journal)} to='/timelines/tag/QotoJornal' />,
       );
 
       height += 48*2;

@@ -208,7 +208,6 @@ class ColumnsArea extends ImmutablePureComponent {
 
           <div className='columns-area__panels__pane columns-area__panels__pane--start columns-area__panels__pane--navigational'>
             <div className='columns-area__panels__pane__inner'>
-              <NavigationPanel />
             </div>
           </div>
 
@@ -231,11 +230,6 @@ class ColumnsArea extends ImmutablePureComponent {
         })}
 
         {React.Children.map(children, child => React.cloneElement(child, { multiColumn: true }))}
-        <div className='columns-area__panels__pane columns-area__panels__pane--start columns-area__panels__pane--navigational'>
-          <div className='columns-area__panels__pane__inner'>
-            <NavigationPanel />
-          </div>
-        </div>
       </div>
     );
   }
