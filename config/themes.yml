@@ -1,5 +1,5 @@
 default: styles/qoto.scss
-qoto-no-ticker: styled/qoto-no-ticker.scss
+qoto-no-ticker: style/qoto-no-ticker.scss
 contrast: styles/contrast.scss
 mastodon: styles/application.scss
 mastodon-light: styles/mastodon-light.scss
