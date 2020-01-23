@@ -966,7 +966,7 @@ ja:
       too_few_options: は複数必要です
       too_many_options: は%{max}個までです
   preferences:
-    qoto_features: Qotoの機能
+    qoto_features: QOTOの機能
     other: その他
     posting_defaults: デフォルトの投稿設定
     public_timelines: 公開タイムライン
@@ -1202,7 +1202,8 @@ ja:
     title: "%{instance} 利用規約・プライバシーポリシー"
   themes:
     contrast: Mastodon (ハイコントラスト)
-    default: Mastodon (ダーク)
+    default: QOTO Default Theme
+    qoto-no-ticker: QOTO Default theme w/o instance ticker
     instance-ticker-type-0-contrast: Mastodon (ハイコントラスト / インスタンス・ティッカー Type-0 代替アイコン)
     instance-ticker-type-0-light: Mastodon (ライト / インスタンス・ティッカー Type-0 代替アイコン)
     instance-ticker-type-0: Mastodon (ダーク / インスタンス・ティッカー Type-0 代替アイコン)
