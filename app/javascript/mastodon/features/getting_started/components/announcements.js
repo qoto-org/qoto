@@ -12,6 +12,7 @@ import { mascot } from 'mastodon/initial_state';
 import unicodeMapping from 'mastodon/features/emoji/emoji_unicode_mapping_light';
 import classNames from 'classnames';
 import EmojiPickerDropdown from 'mastodon/features/compose/containers/emoji_picker_dropdown_container';
+import AnimatedNumber from 'mastodon/components/animated_number';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -225,7 +226,7 @@ class Reaction extends ImmutablePureComponent {
     return (
       <button className={classNames('reactions-bar__item', { active: reaction.get('me') })} onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} title={`:${shortCode}:`}>
         <span className='reactions-bar__item__emoji'><Emoji hovered={this.state.hovered} emoji={reaction.get('name')} emojiMap={this.props.emojiMap} /></span>
-        <span className='reactions-bar__item__count'><FormattedNumber value={reaction.get('count')} /></span>
+        <span className='reactions-bar__item__count'><AnimatedNumber value={reaction.get('count')} /></span>
       </button>
     );
   }
