@@ -952,6 +952,7 @@ en:
   reactions:
     errors:
       unrecognized_emoji: is not a recognized emoji
+      limit_reached: Limit of different reactions reached
   relationships:
     activity: Account activity
     dormant: Dormant
