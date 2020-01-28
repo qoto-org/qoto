@@ -242,6 +242,7 @@ en:
         title: New announcement
       published: Published
       published_msg: Announcement successfully published!
+      scheduled_for: Scheduled for %{time}
       scheduled_msg: Announcement scheduled for publication!
       time_range: Time range
       title: Announcements
