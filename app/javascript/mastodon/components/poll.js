@@ -113,7 +113,7 @@ class Poll extends ImmutablePureComponent {
 
   renderOption (option, optionIndex, showResults) {
     const { poll, disabled, intl } = this.props;
-    const pollVotesCount  = poll.get('voters_count') || poll.get('votes_count');
+    const pollVotesCount  = poll.get('votes_count');
     const percent         = pollVotesCount === 0 ? 0 : (option.get('votes_count') / pollVotesCount) * 100;
     const leading         = poll.get('options').filterNot(other => other.get('title') === option.get('title')).every(other => option.get('votes_count') >= other.get('votes_count'));
     const active          = !!this.state.selected[`${optionIndex}`];
@@ -176,7 +176,7 @@ class Poll extends ImmutablePureComponent {
     }
 
     const timeRemaining = expired ? intl.formatMessage(messages.closed) : <RelativeTimestamp timestamp={poll.get('expires_at')} futureDate />;
-    const showResults   = poll.get('voted') || expired;
+    const showResults   = false//poll.get('voted') || expired;
     const disabled      = this.props.disabled || Object.entries(this.state.selected).every(item => !item);
 
     let votesCount = null;
