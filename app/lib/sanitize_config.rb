@@ -19,19 +19,45 @@ class Sanitize
       node['class'] = class_list.join(' ')
     end
 
+    UNSUPPORTED_HREF_TRANSFORMER = lambda do |env|
+      return unless env[:node_name] == 'a'
+
+      current_node = env[:node]
+
+      scheme = begin
+        if current_node['href'].blank?
+          nil
+        else
+          uri = Addressable::URI.parse(current_node['href'])
+
+          if uri.relative?
+            :relative
+          else
+            uri.scheme
+          end
+        end
+      rescue Addressable::URI::InvalidURIError
+        nil
+      end
+
+      current_node.replace(current_node.children) if scheme.nil? || !HTTP_PROTOCOLS.include?(scheme)
+    end
+
     UNSUPPORTED_ELEMENTS_TRANSFORMER = lambda do |env|
       return unless %w(h1 h2 h3 h4 h5 h6 blockquote pre ul ol li).include?(env[:node_name])
 
+      current_node = env[:node]
+
       case env[:node_name]
       when 'li'
-        env[:node].traverse do |node|
+        current_node.traverse do |node|
           next unless %w(p ul ol li).include?(node.name)
 
           node.add_next_sibling('<br>') if node.next_sibling
           node.replace(node.children) unless node.text?
         end
       else
-        env[:node].name = 'p'
+        current_node.name = 'p'
       end
     end
 
@@ -50,13 +76,12 @@ class Sanitize
         },
       },
 
-      protocols: {
-        'a' => { 'href' => HTTP_PROTOCOLS },
-      },
+      protocols: {},
 
       transformers: [
         CLASS_WHITELIST_TRANSFORMER,
         UNSUPPORTED_ELEMENTS_TRANSFORMER,
+        UNSUPPORTED_HREF_TRANSFORMER,
       ]
     )
 
