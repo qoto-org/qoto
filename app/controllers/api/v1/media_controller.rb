@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class Api::V1::MediaController < Api::BaseController
+  include StoplightConcern
+
   before_action -> { doorkeeper_authorize! :write, :'write:media' }
   before_action :require_user!
+
+  around_action :object_storage_stoplight, only: :create
 
   respond_to :json
 
