@@ -9,6 +9,17 @@ module Mastodon
   class DimensionsValidationError < ValidationError; end
   class RaceConditionError < Error; end
 
+  class RateLimitExceededError < Error
+    attr_reader :limit, :period
+
+    def initialize(limit, period)
+      @limit  = limit
+      @period = period
+
+      super
+    end
+  end
+
   class UnexpectedResponseError < Error
     def initialize(response = nil)
       if response.respond_to? :uri

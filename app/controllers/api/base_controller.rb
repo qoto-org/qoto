@@ -44,6 +44,16 @@ class Api::BaseController < ApplicationController
     render json: { error: 'There was a temporary problem serving your request, please try again' }, status: 503
   end
 
+  rescue_from Mastodon::RateLimitExceededError do |e|
+    now = Time.now.utc
+
+    response.headers['X-RateLimit-Limit']     = e.limit.to_s
+    response.headers['X-RateLimit-Remaining'] = '0'
+    response.headers['X-RateLimit-Reset']     = (now + (e.period - now.to_i % e.period)).iso8601(6)
+
+    render json: { error: I18n.t('errors.429') }, status: 429
+  end
+
   rescue_from ActionController::ParameterMissing do |e|
     render json: { error: e.to_s }, status: 400
   end
