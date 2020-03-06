@@ -7,7 +7,8 @@ class Api::V1::MediaController < Api::BaseController
   respond_to :json
 
   def create
-    @media = current_account.media_attachments.create!(media_params)
+    # For delayed processing to have an effect, it needs to be set before the actual file
+    @media = current_account.media_attachments.create!({ delay_processing: true }.merge(media_params))
     render json: @media, serializer: REST::MediaAttachmentSerializer
   rescue Paperclip::Errors::NotIdentifiedByImageMagickError
     render json: file_type_error, status: 422
