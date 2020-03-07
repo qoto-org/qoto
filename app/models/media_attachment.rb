@@ -124,6 +124,12 @@ class MediaAttachment < ApplicationRecord
   IMAGE_LIMIT = 10.megabytes
   VIDEO_LIMIT = 40.megabytes
 
+  MIN_VIDEO_MATRIX_LIMIT = 1024 # 32x32px
+  MAX_VIDEO_MATRIX_LIMIT = 2_304_000 # 1920x1200px
+  MAX_VIDEO_FRAME_RATE   = 60
+  MIN_VIDEO_ASPECT_RATIO = 1.0 / 2.39
+  MAX_VIDEO_ASPECT_RATIO = 2.39
+
   belongs_to :account,          inverse_of: :media_attachments, optional: true
   belongs_to :status,           inverse_of: :media_attachments, optional: true
   belongs_to :scheduled_status, inverse_of: :media_attachments, optional: true
@@ -209,6 +215,7 @@ class MediaAttachment < ApplicationRecord
   before_create :set_shortcode
 
   before_post_process :set_type_and_extension
+  before_post_process :check_video_dimensions
 
   before_save :set_meta
 
@@ -275,6 +282,21 @@ class MediaAttachment < ApplicationRecord
         :image
       end
     end
+  end
+
+  def check_video_dimensions
+    return unless video? && file.queued_for_write[:original].present?
+
+    movie = FFMPEG::Movie.new(file.queued_for_write[:original].path)
+
+    return unless movie.valid?
+
+    matrix       = movie.width * movie.height
+    aspect_ratio = movie.width.to_f / movie.height
+
+    raise Mastodon::DimensionsValidationError, "#{movie.width}x#{movie.height} videos are not supported" if (matrix > MAX_VIDEO_MATRIX_LIMIT) || (matrix < MIN_VIDEO_MATRIX_LIMIT)
+    raise Mastodon::DimensionsValidationError, "#{movie.frame_rate.to_i}fps videos are not supported" if movie.frame_rate > MAX_VIDEO_FRAME_RATE
+    raise Mastodon::DimensionsValidationError, "#{(movie.width.to_r / movie.height.to_r).to_s.gsub('/', ':')} videos are not supported" unless (MIN_VIDEO_ASPECT_RATIO..MAX_VIDEO_ASPECT_RATIO).cover?(aspect_ratio)
   end
 
   def set_meta
