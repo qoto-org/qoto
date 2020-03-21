@@ -12,10 +12,11 @@ class FollowService < BaseService
   # @option [Boolean] :notify Whether to create notifications about new posts, defaults to false
   # @option [Boolean] :bypass_locked
   # @option [Boolean] :with_rate_limit
+  # @option [Boolean] :delivery
   def call(source_account, target_account, options = {})
     @source_account = source_account
     @target_account = ResolveAccountService.new.call(target_account, skip_webfinger: true)
-    @options        = { bypass_locked: false, with_rate_limit: false }.merge(options)
+    @options        = { bypass_locked: false, delivery: true, with_rate_limit: false }.merge(options)
 
     raise ActiveRecord::RecordNotFound if following_not_possible?
     raise Mastodon::NotPermittedError  if following_not_allowed?
