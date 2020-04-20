@@ -12,7 +12,11 @@ class LocalNotificationWorker
       activity = activity_class_name.constantize.find(activity_id)
     end
 
-    NotifyService.new.call(receiver, activity)
+    # This worker is only used for a few activity types, and they
+    # happen to correspond to their class names
+    type = activity_class_name.snake_case
+
+    NotifyService.new.call(receiver, type, activity)
   rescue ActiveRecord::RecordNotFound
     true
   end

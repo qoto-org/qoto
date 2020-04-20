@@ -10,14 +10,18 @@
 #  updated_at      :datetime         not null
 #  account_id      :bigint(8)        not null
 #  from_account_id :bigint(8)        not null
+#  type            :string
 #
 
 class Notification < ApplicationRecord
+  self.inheritance_column = nil
+
   include Paginable
   include Cacheable
 
   TYPE_CLASS_MAP = {
     mention:        'Mention',
+    status:         'Status',
     reblog:         'Status',
     follow:         'Follow',
     follow_request: 'FollowRequest',
@@ -42,22 +46,25 @@ class Notification < ApplicationRecord
   validates :activity_type, inclusion: { in: TYPE_CLASS_MAP.values }
 
   scope :browserable, ->(exclude_types = [], account_id = nil) {
-    types = TYPE_CLASS_MAP.values - activity_types_from_types(exclude_types)
+    types = TYPE_CLASS_MAP.keys - exclude_types.map(&:to_sym)
+
     if account_id.nil?
-      where(activity_type: types)
+      where(type: types)
     else
-      where(activity_type: types, from_account_id: account_id)
+      where(type: types, from_account_id: account_id)
     end
   }
 
   cache_associated :from_account, status: STATUS_INCLUDES, mention: [status: STATUS_INCLUDES], favourite: [:account, status: STATUS_INCLUDES], follow: :account, follow_request: :account, poll: [status: STATUS_INCLUDES]
 
   def type
-    @type ||= TYPE_CLASS_MAP.invert[activity_type].to_sym
+    @type ||= (super || TYPE_CLASS_MAP.invert[activity_type]).to_sym
   end
 
   def target_status
     case type
+    when :status
+      status
     when :reblog
       status&.reblog
     when :favourite
