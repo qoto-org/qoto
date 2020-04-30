@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ActivityPub::CollectionsController < ActivityPub::BaseController
-  include SignatureVerification
+  include SignatureAuthentication
   include AccountOwnedConcern
 
   before_action :require_signature!, if: :authorized_fetch_mode?
@@ -10,7 +10,7 @@ class ActivityPub::CollectionsController < ActivityPub::BaseController
   before_action :set_cache_headers
 
   def show
-    expires_in 3.minutes, public: public_fetch_mode?
+    expires_in 3.minutes, public: current_account.nil?
     render_with_cache json: collection_presenter, content_type: 'application/activity+json', serializer: ActivityPub::CollectionSerializer, adapter: ActivityPub::Adapter, skip_activities: true
   end
 
@@ -24,16 +24,16 @@ class ActivityPub::CollectionsController < ActivityPub::BaseController
   def set_size
     case params[:id]
     when 'featured'
-      @account.pinned_statuses.count
+      @size = @account.pinned_statuses.count
     else
-      raise ActiveRecord::RecordNotFound
+      not_found
     end
   end
 
   def scope_for_collection
     case params[:id]
     when 'featured'
-      return Status.none if @account.blocking?(signed_request_account)
+      return Status.none if !current_account.nil? && (@account.blocking?(current_account) || (!current_account.domain.nil? && @account.domain_blocking?(current_account.domain)))
 
       @account.pinned_statuses
     else

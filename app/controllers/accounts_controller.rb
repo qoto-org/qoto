@@ -141,11 +141,7 @@ class AccountsController < ApplicationController
   end
 
   def filtered_status_page(params)
-    if params[:min_id].present?
-      filtered_statuses.paginate_by_min_id(PAGE_SIZE, params[:min_id]).reverse
-    else
-      filtered_statuses.paginate_by_max_id(PAGE_SIZE, params[:max_id], params[:since_id]).to_a
-    end
+    filtered_statuses.paginate_by_id(PAGE_SIZE, params_slice(:max_id, :min_id, :since_id))
   end
 
   def restrict_fields_to
