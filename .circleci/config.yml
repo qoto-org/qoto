@@ -57,7 +57,7 @@ aliases:
         command: |
           sudo apt-get update
           sudo apt-get install -y libicu-dev libidn11-dev libprotobuf-dev protobuf-compiler
-          
+
           ## TODO: FIX THESE BUSTER DEPENDANCES
           sudo wget http://ftp.au.debian.org/debian/pool/main/i/icu/libicu57_57.1-6+deb9u3_amd64.deb
           sudo dpkg -i libicu57_57.1-6+deb9u3_amd64.deb
@@ -92,13 +92,11 @@ aliases:
         - *attach_workspace
         - *install_system_dependencies
         - run: sudo apt-get install -y ffmpeg
-        - run:
-            name: Prepare Tests
-            command: ./bin/rails parallel:create parallel:load_schema parallel:prepare
-        - run:
-            name: Run Tests
-            command: ./bin/retry bundle exec parallel_test ./spec/ --group-by filesize --type rspec
-
+        - run: ./bin/rails parallel:create parallel:load_schema parallel:prepare
+        - run: mkdir ~/rspec
+        - run: ./bin/retry bundle exec parallel_test ./spec/ --group-by filesize --type rspec
+        - store_test_results:
+            path: ~/rspec
 jobs:
   install:
     <<: *defaults
