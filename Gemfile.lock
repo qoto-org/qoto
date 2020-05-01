@@ -1,25 +1,17 @@
 GIT
+  remote: https://github.com/firstmoversadvantage/hcaptcha
+  revision: e65246bea49374566a9dbaead59fdb35b46b086d
+  ref: e65246bea49374566a9dbaead59fdb35b46b086d
+  specs:
+    hcaptcha (6.0.1)
+
+GIT
   remote: https://github.com/ianheggie/health_check
   revision: 0b799ead604f900ed50685e9b2d469cd2befba5b
   ref: 0b799ead604f900ed50685e9b2d469cd2befba5b
   specs:
     health_check (4.0.0.pre)
       rails (>= 4.0)
-
-GIT
-  remote: https://github.com/rtomayko/posix-spawn
-  revision: 58465d2e213991f8afb13b984854a49fcdcc980c
-  ref: 58465d2e213991f8afb13b984854a49fcdcc980c
-  specs:
-    posix-spawn (0.3.13)
-
-GIT
-  remote: https://github.com/tmm1/http_parser.rb
-  revision: 54b17ba8c7d8d20a16dfc65d1775241833219cf2
-  ref: 54b17ba8c7d8d20a16dfc65d1775241833219cf2
-  submodules: true
-  specs:
-    http_parser.rb (0.6.1)
 
 GIT
   remote: https://github.com/witgo/nilsimsa
@@ -755,6 +747,7 @@ DEPENDENCIES
   fog-openstack (~> 0.3)
   fuubar (~> 2.5)
   hamlit-rails (~> 0.2)
+  hcaptcha!
   health_check!
   hiredis (~> 0.6)
   htmlentities (~> 4.3)
