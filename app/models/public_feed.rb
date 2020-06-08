@@ -19,11 +19,12 @@ class PublicFeed < Feed
   # @param [Integer] min_id
   # @return [Array<Status>]
   def get(limit, max_id = nil, since_id = nil, min_id = nil)
+    return Status.none if local_only? && !imast?
+
     scope = public_scope
 
     scope.merge!(without_replies_scope) unless with_replies?
     scope.merge!(without_reblogs_scope) unless with_reblogs?
-    scope.merge!(local_only_scope) if local_only?
     scope.merge!(remote_only_scope) if remote_only?
     scope.merge!(domain_only_scope) if domain_only?
     scope.merge!(account_filters_scope) if account?
@@ -43,7 +44,11 @@ class PublicFeed < Feed
   end
 
   def local_only?
-    false
+    @options[:local]
+  end
+
+  def imast?
+    @options[:application]&.website == 'https://cinderella-project.github.io/iMast/'
   end
 
   def remote_only?
