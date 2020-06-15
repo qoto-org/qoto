@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import detectPassiveEvents from 'detect-passive-events';
 import { buildCustomEmojis, categoriesFromEmojis } from '../../emoji/emoji';
+import Tooltip from 'mastodon/components/tooltip';
 
 const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
@@ -358,13 +359,15 @@ class EmojiPickerDropdown extends React.PureComponent {
 
     return (
       <div className='emoji-picker-dropdown' onKeyDown={this.handleKeyDown}>
-        <div ref={this.setTargetRef} className='emoji-button' title={title} aria-label={title} aria-expanded={active} role='button' onClick={this.onToggle} onKeyDown={this.onToggle} tabIndex={0}>
-          {button || <img
-            className={classNames('emojione', { 'pulse-loading': active && loading })}
-            alt='🙂'
-            src={`${assetHost}/emoji/1f602.svg`}
-          />}
-        </div>
+        <Tooltip placement='top' overlay={title}>
+          <div ref={this.setTargetRef} className='emoji-button' aria-label={title} aria-expanded={active} role='button' onClick={this.onToggle} onKeyDown={this.onToggle} tabIndex={0}>
+            {button || <img
+              className={classNames('emojione', { 'pulse-loading': active && loading })}
+              alt='🙂'
+              src={`${assetHost}/emoji/1f602.svg`}
+            />}
+          </div>
+        </Tooltip>
 
         <Overlay show={active} placement={placement} target={this.findTarget}>
           <EmojiPickerMenu

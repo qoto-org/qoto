@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Tooltip from 'mastodon/components/tooltip';
 
 const iconStyle = {
   height: null,
@@ -26,16 +27,17 @@ export default class TextIconButton extends React.PureComponent {
     const { label, title, active, ariaControls } = this.props;
 
     return (
-      <button
-        title={title}
-        aria-label={title}
-        className={`text-icon-button ${active ? 'active' : ''}`}
-        aria-expanded={active}
-        onClick={this.handleClick}
-        aria-controls={ariaControls} style={iconStyle}
-      >
-        {label}
-      </button>
+      <Tooltip placement='bottom' overlay={title}>
+        <button
+          aria-label={title}
+          className={`text-icon-button ${active ? 'active' : ''}`}
+          aria-expanded={active}
+          onClick={this.handleClick}
+          aria-controls={ariaControls} style={iconStyle}
+        >
+          {label}
+        </button>
+      </Tooltip>
     );
   }
 

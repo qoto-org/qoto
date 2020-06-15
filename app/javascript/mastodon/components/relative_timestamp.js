@@ -1,6 +1,7 @@
 import React from 'react';
 import { injectIntl, defineMessages } from 'react-intl';
 import PropTypes from 'prop-types';
+import Tooltip from 'mastodon/components/tooltip';
 
 const messages = defineMessages({
   today: { id: 'relative_time.today', defaultMessage: 'today' },
@@ -181,11 +182,14 @@ class RelativeTimestamp extends React.Component {
     const timeGiven    = timestamp.includes('T');
     const date         = new Date(timestamp);
     const relativeTime = futureDate ? timeRemainingString(intl, date, this.state.now, timeGiven) : timeAgoString(intl, date, this.state.now, year, timeGiven);
+    const formatted    = intl.formatDate(date, dateFormatOptions);
 
     return (
-      <time dateTime={timestamp} title={intl.formatDate(date, dateFormatOptions)}>
-        {relativeTime}
-      </time>
+      <Tooltip placement='top' overlay={formatted}>
+        <time dateTime={timestamp} aria-label={formatted}>
+          {relativeTime}
+        </time>
+      </Tooltip>
     );
   }
 

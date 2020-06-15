@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Tooltip from 'mastodon/components/tooltip';
 
 export default class Button extends React.PureComponent {
 
@@ -49,16 +50,17 @@ export default class Button extends React.PureComponent {
     });
 
     return (
-      <button
-        className={className}
-        disabled={this.props.disabled}
-        onClick={this.handleClick}
-        ref={this.setRef}
-        style={style}
-        title={this.props.title}
-      >
-        {this.props.text || this.props.children}
-      </button>
+      <Tooltip placement='bottom' overlay={this.props.title}>
+        <button
+          className={className}
+          disabled={this.props.disabled}
+          onClick={this.handleClick}
+          ref={this.setRef}
+          style={style}
+        >
+          {this.props.text || this.props.children}
+        </button>
+      </Tooltip>
     );
   }
 

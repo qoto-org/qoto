@@ -11,6 +11,7 @@ import Avatar from 'mastodon/components/avatar';
 import { shortNumberFormat } from 'mastodon/utils/numbers';
 import { NavLink } from 'react-router-dom';
 import DropdownMenuContainer from 'mastodon/containers/dropdown_menu_container';
+import Tooltip from 'mastodon/components/tooltip';
 
 const messages = defineMessages({
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
@@ -293,19 +294,34 @@ class Header extends ImmutablePureComponent {
                       <dt dangerouslySetInnerHTML={{ __html: proof.get('provider') }} />
 
                       <dd className='verified'>
-                        <a href={proof.get('proof_url')} target='_blank' rel='noopener noreferrer'><span title={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(proof.get('updated_at'), dateFormatOptions) })}>
-                          <Icon id='check' className='verified__mark' />
-                        </span></a>
+                        <Tooltip placement='top' overlay={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(proof.get('updated_at'), dateFormatOptions) })}>
+                          <a href={proof.get('proof_url')} target='_blank' rel='noopener noreferrer'>
+                            <Icon id='check' className='verified__mark' />
+                          </a>
+                        </Tooltip>
+
                         <a href={proof.get('profile_url')} target='_blank' rel='noopener noreferrer'><span dangerouslySetInnerHTML={{ __html: ' '+proof.get('provider_username') }} /></a>
                       </dd>
                     </dl>
                   ))}
                   {fields.map((pair, i) => (
                     <dl key={i}>
-                      <dt dangerouslySetInnerHTML={{ __html: pair.get('name_emojified') }} title={pair.get('name')} />
+                      <dt>
+                        <Tooltip placement='top' overlay={pair.get('name')}>
+                          <span dangerouslySetInnerHTML={{ __html: pair.get('name_emojified') }} />
+                        </Tooltip>
+                      </dt>
 
-                      <dd className={pair.get('verified_at') && 'verified'} title={pair.get('value_plain')}>
-                        {pair.get('verified_at') && <span title={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(pair.get('verified_at'), dateFormatOptions) })}><Icon id='check' className='verified__mark' /></span>} <span dangerouslySetInnerHTML={{ __html: pair.get('value_emojified') }} />
+                      <dd className={pair.get('verified_at') && 'verified'}>
+                        {pair.get('verified_at') && (
+                          <Tooltip placement='top' overlay={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(pair.get('verified_at'), dateFormatOptions) })}>
+                            <Icon id='check' className='verified__mark' />
+                          </Tooltip>
+                        )}
+                        {' '}
+                        <Tooltip placement='top' overlay={pair.get('value_plain')}>
+                          <span dangerouslySetInnerHTML={{ __html: pair.get('value_emojified') }} />
+                        </Tooltip>
                       </dd>
                     </dl>
                   ))}
@@ -316,17 +332,23 @@ class Header extends ImmutablePureComponent {
             </div>
 
             <div className='account__header__extra__links'>
-              <NavLink isActive={this.isStatusesPageActive} activeClassName='active' to={`/accounts/${account.get('id')}`} title={intl.formatNumber(account.get('statuses_count'))}>
-                <strong>{shortNumberFormat(account.get('statuses_count'))}</strong> <FormattedMessage id='account.posts' defaultMessage='Toots' />
-              </NavLink>
+              <Tooltip placement='bottom' overlay={intl.formatNumber(account.get('statuses_count'))}>
+                <NavLink isActive={this.isStatusesPageActive} activeClassName='active' to={`/accounts/${account.get('id')}`}>
+                  <strong>{shortNumberFormat(account.get('statuses_count'))}</strong> <FormattedMessage id='account.posts' defaultMessage='Toots' />
+                </NavLink>
+              </Tooltip>
 
-              <NavLink exact activeClassName='active' to={`/accounts/${account.get('id')}/following`} title={intl.formatNumber(account.get('following_count'))}>
-                <strong>{shortNumberFormat(account.get('following_count'))}</strong> <FormattedMessage id='account.follows' defaultMessage='Follows' />
-              </NavLink>
+              <Tooltip placement='bottom' overlay={intl.formatNumber(account.get('following_count'))}>
+                <NavLink exact activeClassName='active' to={`/accounts/${account.get('id')}/following`}>
+                  <strong>{shortNumberFormat(account.get('following_count'))}</strong> <FormattedMessage id='account.follows' defaultMessage='Follows' />
+                </NavLink>
+              </Tooltip>
 
-              <NavLink exact activeClassName='active' to={`/accounts/${account.get('id')}/followers`} title={intl.formatNumber(account.get('followers_count'))}>
-                <strong>{shortNumberFormat(account.get('followers_count'))}</strong> <FormattedMessage id='account.followers' defaultMessage='Followers' />
-              </NavLink>
+              <Tooltip placement='bottom' overlay={intl.formatNumber(account.get('followers_count'))}>
+                <NavLink exact activeClassName='active' to={`/accounts/${account.get('id')}/followers`}>
+                  <strong>{shortNumberFormat(account.get('followers_count'))}</strong> <FormattedMessage id='account.followers' defaultMessage='Followers' />
+                </NavLink>
+              </Tooltip>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { changeComposeSensitivity } from 'mastodon/actions/compose';
 import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
+import Tooltip from 'mastodon/components/tooltip';
 
 const messages = defineMessages({
   marked: { id: 'compose_form.sensitive.marked', defaultMessage: 'Media is marked as sensitive' },
@@ -37,19 +38,21 @@ class SensitiveButton extends React.PureComponent {
 
     return (
       <div className='compose-form__sensitive-button'>
-        <label className={classNames('icon-button', { active })} title={intl.formatMessage(active ? messages.marked : messages.unmarked)}>
-          <input
-            name='mark-sensitive'
-            type='checkbox'
-            checked={active}
-            onChange={onClick}
-            disabled={disabled}
-          />
+        <Tooltip placement='top' overlay={intl.formatMessage(active ? messages.marked : messages.unmarked)}>
+          <label className={classNames('icon-button', { active })} aria-label={intl.formatMessage(active ? messages.marked : messages.unmarked)}>
+            <input
+              name='mark-sensitive'
+              type='checkbox'
+              checked={active}
+              onChange={onClick}
+              disabled={disabled}
+            />
 
-          <span className={classNames('checkbox', { active })} />
+            <span className={classNames('checkbox', { active })} />
 
-          <FormattedMessage id='compose_form.sensitive.hide' defaultMessage='Mark media as sensitive' />
-        </label>
+            <FormattedMessage id='compose_form.sensitive.hide' defaultMessage='Mark media as sensitive' />
+          </label>
+        </Tooltip>
       </div>
     );
   }

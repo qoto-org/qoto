@@ -8,6 +8,7 @@ import { isIOS } from '../is_mobile';
 import classNames from 'classnames';
 import { autoPlayGif, cropImages, displayMedia, useBlurhash } from '../initial_state';
 import { decode } from 'blurhash';
+import Tooltip from 'mastodon/components/tooltip';
 
 const messages = defineMessages({
   toggle_visible: { id: 'media_gallery.toggle_visible',
@@ -165,9 +166,11 @@ class Item extends React.PureComponent {
     if (attachment.get('type') === 'unknown') {
       return (
         <div className={classNames('media-gallery__item', { standalone })} key={attachment.get('id')} style={{ left: left, top: top, right: right, bottom: bottom, width: `${width}%`, height: `${height}%` }}>
-          <a className='media-gallery__item-thumbnail' href={attachment.get('remote_url') || attachment.get('url')} style={{ cursor: 'pointer' }} title={attachment.get('description')} target='_blank' rel='noopener noreferrer'>
-            <canvas width={32} height={32} ref={this.setCanvasRef} className='media-gallery__preview' />
-          </a>
+          <Tooltip placement='bottom' overlay={attachment.get('description')}>
+            <a className='media-gallery__item-thumbnail' href={attachment.get('remote_url') || attachment.get('url')} style={{ cursor: 'pointer' }} aria-label={attachment.get('description')} target='_blank' rel='noopener noreferrer'>
+              <canvas width={32} height={32} ref={this.setCanvasRef} className='media-gallery__preview' />
+            </a>
+          </Tooltip>
         </div>
       );
     } else if (attachment.get('type') === 'image') {
@@ -188,42 +191,44 @@ class Item extends React.PureComponent {
       const y      = ((focusY / -2) + .5) * 100;
 
       thumbnail = (
-        <a
-          className='media-gallery__item-thumbnail'
-          href={attachment.get('remote_url') || originalUrl}
-          onClick={this.handleClick}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <img
-            src={previewUrl}
-            srcSet={srcSet}
-            sizes={sizes}
-            alt={attachment.get('description')}
-            title={attachment.get('description')}
-            style={{ objectPosition: `${x}% ${y}%` }}
-            onLoad={this.handleImageLoad}
-          />
-        </a>
+        <Tooltip placement='bottom' overlay={attachment.get('description')}>
+          <a
+            className='media-gallery__item-thumbnail'
+            href={attachment.get('remote_url') || originalUrl}
+            onClick={this.handleClick}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <img
+              src={previewUrl}
+              srcSet={srcSet}
+              sizes={sizes}
+              alt={attachment.get('description')}
+              style={{ objectPosition: `${x}% ${y}%` }}
+              onLoad={this.handleImageLoad}
+            />
+          </a>
+        </Tooltip>
       );
     } else if (attachment.get('type') === 'gifv') {
       const autoPlay = !isIOS() && this.getAutoPlay();
 
       thumbnail = (
         <div className={classNames('media-gallery__gifv', { autoplay: autoPlay })}>
-          <video
-            className='media-gallery__item-gifv-thumbnail'
-            aria-label={attachment.get('description')}
-            title={attachment.get('description')}
-            role='application'
-            src={attachment.get('url')}
-            onClick={this.handleClick}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-            autoPlay={autoPlay}
-            loop
-            muted
-          />
+          <Tooltip placement='bottom' overlay={attachment.get('description')}>
+            <video
+              className='media-gallery__item-gifv-thumbnail'
+              aria-label={attachment.get('description')}
+              role='application'
+              src={attachment.get('url')}
+              onClick={this.handleClick}
+              onMouseEnter={this.handleMouseEnter}
+              onMouseLeave={this.handleMouseLeave}
+              autoPlay={autoPlay}
+              loop
+              muted
+            />
+          </Tooltip>
 
           <span className='media-gallery__gifv__label'>GIF</span>
         </div>

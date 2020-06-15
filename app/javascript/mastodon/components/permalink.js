@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Tooltip from 'mastodon/components/tooltip';
 
 export default class Permalink extends React.PureComponent {
 
@@ -28,12 +29,14 @@ export default class Permalink extends React.PureComponent {
   }
 
   render () {
-    const { href, children, className, onInterceptClick, ...other } = this.props;
+    const { href, children, className, onInterceptClick, title, ...other } = this.props;
 
     return (
-      <a target='_blank' href={href} onClick={this.handleClick} {...other} className={`permalink${className ? ' ' + className : ''}`}>
-        {children}
-      </a>
+      <Tooltip placement='top' overlay={title}>
+        <a target='_blank' href={href} onClick={this.handleClick} {...other} className={`permalink${className ? ' ' + className : ''}`}>
+          {children}
+        </a>
+      </Tooltip>
     );
   }
 

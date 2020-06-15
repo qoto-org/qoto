@@ -16,6 +16,7 @@ import { MediaGallery, Video, Audio } from '../features/ui/util/async-components
 import { HotKeys } from 'react-hotkeys';
 import classNames from 'classnames';
 import Icon from 'mastodon/components/icon';
+import Tooltip from 'mastodon/components/tooltip';
 import { displayMedia } from '../initial_state';
 
 // We use the component (and not the container) since we do not want
@@ -424,13 +425,15 @@ class Status extends ImmutablePureComponent {
             <div className='status__info'>
               <a href={status.get('url')} className='status__relative-time' target='_blank' rel='noopener noreferrer'><RelativeTimestamp timestamp={status.get('created_at')} /></a>
 
-              <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} title={status.getIn(['account', 'acct'])} className='status__display-name' target='_blank' rel='noopener noreferrer'>
-                <div className='status__avatar'>
-                  {statusAvatar}
-                </div>
+              <Tooltip placement='top' overlay={status.getIn(['account', 'acct'])}>
+                <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name' target='_blank' rel='noopener noreferrer'>
+                  <div className='status__avatar'>
+                    {statusAvatar}
+                  </div>
 
-                <DisplayName account={status.get('account')} others={otherAccounts} />
-              </a>
+                  <DisplayName account={status.get('account')} others={otherAccounts} />
+                </a>
+              </Tooltip>
             </div>
 
             <StatusContent status={status} onClick={this.handleClick} expanded={!status.get('hidden')} showThread={showThread} onExpandedToggle={this.handleExpandedToggle} collapsable onCollapsedToggle={this.handleCollapsedToggle} />
