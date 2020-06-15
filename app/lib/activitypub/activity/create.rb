@@ -119,6 +119,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
         media_attachment_ids: process_attachments.take(4).map(&:id),
         poll: process_poll,
         quote: quote,
+        expires_at: @object['expiry'],
       }
     end
   end

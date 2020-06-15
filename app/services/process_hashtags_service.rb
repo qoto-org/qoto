@@ -12,6 +12,11 @@ class ProcessHashtagsService < BaseService
       TrendingTags.record_use!(tag, status.account, status.created_at) if status.public_visibility?
     end
 
+    time_limit = TimeLimit.from_status(status)
+    if (time_limit.present?)
+      status.update(expires_at: time_limit.to_datetime, expires_action: :delete)
+    end
+
     return unless status.distributable?
 
     status.account.featured_tags.where(tag_id: records.map(&:id)).each do |featured_tag|

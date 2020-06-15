@@ -1185,6 +1185,8 @@ ja:
     disallowed_hashtags:
       other: '許可されていないハッシュタグが含まれています: %{tags}'
     errors:
+      duration_too_long: が長過ぎます
+      duration_too_short: が短過ぎます
       in_reply_not_found: あなたが返信しようとしているトゥートは存在しないようです。
     language_detection: 自動検出
     open_in_web: Webで開く

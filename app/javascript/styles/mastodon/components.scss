@@ -1136,6 +1136,10 @@
       color: $light-text-color;
     }
 
+    .status__expiration-time {
+      color: $light-text-color;
+    }
+
     .status__display-name {
       color: $inverted-text-color;
     }
@@ -1169,6 +1173,7 @@
 
 .status__relative-time,
 .status__visibility-icon,
+.status__expiration-time,
 .notification__relative_time {
   color: $dark-text-color;
   float: right;
@@ -1178,6 +1183,14 @@
 .status__visibility-icon {
   margin-left: 4px;
   margin-right: 4px;
+}
+
+.status__expiration-time {
+  margin-left: 4px;
+}
+
+.status-expired .status__expiration-time {
+  color: red;
 }
 
 .status__display-name {
@@ -1343,6 +1356,15 @@
   font-weight: 500;
   font-size: 12px;
   margin-left: 6px;
+}
+
+.detailed-status__expiration-time {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.detailed-status-expired .detailed-status__expiration-time {
+  color: red;
 }
 
 .reply-indicator__content,
@@ -6887,6 +6909,12 @@ noscript {
     }
 
     &__relative-time {
+      font-size: 15px;
+      color: $darker-text-color;
+      padding-left: 15px;
+    }
+
+    &__expiration-time {
       font-size: 15px;
       color: $darker-text-color;
       padding-left: 15px;
