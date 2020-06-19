@@ -6,6 +6,103 @@ import { formatTime } from 'mastodon/features/video';
 import Icon from 'mastodon/components/icon';
 import classNames from 'classnames';
 import { throttle } from 'lodash';
+import { encode, decode } from 'blurhash';
+
+const digitCharacters = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+  "#",
+  "$",
+  "%",
+  "*",
+  "+",
+  ",",
+  "-",
+  ".",
+  ":",
+  ";",
+  "=",
+  "?",
+  "@",
+  "[",
+  "]",
+  "^",
+  "_",
+  "{",
+  "|",
+  "}",
+  "~"
+];
+
+const decode83 = (str) => {
+  let value = 0;
+  for (let i = 0; i < str.length; i++) {
+    const c = str[i];
+    const digit = digitCharacters.indexOf(c);
+    value = value * 83 + digit;
+  }
+  return value;
+};
 
 const messages = defineMessages({
   play: { id: 'video.play', defaultMessage: 'Play' },
@@ -15,12 +112,16 @@ const messages = defineMessages({
   download: { id: 'video.download', defaultMessage: 'Download file' },
 });
 
+const TICK_SIZE = 10;
+const PADDING = 180;
+
 export default @injectIntl
 class Audio extends React.PureComponent {
 
   static propTypes = {
     src: PropTypes.string.isRequired,
     alt: PropTypes.string,
+    poster: PropTypes.string,
     duration: PropTypes.number,
     peaks: PropTypes.arrayOf(PropTypes.number),
     height: PropTypes.number,
@@ -35,6 +136,8 @@ class Audio extends React.PureComponent {
     paused: true,
     muted: false,
     volume: 0.5,
+    containerWidth: 0,
+    color: { r: 255, g: 255, b: 255 },
   };
 
   // Hard coded in components.scss
@@ -48,99 +151,104 @@ class Audio extends React.PureComponent {
     return (offset > 110) ? 110 : offset;
   }
 
+  setPlayerRef = c => {
+    this.player = c;
+
+    if (c) {
+      const width  = c.offsetWidth;
+      const height = width / (16/9);
+
+      this.setState({ width, height });
+    }
+  }
+
   setVolumeRef = c => {
     this.volume = c;
   }
 
-  setWaveformRef = c => {
-    this.waveform = c;
+  setAudioRef = c => {
+    this.audio = c;
+
+    if (this.audio) {
+      this.setState({ volume: this.audio.volume, muted: this.audio.muted });
+    }
+  }
+
+  setBlurhashCanvasRef = c => {
+    this.blurhashCanvas = c;
+  }
+
+  setCanvasRef = c => {
+    this.canvas = c;
+
+    if (c) {
+      this.canvasContext = c.getContext('2d');
+    }
   }
 
   componentDidMount () {
-    if (this.waveform) {
-      this._updateWaveform();
-    }
-
     window.addEventListener('scroll', this.handleScroll);
+
+    const img = new Image();
+    img.onload = () => this.handlePosterLoad(img);
+    img.src = this.props.poster;
   }
 
-  componentDidUpdate (prevProps) {
-    if (this.waveform && prevProps.src !== this.props.src) {
-      this._updateWaveform();
+  componentDidUpdate (prevProps, prevState) {
+    if (prevProps.poster !== this.props.poster) {
+      const img = new Image();
+      img.onload = () => this.handlePosterLoad(img);
+      img.src = this.props.poster;
     }
+
+    if (prevState.blurhash !== this.state.blurhash) {
+      const context = this.blurhashCanvas.getContext('2d');
+      const pixels = decode(this.state.blurhash, 32, 32);
+      const outputImageData = new ImageData(pixels, 32, 32);
+
+      context.putImageData(outputImageData, 0, 0);
+    }
+
+    this._clear();
+    this._draw();
   }
 
   componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll);
-
-    if (this.wavesurfer) {
-      this.wavesurfer.destroy();
-      this.wavesurfer = null;
-    }
-  }
-
-  _updateWaveform () {
-    const { src, height, duration, peaks, preload } = this.props;
-
-    const progressColor = window.getComputedStyle(document.querySelector('.audio-player__progress-placeholder')).getPropertyValue('background-color');
-    const waveColor     = window.getComputedStyle(document.querySelector('.audio-player__wave-placeholder')).getPropertyValue('background-color');
-
-    if (this.wavesurfer) {
-      this.wavesurfer.destroy();
-      this.loaded = false;
-    }
-
-    const wavesurfer = WaveSurfer.create({
-      container: this.waveform,
-      height,
-      barWidth: 3,
-      cursorWidth: 0,
-      progressColor,
-      waveColor,
-      backend: 'MediaElement',
-      interact: preload,
-    });
-
-    wavesurfer.setVolume(this.state.volume);
-
-    if (preload) {
-      wavesurfer.load(src);
-      this.loaded = true;
-    } else {
-      wavesurfer.load(src, peaks, 'none', duration);
-      this.loaded = false;
-    }
-
-    wavesurfer.on('ready', () => this.setState({ duration: Math.floor(wavesurfer.getDuration()) }));
-    wavesurfer.on('audioprocess', () => this.setState({ currentTime: Math.floor(wavesurfer.getCurrentTime()) }));
-    wavesurfer.on('pause', () => this.setState({ paused: true }));
-    wavesurfer.on('play', () => this.setState({ paused: false }));
-    wavesurfer.on('volume', volume => this.setState({ volume }));
-    wavesurfer.on('mute', muted => this.setState({ muted }));
-
-    this.wavesurfer = wavesurfer;
   }
 
   togglePlay = () => {
     if (this.state.paused) {
-      if (!this.props.preload && !this.loaded) {
-        this.wavesurfer.createBackend();
-        this.wavesurfer.createPeakCache();
-        this.wavesurfer.load(this.props.src);
-        this.wavesurfer.toggleInteraction();
-        this.wavesurfer.setVolume(this.state.volume);
-        this.loaded = true;
-      }
-
-      this.setState({ paused: false }, () => this.wavesurfer.play());
+      this.setState({ paused: false }, () => this.audio.play());
     } else {
-      this.setState({ paused: true }, () => this.wavesurfer.pause());
+      this.setState({ paused: true }, () => this.audio.pause());
     }
+  }
+
+  handlePlay = () => {
+    this.setState({ paused: false });
+
+    if (this.canvas) {
+      this._initAudioContext();
+    }
+
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume();
+    }
+
+    this._renderCanvas();
+  }
+
+  handlePause = () => {
+    this.setState({ paused: true });
   }
 
   toggleMute = () => {
     const muted = !this.state.muted;
-    this.setState({ muted }, () => this.wavesurfer.setMute(muted));
+
+    this.setState({ muted }, () => {
+      this.audio.muted = muted;
+    });
   }
 
   handleVolumeMouseDown = e => {
@@ -162,6 +270,13 @@ class Audio extends React.PureComponent {
     document.removeEventListener('touchend', this.handleVolumeMouseUp, true);
   }
 
+  handleTimeUpdate = () => {
+    this.setState({
+      currentTime: Math.floor(this.audio.currentTime),
+      duration: Math.floor(this.audio.duration),
+    });
+  }
+
   handleMouseVolSlide = throttle(e => {
     const rect = this.volume.getBoundingClientRect();
     const x    = (e.clientX - rect.left) / this.volWidth; // x position within the element.
@@ -175,41 +290,267 @@ class Audio extends React.PureComponent {
         slideamt = 0;
       }
 
-      this.wavesurfer.setVolume(slideamt);
+      this.setState({ volume: slideamt }, () => {
+        this.audio.volume = slideamt;
+      });
     }
   }, 60);
 
   handleScroll = throttle(() => {
-    if (!this.waveform || !this.wavesurfer) {
+    return;
+
+    if (!this.canvas || !this.audio) {
       return;
     }
 
-    const { top, height } = this.waveform.getBoundingClientRect();
+    const { top, height } = this.canvas.getBoundingClientRect();
     const inView = (top <= (window.innerHeight || document.documentElement.clientHeight)) && (top + height >= 0);
 
     if (!this.state.paused && !inView) {
-      this.setState({ paused: true }, () => this.wavesurfer.pause());
+      this.setState({ paused: true }, () => this.audio.pause());
     }
-  }, 150, { trailing: true })
+  }, 150, { trailing: true });
+
+  _initAudioContext () {
+    const context  = new AudioContext();
+    const analyser = context.createAnalyser();    
+    const source   = context.createMediaElementSource(this.audio);
+
+    analyser.smoothingTimeConstant = 0.6;
+    analyser.fftSize = 2048;
+
+    source.connect(analyser);
+    source.connect(context.destination);
+
+    this.audioContext = context;
+    this.analyser = analyser;
+  }
+
+  handlePosterLoad = image => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    canvas.width  = image.width;
+    canvas.height = image.height;
+
+    context.drawImage(image, 0, 0);
+
+    const inputImageData = context.getImageData(0, 0, image.width, image.height);
+    const blurhash = encode(inputImageData.data, image.width, image.height, 4, 4);
+    const averageColor = decode83(blurhash.slice(2, 6));
+
+    this.setState({
+      blurhash,
+
+      color: {
+        r: Math.max(0, (averageColor >> 16) - 80),
+        g: Math.max(0, ((averageColor >> 8) & 255) - 80),
+        b: Math.max(0, (averageColor & 255) - 80),
+      },
+    });
+  }
+
+  _renderCanvas () {
+    requestAnimationFrame(() => {
+      this._clear();
+      this._draw();
+
+      if (!this.state.paused) {
+        this._renderCanvas();
+      }
+    });
+  }
+
+  _clear () {
+    this.canvasContext.clearRect(0, 0, this.state.width, this.state.height);
+  }
+
+  _draw () {
+    this.canvasContext.save();
+
+    const [ticks, scale] = this._getTicks(360 * this._getScaleCoefficient(), TICK_SIZE);
+
+    ticks.forEach(tick => {
+      this._drawTick(tick.x1, tick.y1, tick.x2, tick.y2);
+    });
+
+    this.canvasContext.restore();
+  }
+
+  _getRadius () {
+    return ((this.state.height || this.props.height) - (PADDING * this._getScaleCoefficient()) * 2) / 2;
+  }
+
+  _getScaleCoefficient () {
+    return (this.state.height || this.props.height) / 982;
+  }
+
+  _getTicks (count, size, animationParams = [0, 90]) {
+    const radius = this._getRadius();
+    const ticks = this._getTickPoints(count);
+    const lesser = 200;
+    const m = [];
+    const bufferLength = this.analyser ? this.analyser.frequencyBinCount : 0;
+    const frequencyData = new Uint8Array(bufferLength);
+    const allScales = [];
+    const scaleCoefficient = this._getScaleCoefficient();
+
+    if (this.analyser) {
+      this.analyser.getByteFrequencyData(frequencyData);
+    }
+
+    ticks.forEach((tick, i) => {
+      const coef = 1 - i / (ticks.length * 2.5);
+
+      let delta = ((frequencyData[i] || 0) - lesser * coef) * scaleCoefficient;
+
+      if (delta < 0) {
+        delta = 0;
+      }
+
+      let k;
+
+      if (animationParams[0] <= tick.angle && tick.angle <= animationParams[1]) {
+        k = radius / (radius - this._getSize(tick.angle, animationParams[0], animationParams[1]) - delta);
+      } else {
+        k = radius / (radius - (size + delta));
+      }
+
+      const x1 = tick.x * (radius - size);
+      const y1 = tick.y * (radius - size);
+      const x2 = x1 * k;
+      const y2 = y1 * k;
+
+      m.push({ x1, y1, x2, y2 });
+
+      if (i < 20) {
+        let scale = delta / (200 * scaleCoefficient);
+        scale = scale < 1 ? 1 : scale;
+        allScales.push(scale);
+      }
+    });
+
+    const sum = allScales.reduce((pv, cv) => pv + cv, 0) / allScales.length;
+
+    return [m.map(({ x1, y1, x2, y2 }) => ({
+      x1: x1,
+      y1: y1,
+      x2: x2 * sum,
+      y2: y2 * sum,
+    })), sum];
+  }
+
+  _getSize (angle, l, r) {
+    const scaleCoefficient = this._getScaleCoefficient();
+    const maxTickSize = TICK_SIZE * 9 * scaleCoefficient;
+    const m = (r - l) / 2;
+    const x = (angle - l);
+
+    let h;
+
+    if (x == m) {
+      return maxTickSize;
+    }
+
+    const d = Math.abs(m - x);
+    const v = 40 * Math.sqrt(1 / d);
+
+    if (v > maxTickSize) {
+      h = maxTickSize;
+    } else {
+      h = Math.max(TICK_SIZE, v);
+    }
+
+    return h;
+  }
+
+  _getTickPoints (count) {
+    const PI = 360;
+    const coords = [];
+    const step = PI / count;
+
+    let rad;
+
+    for(let deg = 0; deg < PI; deg += step) {
+      rad = deg * Math.PI / (PI / 2);
+      coords.push({ x: Math.cos(rad), y: -Math.sin(rad), angle: deg });
+    }
+
+    return coords;
+  }
+
+  _drawTick (x1, y1, x2, y2) {
+    const radius = this._getRadius();
+    const cx = this.state.width / 2;
+    const cy = radius + (PADDING * this._getScaleCoefficient());
+
+    const dx1 = parseInt(cx + x1);
+    const dy1 = parseInt(cy + y1);
+    const dx2 = parseInt(cx + x2);
+    const dy2 = parseInt(cy + y2);
+
+    const gradient = this.canvasContext.createLinearGradient(dx1, dy1, dx2, dy2);
+    
+    const mainColor = `rgb(${this.state.color.r}, ${this.state.color.g}, ${this.state.color.b})`;
+    const lastColor = `rgba(${this.state.color.r}, ${this.state.color.g}, ${this.state.color.b}, 0)`;
+
+    gradient.addColorStop(0, mainColor);
+    gradient.addColorStop(0.6, mainColor);
+    gradient.addColorStop(1, lastColor);
+
+    this.canvasContext.beginPath();
+    this.canvasContext.strokeStyle = gradient;
+    this.canvasContext.lineWidth = 2;
+    this.canvasContext.moveTo(dx1, dy1);
+    this.canvasContext.lineTo(dx2, dy2);
+    this.canvasContext.stroke();
+  }
+
+  _getColor () {
+    return `rgb(${this.state.color.r}, ${this.state.color.g}, ${this.state.color.b})`;
+  }
 
   render () {
-    const { height, intl, alt, editable } = this.props;
+    const { src, intl, alt, editable } = this.props;
     const { paused, muted, volume, currentTime } = this.state;
 
     const volumeWidth     = muted ? 0 : volume * this.volWidth;
     const volumeHandleLoc = muted ? this.volHandleOffset(0) : this.volHandleOffset(volume);
 
     return (
-      <div className={classNames('audio-player', { editable })}>
-        <div className='audio-player__progress-placeholder' style={{ display: 'none' }} />
-        <div className='audio-player__wave-placeholder' style={{ display: 'none' }} />
+      <div className={classNames('audio-player', { editable })} ref={this.setPlayerRef} style={{ width: this.state.width || '100%', height: this.state.height || this.props.height }}>
+        <audio
+          src={src}
+          ref={this.setAudioRef}
+          preload='none'
+          onPlay={this.handlePlay}
+          onPause={this.handlePause}
+          onTimeUpdate={this.handleTimeUpdate}
+        />
 
-        <div
-          className='audio-player__waveform'
+        <canvas 
+          className='audio-player__background'
+          width='32'
+          height='32'
+          style={{ width: this.state.width, height: this.state.height, position: 'absolute', top: 0, left: 0 }}
+          ref={this.setBlurhashCanvasRef}
+        />
+
+        <canvas
+          className='audio-player__canvas'
           aria-label={alt}
           title={alt}
-          style={{ height }}
-          ref={this.setWaveformRef}
+          width={this.state.width}
+          height={this.state.height}
+          style={{ width: '100%', position: 'absolute', top: 0, left: 0 }}
+          ref={this.setCanvasRef}
+        />
+
+        <img
+          src={this.props.poster}
+          width={(this._getRadius() - TICK_SIZE) * 2}
+          height={(this._getRadius() - TICK_SIZE) * 2}
+          style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', borderRadius: '50%' }}
         />
 
         <div className='video-player__controls active'>
@@ -220,12 +561,12 @@ class Audio extends React.PureComponent {
 
               <div className='video-player__volume' onMouseDown={this.handleVolumeMouseDown} ref={this.setVolumeRef}>
                 &nbsp;
-                <div className='video-player__volume__current' style={{ width: `${volumeWidth}px` }} />
+                <div className='video-player__volume__current' style={{ width: `${volumeWidth}px`, backgroundColor: this._getColor() }} />
 
                 <span
                   className={classNames('video-player__volume__handle')}
                   tabIndex='0'
-                  style={{ left: `${volumeHandleLoc}px` }}
+                  style={{ left: `${volumeHandleLoc}px`, backgroundColor: this._getColor() }}
                 />
               </div>
 
@@ -239,7 +580,7 @@ class Audio extends React.PureComponent {
             <div className='video-player__buttons right'>
               <button type='button' title={intl.formatMessage(messages.download)} aria-label={intl.formatMessage(messages.download)}>
                 <a className='video-player__download__icon' href={this.props.src} download>
-                  <Icon id={'download'} fixedWidth />
+                  <Icon id='download' fixedWidth />
                 </a>
               </button>
             </div>
