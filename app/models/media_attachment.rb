@@ -219,11 +219,10 @@ class MediaAttachment < ApplicationRecord
   before_create :prepare_description, unless: :local?
   before_create :set_shortcode
   before_create :set_processing
+  before_create :set_meta
 
   before_post_process :set_type_and_extension
   before_post_process :check_video_dimensions
-
-  before_save :set_meta
 
   class << self
     def supported_mime_types
@@ -306,15 +305,11 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_meta
-    meta = populate_meta
-
-    return if meta == {}
-
-    file.instance_write :meta, meta
+    file.instance_write :meta, populate_meta
   end
 
   def populate_meta
-    meta = file.instance_read(:meta) || {}
+    meta = {}
 
     file.queued_for_write.each do |style, file|
       meta[style] = style == :small || image? ? image_geometry(file) : video_metadata(file)

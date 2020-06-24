@@ -276,8 +276,10 @@ class Audio extends React.PureComponent {
   }
 
   handleProgress = () => {
-    if (this.audio.buffered.length > 0) {
-      this.setState({ buffer: this.audio.buffered.end(0) / this.audio.duration * 100 });
+    const lastTimeRange = this.audio.buffered.length - 1;
+
+    if (lastTimeRange > -1) {
+      this.setState({ buffer: Math.ceil(this.audio.buffered.end(lastTimeRange) / this.audio.duration * 100) });
     }
   }
 
@@ -334,18 +336,18 @@ class Audio extends React.PureComponent {
 
   handleMouseMove = throttle(e => {
     const { x } = getPointerPosition(this.seek, e);
-    const currentTime = Math.floor(this.audio.duration * x);
+    const currentTime = this.audio.duration * x;
 
     if (!isNaN(currentTime)) {
       this.setState({ currentTime }, () => {
         this.audio.currentTime = currentTime;
       });
     }
-  }, 60);
+  }, 15);
 
   handleTimeUpdate = () => {
     this.setState({
-      currentTime: Math.floor(this.audio.currentTime),
+      currentTime: this.audio.currentTime,
       duration: Math.floor(this.audio.duration),
     });
   }
@@ -358,7 +360,7 @@ class Audio extends React.PureComponent {
         this.audio.volume = x;
       });
     }
-  }, 60);
+  }, 15);
 
   handleScroll = throttle(() => {
     if (!this.canvas || !this.audio) {
@@ -436,6 +438,7 @@ class Audio extends React.PureComponent {
 
   _renderCanvas () {
     requestAnimationFrame(() => {
+      this.handleTimeUpdate();
       this._clear();
       this._draw();
 
@@ -608,7 +611,6 @@ class Audio extends React.PureComponent {
           onPlay={this.handlePlay}
           onPause={this.handlePause}
           onProgress={this.handleProgress}
-          onTimeUpdate={this.handleTimeUpdate}
           crossOrigin='anonymous'
         />
 
@@ -669,7 +671,7 @@ class Audio extends React.PureComponent {
               </div>
 
               <span className='video-player__time'>
-                <span className='video-player__time-current'>{formatTime(currentTime)}</span>
+                <span className='video-player__time-current'>{formatTime(Math.floor(currentTime))}</span>
                 <span className='video-player__time-sep'>/</span>
                 <span className='video-player__time-total'>{formatTime(this.state.duration || Math.floor(this.props.duration))}</span>
               </span>
