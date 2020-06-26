@@ -26,6 +26,8 @@ class REST::MediaAttachmentSerializer < ActiveModel::Serializer
   end
 
   def preview_url
+    return unless object.file.styles.has_key?(:small)
+
     if object.needs_redownload?
       media_proxy_url(object.id, :small)
     else

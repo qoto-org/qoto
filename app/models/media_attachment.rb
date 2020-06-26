@@ -49,13 +49,13 @@ class MediaAttachment < ApplicationRecord
     original: {
       pixels: 1_638_400, # 1280x1280px
       file_geometry_parser: FastGeometryParser,
-    },
+    }.freeze,
 
     small: {
       pixels: 160_000, # 400x400px
       file_geometry_parser: FastGeometryParser,
       blurhash: BLURHASH_OPTIONS,
-    },
+    }.freeze,
   }.freeze
 
   VIDEO_FORMAT = {
@@ -74,14 +74,14 @@ class MediaAttachment < ApplicationRecord
         'frames:v' => 60 * 60 * 3,
         'crf' => 18,
         'map_metadata' => '-1',
-      },
-    },
+      }.freeze,
+    }.freeze,
   }.freeze
 
   VIDEO_PASSTHROUGH_OPTIONS = {
-    video_codecs: ['h264'],
-    audio_codecs: ['aac', nil],
-    colorspaces: ['yuv420p'],
+    video_codecs: ['h264'].freeze,
+    audio_codecs: ['aac', nil].freeze,
+    colorspaces: ['yuv420p'].freeze,
     options: {
       format: 'mp4',
       convert_options: {
@@ -90,9 +90,9 @@ class MediaAttachment < ApplicationRecord
           'map_metadata' => '-1',
           'c:v' => 'copy',
           'c:a' => 'copy',
-        },
-      },
-    },
+        }.freeze,
+      }.freeze,
+    }.freeze,
   }.freeze
 
   VIDEO_STYLES = {
@@ -101,15 +101,15 @@ class MediaAttachment < ApplicationRecord
         output: {
           'loglevel' => 'fatal',
           vf: 'scale=\'min(400\, iw):min(400\, ih)\':force_original_aspect_ratio=decrease',
-        },
-      },
+        }.freeze,
+      }.freeze,
       format: 'png',
       time: 0,
       file_geometry_parser: FastGeometryParser,
       blurhash: BLURHASH_OPTIONS,
-    },
+    }.freeze,
 
-    original: VIDEO_FORMAT.merge(passthrough_options: VIDEO_PASSTHROUGH_OPTIONS),
+    original: VIDEO_FORMAT.merge(passthrough_options: VIDEO_PASSTHROUGH_OPTIONS).freeze,
   }.freeze
 
   AUDIO_STYLES = {
@@ -119,16 +119,20 @@ class MediaAttachment < ApplicationRecord
       convert_options: {
         output: {
           'loglevel' => 'fatal',
-          'map_metadata' => '-1',
           'q:a' => 2,
-        },
-      },
-    },
+        }.freeze,
+      }.freeze,
+    }.freeze,
   }.freeze
 
   VIDEO_CONVERTED_STYLES = {
-    small: VIDEO_STYLES[:small],
-    original: VIDEO_FORMAT,
+    small: VIDEO_STYLES[:small].freeze,
+    original: VIDEO_FORMAT.freeze,
+  }.freeze
+
+  AUDIO_WITH_ART_STYLES = {
+    small: VIDEO_STYLES[:small].merge(time: -1).freeze,
+    original: AUDIO_STYLES[:original].freeze,
   }.freeze
 
   IMAGE_LIMIT = 10.megabytes
@@ -215,6 +219,10 @@ class MediaAttachment < ApplicationRecord
     @delay_processing
   end
 
+  def audio_with_art?
+    @audio_with_art ||= file.meta&.has_key?('small')
+  end
+
   after_commit :enqueue_processing, on: :create
   after_commit :reset_parent_cache, on: :update
 
@@ -225,6 +233,7 @@ class MediaAttachment < ApplicationRecord
 
   before_post_process :set_type_and_extension
   before_post_process :check_video_dimensions
+  before_post_process :check_audio_art
 
   class << self
     def supported_mime_types
@@ -244,18 +253,24 @@ class MediaAttachment < ApplicationRecord
         IMAGE_STYLES
       elsif VIDEO_MIME_TYPES.include?(f.instance.file_content_type)
         VIDEO_STYLES
+      elsif f.instance.audio_with_art?
+        AUDIO_WITH_ART_STYLES
       else
         AUDIO_STYLES
       end
     end
 
-    def file_processors(f)
-      if f.file_content_type == 'image/gif'
+    def file_processors(instance)
+      if instance.file_content_type == 'image/gif'
         [:gif_transcoder, :blurhash_transcoder]
-      elsif VIDEO_MIME_TYPES.include?(f.file_content_type)
+      elsif VIDEO_MIME_TYPES.include?(instance.file_content_type)
         [:video_transcoder, :blurhash_transcoder, :type_corrector]
-      elsif AUDIO_MIME_TYPES.include?(f.file_content_type)
-        [:transcoder, :type_corrector]
+      elsif AUDIO_MIME_TYPES.include?(instance.file_content_type)
+        if instance.audio_with_art?
+          [:transcoder, :blurhash_transcoder, :type_corrector]
+        else
+          [:transcoder, :type_corrector]
+        end
       else
         [:lazy_thumbnail, :blurhash_transcoder, :type_corrector]
       end
@@ -298,12 +313,20 @@ class MediaAttachment < ApplicationRecord
   def check_video_dimensions
     return unless (video? || gifv?) && file.queued_for_write[:original].present?
 
-    movie = FFMPEG::Movie.new(file.queued_for_write[:original].path)
+    movie = ffmpeg_data(file.queued_for_write[:original].path)
 
     return unless movie.valid?
 
     raise Mastodon::DimensionsValidationError, "#{movie.width}x#{movie.height} videos are not supported" if movie.width * movie.height > MAX_VIDEO_MATRIX_LIMIT
     raise Mastodon::DimensionsValidationError, "#{movie.frame_rate.to_i}fps videos are not supported" if movie.frame_rate > MAX_VIDEO_FRAME_RATE
+  end
+
+  def check_audio_art
+    return unless audio? && file.queued_for_write[:original].present?
+
+    movie = ffmpeg_data(file.queued_for_write[:original].path)
+
+    @audio_with_art = movie.valid? && movie.video_stream.present?
   end
 
   def set_meta
@@ -334,7 +357,7 @@ class MediaAttachment < ApplicationRecord
   end
 
   def video_metadata(file)
-    movie = FFMPEG::Movie.new(file.path)
+    movie = ffmpeg_data(file.path)
 
     return {} unless movie.valid?
 
@@ -345,6 +368,10 @@ class MediaAttachment < ApplicationRecord
       duration: movie.duration,
       bitrate: movie.bitrate,
     }.compact
+  end
+
+  def ffmpeg_data(path = nil)
+    @ffmpeg_data ||= FFMPEG::Movie.new(path)
   end
 
   def enqueue_processing
