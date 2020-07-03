@@ -293,8 +293,6 @@ class Header extends ImmutablePureComponent {
             </h1>
           </div>
 
-          <AccountNoteContainer account={account} />
-
           <div className='account__header__extra'>
             <div className='account__header__bio'>
               { (fields.size > 0 || identity_proofs.size > 0) && (
@@ -322,6 +320,8 @@ class Header extends ImmutablePureComponent {
                   ))}
                 </div>
               )}
+
+              <AccountNoteContainer account={account} />
 
               {account.get('note').length > 0 && account.get('note') !== '<p></p>' && <div className='account__header__content' dangerouslySetInnerHTML={content} />}
             </div>

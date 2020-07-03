@@ -3,11 +3,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import Icon from 'mastodon/components/icon';
 import Textarea from 'react-textarea-autosize';
+import { is } from 'immutable';
 
 const messages = defineMessages({
-  placeholder: { id: 'account_note.placeholder', defaultMessage: 'No comment provided' },
+  placeholder: { id: 'account_note.placeholder', defaultMessage: 'Click to add a note' },
 });
 
 export default @injectIntl
@@ -15,87 +15,99 @@ class Header extends ImmutablePureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
-    isEditing: PropTypes.bool,
-    isSubmitting: PropTypes.bool,
-    accountNote: PropTypes.string,
-    onEditAccountNote: PropTypes.func.isRequired,
-    onCancelAccountNote: PropTypes.func.isRequired,
-    onSaveAccountNote: PropTypes.func.isRequired,
-    onChangeAccountNote: PropTypes.func.isRequired,
+    value: PropTypes.string,
+    onSave: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };
 
-  handleChangeAccountNote = (e) => {
-    this.props.onChangeAccountNote(e.target.value);
+  state = {
+    value: '',
   };
 
-  componentWillUnmount () {
-    if (this.props.isEditing) {
-      this.props.onCancelAccountNote();
+  componentWillMount () {
+    this._reset();
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (!is(this.props.account, nextProps.account) || this.props.value !== nextProps.value) {
+      this.setState({ value: nextProps.value || '' });
     }
   }
+
+  componentWillUnmount () {
+    if (this._isDirty()) {
+      this._save();
+    }
+  }
+
+  setTextareaRef = c => {
+    this.textarea = c;
+  }
+
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
 
   handleKeyDown = e => {
     if (e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
-      this.props.onSaveAccountNote();
+      e.preventDefault();
+
+      this._save();
+
+      if (this.textarea) {
+        this.textarea.blur();
+      }
     } else if (e.keyCode === 27) {
-      this.props.onCancelAccountNote();
+      e.preventDefault();
+
+      this._reset(() => {
+        if (this.textarea) {
+          this.textarea.blur();
+        }
+      });
     }
   }
 
+  handleBlur = () => {
+    if (this._isDirty()) {
+      this._save();
+    }
+  }
+
+  _save () {
+    this.props.onSave(this.state.value);
+  }
+
+  _reset (callback) {
+    this.setState({ value: this.props.value || '' }, callback);
+  }
+
+  _isDirty () {
+    return this.state.value !== this.props.value;
+  }
+
   render () {
-    const { account, accountNote, isEditing, isSubmitting, intl } = this.props;
+    const { account, intl } = this.props;
+    const { value } = this.state;
 
-    if (!account || (!accountNote && !isEditing)) {
+    if (!account) {
       return null;
-    }
-
-    let action_buttons = null;
-    if (isEditing) {
-      action_buttons = (
-        <div className='account__header__account-note__buttons'>
-          <button className='text-btn' tabIndex='0' onClick={this.props.onCancelAccountNote} disabled={isSubmitting}>
-            <Icon id='times' size={15} /> <FormattedMessage id='account_note.cancel' defaultMessage='Cancel' />
-          </button>
-          <div className='flex-spacer' />
-          <button className='text-btn' tabIndex='0' onClick={this.props.onSaveAccountNote} disabled={isSubmitting}>
-            <Icon id='check' size={15} /> <FormattedMessage id='account_note.save' defaultMessage='Save' />
-          </button>
-        </div>
-      );
-    }
-
-    let note_container = null;
-    if (isEditing) {
-      note_container = (
-        <Textarea
-          className='account__header__account-note__content'
-          disabled={isSubmitting}
-          placeholder={intl.formatMessage(messages.placeholder)}
-          value={accountNote}
-          onChange={this.handleChangeAccountNote}
-          onKeyDown={this.handleKeyDown}
-          autoFocus
-        />
-      );
-    } else {
-      note_container = (<div className='account__header__account-note__content'>{accountNote}</div>);
     }
 
     return (
       <div className='account__header__account-note'>
-        <div className='account__header__account-note__header'>
-          <strong><FormattedMessage id='account.account_note_header' defaultMessage='Your note for @{name}' values={{ name: account.get('username') }} /></strong>
-          {!isEditing && (
-            <div>
-              <button className='text-btn' tabIndex='0' onClick={this.props.onEditAccountNote} disabled={isSubmitting}>
-                <Icon id='pencil' size={15} /> <FormattedMessage id='account_note.edit' defaultMessage='Edit' />
-              </button>
-            </div>
-          )}
-        </div>
-        {note_container}
-        {action_buttons}
+        <strong><FormattedMessage id='account.account_note_header' defaultMessage='Note' /></strong>
+
+        <Textarea
+          className='account__header__account-note__content'
+          disabled={(typeof this.props.value === undefined)}
+          placeholder={intl.formatMessage(messages.placeholder)}
+          value={value}
+          onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
+          onBlur={this.handleBlur}
+          ref={this.setTextareaRef}
+        />
       </div>
     );
   }
