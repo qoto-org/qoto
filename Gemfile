@@ -5,6 +5,7 @@ ruby '>= 2.5.0', '< 3.0.0'
 
 gem 'pkg-config', '~> 1.4'
 
+gem 'color_diff'
 gem 'puma', '~> 4.3'
 gem 'rails', '~> 5.2.4.3'
 gem 'sprockets', '~> 3.7.2'
