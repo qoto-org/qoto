@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { changeUploadCompose } from '../../../actions/compose';
+import { changeUploadCompose, uploadThumbnail } from '../../../actions/compose';
 import { getPointerPosition } from '../../video';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import IconButton from 'mastodon/components/icon_button';
@@ -23,17 +23,24 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
   apply: { id: 'upload_modal.apply', defaultMessage: 'Apply' },
   placeholder: { id: 'upload_modal.description_placeholder', defaultMessage: 'A quick brown fox jumps over the lazy dog' },
+  chooseImage: { id: 'upload_modal.choose_image', defaultMessage: 'Choose image' },
 });
 
 const mapStateToProps = (state, { id }) => ({
   media: state.getIn(['compose', 'media_attachments']).find(item => item.get('id') === id),
   account: state.getIn(['accounts', me]),
+  isUploadingThumbnail: state.getIn(['compose', 'isUploadingThumbnail']),
+  thumbnailProgress: state.getIn(['compose', 'thumbnailProgress']),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
 
   onSave: (description, x, y) => {
     dispatch(changeUploadCompose(id, { description, focus: `${x.toFixed(2)},${y.toFixed(2)}` }));
+  },
+
+  onSelectThumbnail: files => {
+    dispatch(uploadThumbnail(id, files[0]));
   },
 
 });
@@ -81,6 +88,10 @@ class FocalPointModal extends ImmutablePureComponent {
   static propTypes = {
     media: ImmutablePropTypes.map.isRequired,
     account: ImmutablePropTypes.map.isRequired,
+    isUploadingThumbnail: PropTypes.bool,
+    thumbnailProgress: PropTypes.number,
+    onSave: PropTypes.func.isRequired,
+    onSelectThumbnail: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };
@@ -235,13 +246,29 @@ class FocalPointModal extends ImmutablePureComponent {
     }).catch(() => this.setState({ detecting: false }));
   }
 
+  handleThumbnailChange = e => {
+    if (e.target.files.length > 0) {
+      this.setState({ dirty: true });
+      this.props.onSelectThumbnail(e.target.files);
+    }
+  }
+
+  setFileInputRef = c => {
+    this.fileInput = c;
+  }
+
+  handleFileInputClick = () => {
+    this.fileInput.click();
+  }
+
   render () {
-    const { media, intl, account, onClose } = this.props;
+    const { media, intl, account, onClose, isUploadingThumbnail, thumbnailProgress } = this.props;
     const { x, y, dragging, description, dirty, detecting, progress } = this.state;
 
     const width  = media.getIn(['meta', 'original', 'width']) || null;
     const height = media.getIn(['meta', 'original', 'height']) || null;
     const focals = ['image', 'gifv'].includes(media.get('type'));
+    const thumbnailable = ['audio', 'video'].includes(media.get('type'));
 
     const previewRatio  = 16/9;
     const previewWidth  = 200;
@@ -257,6 +284,16 @@ class FocalPointModal extends ImmutablePureComponent {
       descriptionLabel = <FormattedMessage id='upload_form.description' defaultMessage='Describe for the visually impaired' />;
     }
 
+    const chooseImageLabel = intl.formatMessage(messages.chooseImage);
+
+    let uploadThumbnailLabel = null;
+
+    if (media.get('type') === 'audio') {
+      uploadThumbnailLabel = <FormattedMessage id='upload_form.audio_thumbnail' defaultMessage='Change cover art' />;
+    } else {
+      uploadThumbnailLabel = <FormattedMessage id='upload_form.thumbnail' defaultMessage='Change thumbnail' />;
+    }
+
     return (
       <div className='modal-root__modal report-modal' style={{ maxWidth: 960 }}>
         <div className='report-modal__target'>
@@ -267,6 +304,29 @@ class FocalPointModal extends ImmutablePureComponent {
         <div className='report-modal__container'>
           <div className='report-modal__comment'>
             {focals && <p><FormattedMessage id='upload_modal.hint' defaultMessage='Click or drag the circle on the preview to choose the focal point which will always be in view on all thumbnails.' /></p>}
+
+            {thumbnailable && (
+              <React.Fragment>
+                <label className='setting-text-label'>{uploadThumbnailLabel}</label>
+
+                <Button disabled={isUploadingThumbnail} text={chooseImageLabel} onClick={this.handleFileInputClick} />
+
+                <label>
+                  <span style={{ display: 'none' }}>{chooseImageLabel}</span>
+
+                  <input
+                    ref={this.setFileInputRef}
+                    type='file'
+                    accept='image/png,image/jpeg'
+                    onChange={this.handleThumbnailChange}
+                    style={{ display: 'none' }}
+                    disabled={isUploadingThumbnail}
+                  />
+                </label>
+
+                <hr className='setting-divider' />
+              </React.Fragment>
+            )}
 
             <label className='setting-text-label' htmlFor='upload-modal__description'>
               {descriptionLabel}
@@ -293,7 +353,7 @@ class FocalPointModal extends ImmutablePureComponent {
               <CharacterCounter max={1500} text={detecting ? '' : description} />
             </div>
 
-            <Button disabled={!dirty || detecting || length(description) > 1500} text={intl.formatMessage(messages.apply)} onClick={this.handleSubmit} />
+            <Button disabled={!dirty || detecting || isUploadingThumbnail || length(description) > 1500} text={intl.formatMessage(messages.apply)} onClick={this.handleSubmit} />
           </div>
 
           <div className='focal-point-modal__content'>
