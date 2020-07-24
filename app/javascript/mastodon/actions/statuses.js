@@ -1,6 +1,4 @@
 import api from '../api';
-import openDB from '../storage/db';
-import { evictStatus } from '../storage/modifier';
 
 import { deleteFromTimelines } from './timelines';
 import { importFetchedStatus, importFetchedStatuses, importAccount, importStatus, importFetchedAccount } from './importer';
@@ -94,23 +92,10 @@ export function fetchStatus(id) {
 
     dispatch(fetchStatusRequest(id, skipLoading));
 
-    openDB().then(db => {
-      const transaction = db.transaction(['accounts', 'statuses'], 'read');
-      const accountIndex = transaction.objectStore('accounts').index('id');
-      const index = transaction.objectStore('statuses').index('id');
-
-      return getFromDB(dispatch, getState, accountIndex, index, id).then(() => {
-        db.close();
-      }, error => {
-        db.close();
-        throw error;
-      });
-    }).then(() => {
-      dispatch(fetchStatusSuccess(skipLoading));
-    }, () => api(getState).get(`/api/v1/statuses/${id}`).then(response => {
+    api(getState).get(`/api/v1/statuses/${id}`).then(response => {
       dispatch(importFetchedStatus(response.data));
       dispatch(fetchStatusSuccess(skipLoading));
-    })).catch(error => {
+    }).catch(error => {
       dispatch(fetchStatusFail(id, error, skipLoading));
     });
   };
@@ -152,7 +137,6 @@ export function deleteStatus(id, routerHistory, withRedraft = false) {
     dispatch(deleteStatusRequest(id));
 
     api(getState).delete(`/api/v1/statuses/${id}`).then(response => {
-      evictStatus(id);
       dispatch(deleteStatusSuccess(id));
       dispatch(deleteFromTimelines(id));
       dispatch(importFetchedAccount(response.data.account));

@@ -8,6 +8,7 @@ import {
 } from './timelines';
 import { updateNotifications, expandNotifications } from './notifications';
 import { updateConversations } from './conversations';
+import { receiveCrypto } from './crypto';
 import {
   fetchAnnouncements,
   updateAnnouncements,
@@ -58,6 +59,9 @@ export function connectTimelineStream (timelineId, path, pollingRefresh = null, 
           break;
         case 'announcement.delete':
           dispatch(deleteAnnouncement(data.payload));
+          break;
+        case 'encrypted_message':
+          dispatch(receiveCrypto(JSON.parse(data.payload)));
           break;
         }
       },

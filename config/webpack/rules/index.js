@@ -2,6 +2,7 @@ const babel = require('./babel');
 const css = require('./css');
 const file = require('./file');
 const nodeModules = require('./node_modules');
+const wasm = require('./wasm');
 
 // Webpack loaders are processed in reverse order
 // https://webpack.js.org/concepts/loaders/#loader-features
@@ -11,4 +12,5 @@ module.exports = {
   css,
   nodeModules,
   babel,
+  wasm,
 };

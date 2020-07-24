@@ -3811,6 +3811,11 @@ detect-passive-events@^1.0.2:
   resolved "https://registry.yarnpkg.com/detect-passive-events/-/detect-passive-events-1.0.4.tgz#6ed477e6e5bceb79079735dcd357789d37f9a91a"
   integrity sha1-btR35uW863kHlzXc01d4nTf5qRo=
 
+dexie@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-3.0.1.tgz#faafeb94be0d5e18b25d700546a2c05725511cfc"
+  integrity sha512-/s4KzlaerQnCad/uY1ZNdFckTrbdMVhLlziYQzz62Ff9Ick1lHGomvTXNfwh4ApEZATyXRyVk5F6/y8UU84B0w==
+
 diff-sequences@^25.2.6:
   version "25.2.6"
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-25.2.6.tgz#5f467c00edd35352b7bca46d7927d60e687a76dd"
@@ -7657,6 +7662,10 @@ offline-plugin@^5.0.7:
     loader-utils "0.2.x"
     minimatch "^3.0.3"
     slash "^1.0.0"
+
+"olm@https://packages.matrix.org/npm/olm/olm-3.1.4.tgz":
+  version "3.1.4"
+  resolved "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz#0f03128b7d3b2f614d2216409a1dfccca765fdb3"
 
 on-finished@~2.3.0:
   version "2.3.0"
