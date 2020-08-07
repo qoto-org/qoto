@@ -12,7 +12,7 @@ const uuid = require('uuid');
 const fs = require('fs');
 
 const env = process.env.NODE_ENV || 'development';
-const alwaysRequireAuth = process.env.WHITELIST_MODE === 'true' || process.env.AUTHORIZED_FETCH === 'true';
+const alwaysRequireAuth = process.env.LIMITED_FEDERATION_MODE === 'true' || process.env.WHITELIST_MODE === 'true' || process.env.AUTHORIZED_FETCH === 'true';
 
 dotenv.config({
   path: env === 'production' ? '.env.production' : '.env',
@@ -108,6 +108,7 @@ const startWorker = (workerId) => {
   }
 
   const app = express();
+
   app.set('trusted proxy', process.env.TRUSTED_PROXY_IP || 'loopback,uniquelocal');
 
   const pgPool = new pg.Pool(Object.assign(pgConfigs[env], dbUrlToConfig(process.env.DATABASE_URL)));
@@ -167,16 +168,24 @@ const startWorker = (workerId) => {
   const subscribe = (channel, callback) => {
     log.silly(`Adding listener for ${channel}`);
     subs[channel] = subs[channel] || [];
+
     if (subs[channel].length === 0) {
       log.verbose(`Subscribe ${channel}`);
       redisSubscribeClient.subscribe(channel);
     }
+
     subs[channel].push(callback);
   };
 
   const unsubscribe = (channel, callback) => {
     log.silly(`Removing listener for ${channel}`);
+
+    if (!subs[channel]) {
+      return;
+    }
+
     subs[channel] = subs[channel].filter(item => item !== callback);
+
     if (subs[channel].length === 0) {
       log.verbose(`Unsubscribe ${channel}`);
       redisSubscribeClient.unsubscribe(channel);
@@ -288,6 +297,7 @@ const startWorker = (workerId) => {
 
     if (authRequired) {
       allowedScopes.push('read');
+
       if (location.query.stream === 'user:notification') {
         allowedScopes.push('read:notifications');
       } else {
@@ -324,6 +334,7 @@ const startWorker = (workerId) => {
 
     if (authRequired) {
       allowedScopes.push('read');
+
       if (req.path === '/api/v1/streaming/user/notification') {
         allowedScopes.push('read:notifications');
       } else {
@@ -447,7 +458,11 @@ const startWorker = (workerId) => {
       subscribe(`${redisPrefix}${id}`, listener);
     });
 
-    attachCloseHandler(ids.map(id => `${redisPrefix}${id}`), listener);
+    if (attachCloseHandler) {
+      attachCloseHandler(ids.map(id => `${redisPrefix}${id}`), listener);
+    }
+
+    return listener;
   };
 
   // Setup stream output to HTTP
@@ -491,13 +506,13 @@ const startWorker = (workerId) => {
   };
 
   // Setup stream output to WebSockets
-  const streamToWs = (req, ws) => (event, payload) => {
+  const streamToWs = (req, ws, streamName) => (event, payload) => {
     if (ws.readyState !== ws.OPEN) {
       log.error(req.requestId, 'Tried writing to closed socket');
       return;
     }
 
-    ws.send(JSON.stringify({ event, payload }));
+    ws.send(JSON.stringify({ stream: streamName, event, payload }));
   };
 
   // Setup stream end for WebSockets
@@ -575,7 +590,7 @@ const startWorker = (workerId) => {
 
   app.get('/api/v1/streaming/direct', (req, res) => {
     const channel = `timeline:direct:${req.accountId}`;
-    streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req, subscriptionHeartbeat(channel)), true);
+    streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req, subscriptionHeartbeat(channel)));
   });
 
   app.get('/api/v1/streaming/hashtag', (req, res) => {
@@ -616,80 +631,203 @@ const startWorker = (workerId) => {
 
   const wss = new WebSocketServer({ server, verifyClient: wsVerifyClient });
 
-  wss.on('connection', (ws, req) => {
-    const location = url.parse(req.url, true);
-    req.requestId  = uuid.v4();
-    req.remoteAddress = ws._socket.remoteAddress;
-
-    let channel;
-
-    switch(location.query.stream) {
+  const channelNameToIds = (req, name, params) => new Promise((resolve, reject) => {
+    switch(name) {
     case 'user':
-      channel = [`timeline:${req.accountId}`];
+      resolve({
+        channelIds: req.deviceId ? [`timeline:${req.accountId}`, `timeline:${req.accountId}:${req.deviceId}`] : [`timeline:${req.accountId}`],
+        options: { needsFiltering: false, notificationOnly: false },
+      });
 
-      if (req.deviceId) {
-        channel.push(`timeline:${req.accountId}:${req.deviceId}`);
-      }
-
-      streamFrom(channel, req, streamToWs(req, ws), streamWsEnd(req, ws, subscriptionHeartbeat(channel)));
       break;
     case 'user:notification':
-      streamFrom(`timeline:${req.accountId}`, req, streamToWs(req, ws), streamWsEnd(req, ws), false, true);
+      resolve({
+        channelIds: [`timeline:${req.accountId}`],
+        options: { needsFiltering: false, notificationOnly: true },
+      });
+
       break;
     case 'public':
-      streamFrom('timeline:public', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      resolve({
+        channelIds: ['timeline:public'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
       break;
     case 'public:local':
-      streamFrom('timeline:public:local', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      resolve({
+        channelIds: ['timeline:public:local'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
       break;
     case 'public:remote':
-      streamFrom('timeline:public:remote', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      resolve({
+        channelIds: ['timeline:public:remote'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
       break;
     case 'public:media':
-      streamFrom('timeline:public:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      resolve({
+        channelIds: ['timeline:public:media'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
       break;
     case 'public:local:media':
-      streamFrom('timeline:public:local:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      resolve({
+        channelIds: ['timeline:public:local:media'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
       break;
     case 'public:remote:media':
-      streamFrom('timeline:public:remote:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      resolve({
+        channelIds: ['timeline:public:remote:media'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
       break;
     case 'direct':
-      channel = `timeline:direct:${req.accountId}`;
-      streamFrom(channel, req, streamToWs(req, ws), streamWsEnd(req, ws, subscriptionHeartbeat(channel)), true);
+      resolve({
+        channelIds: [`timeline:direct:${req.accountId}`],
+        options: { needsFiltering: false, notificationOnly: false },
+      });
+
       break;
     case 'hashtag':
-      if (!location.query.tag || location.query.tag.length === 0) {
-        ws.close();
-        return;
+      if (!params.tag || params.tag.length === 0) {
+        reject('No tag for stream provided');
+      } else {
+        resolve({
+          channelIds: [`timeline:hashtag:${params.tag.toLowerCase()}`],
+          options: { needsFiltering: true, notificationOnly: false },
+        });
       }
 
-      streamFrom(`timeline:hashtag:${location.query.tag.toLowerCase()}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'hashtag:local':
-      if (!location.query.tag || location.query.tag.length === 0) {
-        ws.close();
-        return;
+      if (!params.tag || params.tag.length === 0) {
+        reject('No tag for stream provided');
+      } else {
+        resolve({
+          channelIds: [`timeline:hashtag:${params.tag.toLowerCase()}:local`],
+          options: { needsFiltering: true, notificationOnly: false },
+        });
       }
 
-      streamFrom(`timeline:hashtag:${location.query.tag.toLowerCase()}:local`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'list':
-      const listId = location.query.list;
-
-      authorizeListAccess(listId, req, authorized => {
+      authorizeListAccess(params.list, req, authorized => {
         if (!authorized) {
-          ws.close();
+          reject('Not authorized to stream this list');
           return;
         }
 
-        channel = `timeline:list:${listId}`;
-        streamFrom(channel, req, streamToWs(req, ws), streamWsEnd(req, ws, subscriptionHeartbeat(channel)));
+        resolve({
+          channelIds: [`timeline:list:${params.list}`],
+          options: { needsFiltering: false, notificationOnly: false },
+        });
       });
+
       break;
     default:
-      ws.close();
+      reject('Unknown stream type');
     }
+  });
+
+  const streamNameFromChannelName = (channelName, params) => {
+    if (channelName === 'list') {
+      return [channelName, params.list];
+    } else if (['hashtag', 'hashtag:local'].includes(channelName)) {
+      return [channelName, params.tag];
+    } else {
+      return [channelName];
+    }
+  };
+
+  const subscribeWebsocketToChannel = ({ socket, request, subscriptions }, channelName, params) =>
+    channelNameToIds(request, channelName, params).then(({ channelIds, options }) => {
+      if (subscriptions[channelIds.join(';')]) {
+        return;
+      }
+
+      const onSend        = streamToWs(request, socket, streamNameFromChannelName(channelName, params));
+      const stopHeartbeat = subscriptionHeartbeat(channelIds);
+      const listener      = streamFrom(channelIds, request, onSend, false, options.needsFiltering, options.notificationOnly);
+
+      subscriptions[channelIds.join(';')] = {
+        listener,
+        stopHeartbeat,
+      };
+    }).catch(err => {
+      log.verbose(request.requestId, 'Subscription error:', err);
+    });
+
+  const unsubscribeWebsocketFromChannel = ({ socket, request, subscriptions }, channelName, params) =>
+    channelNameToIds(request, channelName, params).then(({ channelIds }) => {
+      log.verbose(request.requestId, `Ending stream from ${channelIds.join(', ')} for ${request.accountId}`);
+
+      const { listener, stopHeartbeat } = subscriptions[channelIds.join(';')];
+
+      if (!listener) {
+        return;
+      }
+
+      channelIds.forEach(channelId => {
+        unsubscribe(`${redisPrefix}${channelId}`, listener);
+      });
+
+      stopHeartbeat();
+
+      subscriptions[channelIds.join(';')] = undefined;
+    }).catch(err => {
+      log.verbose(request.requestId, 'Unsubscription error:', err);
+    });
+
+  wss.on('connection', (ws, req) => {
+    const location = url.parse(req.url, true);
+
+    req.requestId     = uuid.v4();
+    req.remoteAddress = ws._socket.remoteAddress;
+
+    const session = {
+      socket: ws,
+      request: req,
+      subscriptions: {},
+    };
+
+    const onEnd = () => {
+      const keys = Object.keys(session.subscriptions);
+
+      keys.forEach(channelIds => {
+        const { listener, stopHeartbeat } = session.subscriptions[channelIds];
+
+        channelIds.split(';').forEach(channelId => {
+          unsubscribe(`${redisPrefix}${channelId}`, listener);
+        });
+
+        stopHeartbeat();
+      });
+    };
+
+    ws.on('close', onEnd);
+    ws.on('error', onEnd);
+
+    ws.on('message', data => {
+      const { type, stream, ...params } = JSON.parse(data);
+
+      if (type === 'subscribe') {
+        subscribeWebsocketToChannel(session, stream, params);
+      } else if (type === 'unsubscribe') {
+        unsubscribeWebsocketFromChannel(session, stream, params)
+      } else {
+        // Unknown action type
+      }
+    });
+
+    subscribeWebsocketToChannel(session, location.query.stream, location.query);
   });
 
   wss.startAutoPing(30000);
