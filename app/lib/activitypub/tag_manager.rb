@@ -66,7 +66,9 @@ class ActivityPub::TagManager
       [COLLECTIONS[:public]]
     when 'unlisted', 'private'
       [account_followers_url(status.account)]
-    when 'direct', 'limited'
+    when 'limited'
+      []
+    when 'direct'
       if status.account.silenced?
         # Only notify followers if the account is locally silenced
         account_ids = status.active_mentions.pluck(:account_id)
@@ -104,7 +106,7 @@ class ActivityPub::TagManager
       cc << COLLECTIONS[:public]
     end
 
-    unless status.direct_visibility? || status.limited_visibility?
+    unless status.direct_visibility?
       if status.account.silenced?
         # Only notify followers if the account is locally silenced
         account_ids = status.active_mentions.pluck(:account_id)

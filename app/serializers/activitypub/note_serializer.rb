@@ -26,7 +26,13 @@ class ActivityPub::NoteSerializer < ActivityPub::Serializer
   attribute :voters_count, if: :poll_and_voters_count?
 
   def id
-    ActivityPub::TagManager.instance.uri_for(object)
+    uri = ActivityPub::TagManager.instance.uri_for(object)
+
+    if object.limited_visibility?
+      "bear:?#{{ u: uri, t: object.capability_tokens.first.token }.to_query}"
+    else
+      uri
+    end
   end
 
   def type

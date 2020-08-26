@@ -63,6 +63,7 @@ class Status < ApplicationRecord
   has_many :mentions, dependent: :destroy, inverse_of: :status
   has_many :active_mentions, -> { active }, class_name: 'Mention', inverse_of: :status
   has_many :media_attachments, dependent: :nullify
+  has_many :capability_tokens, class_name: 'StatusCapabilityToken', inverse_of: :status, dependent: :destroy
 
   has_and_belongs_to_many :tags
   has_and_belongs_to_many :preview_cards

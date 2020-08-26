@@ -43,7 +43,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def create_status
-    return reject_payload! if unsupported_object_type? || invalid_origin?(@object['id']) || Tombstone.exists?(uri: @object['id']) || !related_to_local_activity?
+    return reject_payload! if unsupported_object_type? || invalid_origin?(object_uri) || tombstone_exists? || !related_to_local_activity?
 
     RedisLock.acquire(lock_options) do |lock|
       if lock.acquired?
@@ -102,8 +102,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   def process_status_params
     @params = begin
       {
-        uri: @object['id'],
-        url: object_url || @object['id'],
+        uri: object_uri,
+        url: object_url || object_uri,
         account: @account,
         text: text_from_content || '',
         language: detected_language,
@@ -482,6 +482,10 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     return false if local_usernames.empty?
 
     Account.local.where(username: local_usernames).exists?
+  end
+
+  def tombstone_exists?
+    Tombstone.exists?(uri: object_uri)
   end
 
   def check_for_spam
