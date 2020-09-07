@@ -414,14 +414,14 @@ RSpec.describe FeedManager do
     end
   end
 
-  describe '#merge_into_timeline' do
+  describe '#merge_into_home' do
     it "does not push source account's statuses whose reblogs are already inserted" do
       account = Fabricate(:account, id: 0)
       reblog = Fabricate(:status)
       status = Fabricate(:status, reblog: reblog)
       FeedManager.instance.push_to_home(account, status)
 
-      FeedManager.instance.merge_into_timeline(account, reblog.account)
+      FeedManager.instance.merge_into_home(account, reblog.account)
 
       expect(Redis.current.zscore("feed:home:0", reblog.id)).to eq nil
     end
@@ -459,7 +459,7 @@ RSpec.describe FeedManager do
     end
   end
 
-  describe '#unpush' do
+  describe '#unpush_from_home' do
     let(:receiver) { Fabricate(:account) }
 
     it 'leaves a reblogged status if original was on feed' do
@@ -525,7 +525,7 @@ RSpec.describe FeedManager do
     end
   end
 
-  describe '#clear_from_timeline' do
+  describe '#clear_from_home' do
     let(:account)          { Fabricate(:account) }
     let(:followed_account) { Fabricate(:account) }
     let(:target_account)   { Fabricate(:account) }
@@ -543,8 +543,8 @@ RSpec.describe FeedManager do
       end
     end
 
-    it 'correctly cleans the timeline' do
-      FeedManager.instance.clear_from_timeline(account, target_account)
+    it 'correctly cleans the home timeline' do
+      FeedManager.instance.clear_from_home(account, target_account)
 
       expect(Redis.current.zrange("feed:home:#{account.id}", 0, -1)).to eq [status_1.id.to_s, status_7.id.to_s]
     end
