@@ -4,13 +4,8 @@ module Settings
   class TwoFactorAuthenticationMethodsController < BaseController
     include ChallengableConcern
 
-    layout 'admin'
-
-    before_action :authenticate_user!
     before_action :require_challenge!, only: :disable
     before_action :require_otp_enabled
-
-    skip_before_action :require_functional!
 
     def index; end
 

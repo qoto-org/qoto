@@ -4,11 +4,9 @@ module ExportControllerConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!
-    before_action :require_not_suspended!
     before_action :load_export
 
-    skip_before_action :require_functional!
+    skip_before_action :require_not_suspended!
   end
 
   private
@@ -29,9 +27,5 @@ module ExportControllerConcern
 
   def export_filename
     "#{controller_name}.csv"
-  end
-
-  def require_not_suspended!
-    forbidden if current_account.suspended?
   end
 end

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Settings::AliasesController < Settings::BaseController
-  layout 'admin'
-
-  before_action :authenticate_user!
   before_action :set_aliases, except: :destroy
   before_action :set_alias, only: :destroy
 

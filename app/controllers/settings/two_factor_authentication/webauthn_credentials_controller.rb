@@ -3,9 +3,6 @@
 module Settings
   module TwoFactorAuthentication
     class WebauthnCredentialsController < BaseController
-      layout 'admin'
-
-      before_action :authenticate_user!
       before_action :require_otp_enabled
       before_action :require_webauthn_enabled, only: [:index, :destroy]
 

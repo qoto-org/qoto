@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
 class Settings::MigrationsController < Settings::BaseController
-  layout 'admin'
-
-  before_action :authenticate_user!
-  before_action :require_not_suspended!
   before_action :set_migrations
   before_action :set_cooldown
-
-  skip_before_action :require_functional!
 
   def show
     @migration = current_account.migrations.build
@@ -43,9 +37,5 @@ class Settings::MigrationsController < Settings::BaseController
 
   def on_cooldown?
     @cooldown.present?
-  end
-
-  def require_not_suspended!
-    forbidden if current_account.suspended?
   end
 end
