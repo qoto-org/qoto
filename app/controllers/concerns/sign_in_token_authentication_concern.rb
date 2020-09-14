@@ -28,6 +28,7 @@ module SignInTokenAuthenticationConcern
   def authenticate_with_sign_in_token_attempt(user)
     if valid_sign_in_token_attempt?(user)
       session.delete(:attempt_user_id)
+      session.delete(:attempt_user_updated_at)
       remember_me(user)
       sign_in(user)
     else
@@ -43,8 +44,11 @@ module SignInTokenAuthenticationConcern
     end
 
     set_locale do
-      session[:attempt_user_id] = user.id
+      session[:attempt_user_id]         = user.id
+      session[:attempt_user_updated_at] = user.updated_at
+
       @body_classes = 'lighter'
+
       render :sign_in_token
     end
   end

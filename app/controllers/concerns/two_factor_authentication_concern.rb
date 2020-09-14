@@ -51,6 +51,7 @@ module TwoFactorAuthenticationConcern
 
     if valid_webauthn_credential?(user, webauthn_credential)
       session.delete(:attempt_user_id)
+      session.delete(:attempt_user_updated_at)
       remember_me(user)
       sign_in(user)
       render json: { redirect_path: root_path }, status: :ok
@@ -62,6 +63,7 @@ module TwoFactorAuthenticationConcern
   def authenticate_with_two_factor_via_otp(user)
     if valid_otp_attempt?(user)
       session.delete(:attempt_user_id)
+      session.delete(:attempt_user_updated_at)
       remember_me(user)
       sign_in(user)
     else
@@ -72,14 +74,20 @@ module TwoFactorAuthenticationConcern
 
   def prompt_for_two_factor(user)
     set_locale do
-      session[:attempt_user_id] = user.id
-      @body_classes = 'lighter'
+      session[:attempt_user_id]         = user.id
+      session[:attempt_user_updated_at] = user.updated_at
+
+      @body_classes     = 'lighter'
       @webauthn_enabled = user.webauthn_enabled?
-      @scheme_type = if user.webauthn_enabled? && user_params[:otp_attempt].blank?
-                       'webauthn'
-                     else
-                       'totp'
-                     end
+
+      @scheme_type = begin
+        if user.webauthn_enabled? && user_params[:otp_attempt].blank?
+          'webauthn'
+        else
+          'totp'
+        end
+      end
+
       render :two_factor
     end
   end

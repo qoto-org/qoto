@@ -57,7 +57,7 @@ class Auth::SessionsController < Devise::SessionsController
 
   def find_user
     if session[:attempt_user_id]
-      User.find(session[:attempt_user_id])
+      User.find_by!(id: session[:attempt_user_id], updated_at: session[:attempt_user_updated_at])
     else
       user   = User.authenticate_with_ldap(user_params) if Devise.ldap_authentication
       user ||= User.authenticate_with_pam(user_params) if Devise.pam_authentication
@@ -90,6 +90,7 @@ class Auth::SessionsController < Devise::SessionsController
 
   def require_no_authentication
     super
+
     # Delete flash message that isn't entirely useful and may be confusing in
     # most cases because /web doesn't display/clear flash messages.
     flash.delete(:alert) if flash[:alert] == I18n.t('devise.failure.already_authenticated')
@@ -107,9 +108,11 @@ class Auth::SessionsController < Devise::SessionsController
 
   def home_paths(resource)
     paths = [about_path]
+
     if single_user_mode? && resource.is_a?(User)
       paths << short_account_path(username: resource.account)
     end
+
     paths
   end
 
