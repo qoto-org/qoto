@@ -50,6 +50,8 @@ class Tag < ApplicationRecord
            :decrement_count!,
            to: :account_tag_stat
 
+  before_save :set_unlistable, if: :force_unlistable?
+
   after_save :save_account_tag_stat
 
   update_index('tags#tag', :self)
@@ -83,6 +85,10 @@ class Tag < ApplicationRecord
   end
 
   alias trendable? trendable
+
+  def force_unlistable?
+    name.end_with?('_')
+  end
 
   def requires_review?
     reviewed_at.nil?
@@ -164,6 +170,10 @@ class Tag < ApplicationRecord
   end
 
   private
+
+  def set_unlistable
+    self.listable = false
+  end
 
   def save_account_tag_stat
     return unless account_tag_stat&.changed?
