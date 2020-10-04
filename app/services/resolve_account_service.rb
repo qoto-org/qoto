@@ -47,7 +47,7 @@ class ResolveAccountService < BaseService
     # either needs to be created, or updated from fresh data
 
     process_account!
-  rescue Goldfinger::Error, WebfingerRedirectError, Oj::ParseError => e
+  rescue Webfinger::Error, WebfingerRedirectError, Oj::ParseError => e
     Rails.logger.debug "Webfinger query for #{@uri} failed: #{e}"
     nil
   end
@@ -118,11 +118,11 @@ class ResolveAccountService < BaseService
   end
 
   def activitypub_ready?
-    !@webfinger.link('self').nil? && ['application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'].include?(@webfinger.link('self').type)
+    ['application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'].include?(@webfinger.link('self', 'type'))
   end
 
   def actor_url
-    @actor_url ||= @webfinger.link('self').href
+    @actor_url ||= @webfinger.link('self', 'href')
   end
 
   def actor_json
