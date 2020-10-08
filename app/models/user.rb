@@ -41,6 +41,7 @@
 #  sign_in_token             :string
 #  sign_in_token_sent_at     :datetime
 #  webauthn_id               :string
+#  sign_up_ip                :inet
 #
 
 class User < ApplicationRecord
@@ -385,7 +386,17 @@ class User < ApplicationRecord
   end
 
   def set_approved
-    self.approved = open_registrations? || valid_invitation? || external?
+    self.approved = begin
+      if sign_up_from_ip_requires_approval?
+        false
+      else
+        open_registrations? || valid_invitation? || external?
+      end
+    end
+  end
+
+  def sign_up_from_ip_requires_approval?
+    IpBlock.where(severity: :sign_ip_requires_approval).where('ip <<= ?', sign_up_ip).exists?
   end
 
   def open_registrations?

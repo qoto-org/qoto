@@ -400,6 +400,11 @@ GEM
     pastel (0.8.0)
       tty-color (~> 0.5)
     pg (1.2.3)
+    pg_column_byte_packer (1.0.0)
+      activerecord (>= 5.1, < 6.1)
+      pg
+      pg_query
+    pg_query (1.2.0)
     pghero (2.7.2)
       activerecord (>= 5)
     pkg-config (1.4.4)
@@ -746,6 +751,7 @@ DEPENDENCIES
   parallel_tests (~> 3.3)
   parslet
   pg (~> 1.2)
+  pg_column_byte_packer
   pghero (~> 2.7)
   pkg-config (~> 1.4)
   posix-spawn
