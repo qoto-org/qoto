@@ -18,7 +18,7 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.suspended? && record.deletion_request.present? && admin?
+    record.suspended_temporarily? && admin?
   end
 
   def unsuspend?

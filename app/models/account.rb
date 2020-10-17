@@ -220,6 +220,14 @@ class Account < ApplicationRecord
     suspended_at.present?
   end
 
+  def suspended_permanently?
+    suspended? && deletion_request.nil?
+  end
+
+  def suspended_temporarily?
+    suspended? && deletion_request.present?
+  end
+
   def suspend!(date = Time.now.utc)
     transaction do
       create_deletion_request!

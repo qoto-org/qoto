@@ -20,11 +20,11 @@ class ActivityPub::CollectionsController < ActivityPub::BaseController
   def set_items
     case params[:id]
     when 'featured'
-      @items = for_signed_account { cache_collection(@account.pinned_statuses, Status) }
+      @items = @account.suspended? ? [] : for_signed_account { cache_collection(@account.pinned_statuses, Status) }
     when 'tags'
-      @items = for_signed_account { @account.featured_tags }
+      @items = @account.suspended? ? [] : for_signed_account { @account.featured_tags }
     when 'devices'
-      @items = @account.devices
+      @items = @account.suspended? ? [] : @account.devices
     else
       not_found
     end
