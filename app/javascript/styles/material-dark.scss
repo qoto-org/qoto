@@ -1,0 +1,88 @@
+div.column {
+  flex-grow: 1;
+}
+
+
+@import 'mastodon-light';
+
+/* Main colors:
+1. Status bar     #000000 (but we don't actually use this)
+2. App bar        #212121
+3. Background     #303030
+4. Cards/Dialogs  #424242
+*/
+
+div.columns-area,
+.drawer {
+  background-color: #212121;
+}
+
+
+.column-header, .column-header__button,
+.drawer__header, .drawer__tab {
+  background-color: #212121 !important;
+}
+
+div.status-wrapper, div.detailed-status__wrapper,
+div.detailed-status__wrapper div
+{
+  background-color: #303030 !important;
+}
+
+.status__prepend, status__prepend > * {
+    background: #303030 !important;
+}
+
+.status,
+.detailed-status,
+div.detailed-status__wrapper div.detailed-status,
+div.detailed-status__wrapper div.detailed-status__action-bar {
+    border: 1px solid #212121;
+    margin: 8px;
+    border-radius: 2px;
+    background: #424242 !important;
+}
+
+div.detailed-status__wrapper div.status,
+div.detailed-status__wrapper div.status div,
+div.detailed-status__wrapper div.detailed-status div,
+ div.detailed-status__wrapper div.detailed-status__action-bar div
+{
+    background-color: #424242 !important;
+}
+
+.column-link,
+.tabs-bar__link,
+.sidebar a:not(.selected),
+.column div:not(.status-list__unread-indicator):not(.notifications__unread-indicator):not(.status__video-player-spoiler):not(.spoiler-button):not(.status__video-player-expand):not(.status__video-player-mute):not(.video-player__controls):not(.video-player__seek):not(.video-player__spoiler):not(.video-player__buttons):not(.video-player),
+.drawer__inner {
+    background-color: #424242;
+}
+
+input.search__input,
+input.search__input:focus,
+.flash-message,
+.load-more:hover,
+.column,
+.landing-strip,
+.search-results__header {
+    background: #303030;
+}
+
+.notification, .status__wrapper, article,
+.item-list, .scrollable {
+  background-color: #303030 !important;
+}
+
+.notification__message,
+.notification__message div,
+.notification__message .fa
+{
+    background-color: #303030 !important;
+}
+
+.MathJax, .MathJax_Display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+

@@ -1,3 +1,9 @@
 @import 'mastodon-light/variables';
 @import 'application';
 @import 'mastodon-light/diff';
+
+.MathJax, .MathJax_Display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+

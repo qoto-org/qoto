@@ -1,0 +1,686 @@
+@import 'application';
+
+/**
+* Author : Mandar
+* Contact : Webmaster@eunivers.net
+* Instance : https://eunivers.social
+* StyleSheets overload for Mastodon v1.2 add your instance on top
+* Licence CC by NC - https://creativecommons.org/licenses/by-nc/4.0/
+* have fun.
+**/
+
+/* 3 colunm 100% */
+/* .column {width: calc((100% - 300px) / 3);} */
+
+/* All */
+  body
+  {
+    font-size: 14px;
+    line-height: 1rem;
+    padding-bottom: 50px;
+    background: rgba(10, 65, 100,1) url(https://eunivers.social/system/media_attachments/files/bgBody.jpg) no-repeat fixed;
+  }
+
+  .about-body .actions .info a, .about-body p a, .about-body li a
+  {
+    color: rgba(111, 178, 226,1);
+  }
+
+  .about-body .actions .info a:hover, .about-body p a:hover, .about-body li a:hover
+  {
+    color: rgba(255,255,255,1);
+  }
+
+  .webapp-btn
+  {
+    display: block;
+    width: 100%;
+    border: 0 none;
+    border-radius: 4px;
+    background: rgba(208, 17, 133,0.9);
+    color: rgba(255,255,255,1) !important;
+    font-size: 18px;
+    padding: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+  }
+
+  .webapp-btn:hover
+  {
+    background: rgba(208, 17, 133,1);
+  }
+
+  .simple_form button, .simple_form .block-button
+  {
+    margin-bottom: 2rem;
+  }
+
+  .screenshot-with-signup .simple_form, .screenshot-with-signup .closed-registrations-message
+  {
+    width: 50%;
+    min-width: 300px;
+  }
+
+/* Fil */
+  body.app-body, body.about-body, .regeneration-indicator
+  {
+    background: rgba(10, 65, 100,1) url(https://eunivers.social/system/media_attachments/files/bgBody.jpg) no-repeat 0 0;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  .ui
+  {
+    background: rgba(49, 53, 67, 0.5);
+  }
+
+  .column > .scrollable
+  {
+    background: rgba(255,255,255,1);
+    border-radius: 0 0 0.25rem 0.25rem;
+    color: rgba(51, 51, 51,1);
+  }
+
+  .column-back-button
+  {
+    background: rgba(240, 240, 240,1);
+    box-shadow: inset 0 5px 5px rgba(0,0,0,0.05);
+    border-bottom: 1px solid transparent;
+    height: auto;
+  }
+
+  .column-header
+  {
+    background: rgba(37, 136, 208,1);
+    border-bottom: 1px solid #ccc;
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+
+  .column-icon, .collapsable-collapsed, .column-header__button, .column-header__back-button
+  {
+    background: transparent !important;
+    color: rgba(255,255,255,1);
+  }
+
+  .column-link
+  {
+    background: rgba(240, 240, 240,1);
+    border-bottom: 1px solid #ccc;
+    color: rgba(51, 51, 51,1);
+    box-shadow: inset 0 5px 5px rgba(0,0,0,0.05);
+  }
+
+  .column-link:hover
+  {
+    background: rgba(200,222,243,0.5);
+    color: rgba(255,255,255,1);
+  }
+
+  .drawer__header a:hover
+  {
+    background: rgba(37, 136, 208,0.6);
+  }
+
+  .getting-started
+  {
+    background: #fff url(https://eunivers.social/system/media_attachments/files/mastodon-getting-started.png) no-repeat 0 100% local;
+  }
+
+  .getting-started p
+  {
+    color: rgba(102, 102, 102,1);
+  }
+
+  .static-content p
+  {
+    margin-bottom: 0.5rem;
+  }
+
+  .drawer__inner__mastodon
+  {
+    display: none;
+  }
+
+  .column-subheading
+  {
+    background: rgba(255,255,255,1);
+    color: rgba(10, 65, 100,0.8);
+  }
+
+  .column-header__collapsible > div
+  {
+    background: rgba(40, 60, 85, 0.6);
+    border-bottom: 1px solid;
+  }
+
+  .account__moved-note__message, .account__moved-note .detailed-status__display-name span
+  {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .account__moved-note .detailed-status__display-name strong
+  {
+    color: rgba(255, 255, 255, 1) !important;
+  }
+
+/* Status */
+  .status, .account
+  {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .focusable:focus
+  {
+    background: rgba(200,222,243,0.5);
+  }
+/*.account__header .icon-button {color: rgba(96, 105, 132, 1);}
+.icon-button {color: rgba(0,0,0,0.6);}*/
+  .status__display-name strong, .account__display-name strong
+  {
+    color: rgba(49,53,67,1);
+  }
+
+  .status__content a, .reply-indicator__content a
+  {
+    color: rgba(37, 136, 208,1);
+  }
+
+  .status__content .status__content__spoiler-link, .reply-indicator__content .status__content__spoiler-link
+  {
+    background: rgba(49,53,67,1);
+    line-height: 1.2rem;
+  }
+
+  .status__content__spoiler-link span
+  {
+    color: rgba(255, 255, 255,1);
+  }
+
+  .account__header
+  {
+    background: rgba(10, 65, 100,1);
+  }
+
+  .account__header > div
+  {
+    background: rgba(10, 65, 100,0.5);
+  }
+
+  .account__header .icon-button, .account__action-bar .icon-button
+  {
+    color: rgba(255,255,255,0.8);
+  }
+
+  .account__header .icon-button:hover, .account__action-bar .icon-button:hover
+  {
+    color: rgba(255,255,255,1);
+  }
+
+  .account__action-bar
+  {
+    background: rgba(10, 65, 100,1);
+    border-top: 1px solid rgba(255,255,255,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+  }
+
+  .account__action-bar__tab
+  {
+    border-left: 1px solid rgba(255,255,255,0.25);
+  }
+
+  .notification__message a:hover
+  {
+    color: rgba(37, 136, 208,1);
+  }
+
+  .detailed-status
+  {
+    background: rgba(200,222,243,0.5);
+    color: rgba(51,51,51,1);
+  }
+
+  .detailed-status__display-name, .detailed-status__meta
+  {
+    color: rgba(0,0,0,0.5);
+  }
+
+  .detailed-status__display-name strong
+  {
+    color: rgba(0, 0, 0,1);
+  }
+
+  .detailed-status__action-bar
+  {
+    background: rgba(0, 0, 0,0.05);
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    box-shadow: inset 0 5px 5px rgba(0,0,0,0.05);
+  }
+
+  .notification
+  {
+    background: rgba(200,222,243,0.15);
+  }
+
+  .status.status-direct
+  {
+    background: rgba(250, 180, 0, 0.025);
+  }
+
+  .muted .status__display-name strong, .muted .status__content p, .muted .status__content a
+  {
+    color: rgba(10, 65, 100, 0.8);
+  }
+
+  .account__moved-note, .account__section-headline
+  {
+    background: rgba(10, 65, 100,1);
+  }
+
+/* Status Button & drawer */
+  .icon-button.active
+  {
+    color: rgba(37, 136, 208,1);
+  }
+
+  .compose-form .compose-form__buttons-wrapper
+  {
+    background: rgba(37,136,208,.2);
+  }
+
+  .drawer__inner .icon-button.inverted, .drawer__inner .text-icon-button
+  {
+    color: rgba(255, 255, 255, 1);
+  }
+
+  button.icon-button i.fa-retweet
+  {
+    background: none transparent;
+  }
+
+  button.icon-button i.fa-retweet:after
+  {
+    height: 19px;
+    width: 22px;
+    content: "\f079";
+    display: block;
+  }
+
+  .scrollable .status .icon-button
+  {
+    color: rgba(37, 136, 208,0.6);
+  }
+
+  .scrollable .status .icon-button:hover, .drawer__inner .icon-button.inverted:hover, .drawer__inner .text-icon-button:hover
+  {
+    color: rgba(37, 136, 208,0.4);
+  }
+
+  .scrollable .status .icon-button.star-icon.active, .notification__favourite-icon-wrapper .star-icon, button.icon-button.active i.fa-retweet, .column-header.active .fa
+  {
+    color: rgba(250, 180, 0, 1);
+  }
+
+  button.icon-button.active i.fa-retweet:after
+  {
+    animation: spin 0.5s linear;
+  }
+  @keyframes spin
+  {
+    from {transform: rotate(0deg);
+  }
+
+  to
+  {
+    transform: rotate(360deg);
+  }
+}
+
+.column-header>.column-header__back-button
+{
+  color: #fff;
+}
+
+.account__section-headline a.active:after, .account__section-headline a.active:before
+{
+  border-color: transparent transparent #fff;
+}
+
+/* Drawer */
+.drawer__header
+{
+  background: transparent;
+}
+
+.search__input
+{
+  background: rgba(255, 255, 255, 1);
+}
+
+.drawer__inner
+{
+  border: 1px solid #e6ecf0;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 5px 5px rgba(0,0,0,0.05);
+  color: #333;
+  border-radius: 0.25rem;
+  height: auto;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.navigation-bar strong
+{
+  font-size: 1rem;
+  color: rgba(49,53,67,1);
+}
+
+.compose-form__buttons
+{
+  background: transparent;
+  box-shadow: none;
+}
+
+.drawer__inner.darker, .search-results__header
+{
+  background: rgba(255, 255, 255, 1);
+}
+
+.drawer__inner.darker .account:hover
+{
+  background: rgba(37, 136, 208,0.05);
+}
+
+.autosuggest-textarea__textarea
+{
+  max-height: 500px;
+}
+
+.reply-indicator
+{
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.reply-indicator__content a
+{
+  color: rgba(255, 255, 255,1);
+}
+
+/* Page Profil */
+.container, .container-alt
+{
+  width: 100%;
+  margin: 0 auto;
+  min-width: 300px;
+}
+
+.details, .activity-stream, .accounts-grid, .pagination
+{
+  max-width: 50%;
+  padding: 0 25%;
+  margin: 0 auto;
+  z-index: 2;
+  position: relative;
+  background: rgba(0,30,50,0.5);
+}
+
+.card
+{
+  position: relative;
+  width: 50%;
+  padding: 0 25%;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.card:after
+{
+  background: linear-gradient(rgba(10, 65, 100,0.4) 0%, rgba(10, 65, 100, 0.6) 70%, rgba(10, 65, 100, 1) 85%, rgba(10, 65, 100, 1) 100%);
+}
+
+.card:before
+{
+  display: block;
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: linear-gradient(rgba(10, 65, 100,1) 0%, rgba(10, 65, 100, 0.8) 25%, rgba(10, 65, 100, 0.6) 50%, rgba(10, 65, 100, 0) 100%);
+}
+
+.accounts-grid .account-grid-card
+{
+  width: calc(48% - 1%);
+}
+
+.accounts-grid .account-grid-card .account-grid-card__header
+{
+  background-color: rgba(10, 65, 100,1);
+}
+
+.landing-strip
+{
+  margin-bottom: 0;
+}
+
+.card .controls
+{
+  max-width: 800px;
+  margin: auto;
+  position: relative;
+  text-align: right;
+}
+
+.card .card__bio
+{
+  padding: 3rem 1rem;
+  background: rgba(0,30,50,0.90);
+}
+
+.activity-stream-tabs
+{
+  display: flex;
+  width: 50%;
+  padding: 0 25%;
+  background: rgba(0,30,50,0.90);
+}
+
+.activity-stream-tabs a, .activity-stream .entry
+{
+  background: rgba(255,255,255, 1);
+  border-right: 1px solid #ccc;
+}
+
+.simple_form .fields-group
+{
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1280px)
+{
+  .card, .activity-stream-tabs
+  {
+    width: 70%;
+    padding: 0 15%;
+  }
+
+  .details, .activity-stream, .accounts-grid, .pagination
+  {
+    max-width: 70%;
+    padding: 0 15%;
+  }
+}
+
+@media (max-width: 800px)
+{
+  .card, .activity-stream-tabs
+  {
+    width: 100%;
+    padding: 0;
+  }
+
+  .card, .activity-stream-tabs
+  {
+    background: rgba(255,255,255, 1);
+  }
+
+  .details, .activity-stream, .accounts-grid, .pagination
+  {
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+/* About */
+.landing-page .header-wrapper.compact, .landing-page .header-wrapper
+{
+  background: rgba(10, 65, 100,0.8);
+}
+
+.landing-page .header .links ul li:first-child a
+{
+  padding: 0.25rem 1rem !important;
+}
+
+.landing-page p, .landing-page .extended-description li, .landing-page .extended-description p, .landing-page h1 small, .simple_form p.hint.subtle-hint, .features-list__row .text
+{
+  color: rgba(255,255,255,0.8);
+}
+
+.landing-page .information-board
+{
+  background: rgba(0,30,50,0.6);
+}
+
+.landing-page .information-board .panel
+{
+  background: rgba(0,30,50,1);
+}
+
+.sidebar-layout .panel .panel-header
+{
+  background: rgba(111, 178, 226,0.5);
+}
+
+.sidebar-layout .sidebar
+{
+  border-left: 1px solid rgba(111, 178, 226,0.5);
+}
+
+.extended-description .container,.features .container
+{
+  background: rgba(0,30,50,0.6);
+  padding: 1rem;
+}
+
+.landing-page .information-board .panel .panel-header, .landing-page .information-board .panel .panel-header a, .landing-page .information-board .panel .panel-header span
+{
+  color: #9baec8;
+}
+
+.landing-page .learn-more-cta, .landing-page .header .hero .closed-registrations-message
+{
+  background: rgba(0,30,50,0.6);
+}
+
+.landing-page .header .hero .simple_form
+{
+  background: rgba(0,30,50,0.95);
+}
+
+.landing-page #mastodon-timeline p
+{
+  color: rgba(0,30,50,1);
+}
+
+.landing-page #mastodon-timeline p a
+{
+  color: rgba(111, 178, 226,1);
+}
+
+.landing-page #mastodon-timeline p a:hover
+{
+  color: rgba(37, 136, 208,1);
+}
+
+.landing-page .header .hero .floats .float-1
+{
+  background-image: url(https://eunivers.social/system/media_attachments/files/cloud2.png);
+}
+
+.landing-page .header .hero .floats .float-2
+{
+  background-image: url(https://eunivers.social/system/media_attachments/files/cloud1.png);
+}
+
+.landing-page .header .hero .floats .float-3
+{
+  background-image: url(https://eunivers.social/system/media_attachments/files/cloud3.png);
+}
+
+/* Home */
+.landing-page #mastodon-timeline, .landing-page__forms, .landing-page__information
+{
+  background: rgba(0,30,50,0.6);
+}
+
+.landing-page .separator-or span
+{
+  background: rgba(0,30,50,0.4);
+}
+
+.landing-page__call-to-action
+{
+  background: rgba(0,30,50,0.9);
+}
+
+.button.button-alternative-2
+{
+  background: rgba(208, 17, 133,0.9);
+}
+
+/* Setting */
+body.admin
+{
+  background: rgba(10, 65, 100,1);
+}
+
+.admin-wrapper .sidebar-wrapper
+{
+  background: rgba(0, 0, 0,0.2);
+}
+
+.admin-wrapper .sidebar ul a.selected
+{
+  background: rgba(37, 136, 208,0.25);
+}
+
+/* Scroll Bar */
+::-webkit-scrollbar-thumb
+{
+  background: #999;
+}
+
+::-webkit-scrollbar-thumb:hover
+{
+  background: rgba(255,255,255,0.6);
+}
+
+::-webkit-scrollbar:hover
+{
+  background: rgba(0,0,0,0);
+}
+
+.MathJax, .MathJax_Display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+

@@ -1,3 +1,10 @@
-default: styles/application.scss
+default: styles/qoto.scss
 contrast: styles/contrast.scss
+mastodon: styles/application.scss
 mastodon-light: styles/mastodon-light.scss
+blue: styles/blue.scss
+mastoblue: styles/mastoblue.scss
+material-light: styles/material-light.scss
+material-dark: styles/material-dark.scss
+mastodon-wide-light: styles/mastodon-wide-light.scss
+mastodon-wide-dark: styles/mastodon-wide-dark.scss

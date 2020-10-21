@@ -25,6 +25,7 @@ public/packs-test
 .env.production
 node_modules/
 build/
+*.log
 
 # Ignore Vagrant files
 .vagrant/
@@ -58,3 +59,5 @@ yarn-debug.log
 # Ignore Docker option files
 docker-compose.override.yml
 
+# Ignore files produced building from docker
+dump.rdb
