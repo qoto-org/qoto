@@ -1400,6 +1400,13 @@ en:
       <p>Originally adapted from the <a href="https://github.com/discourse/discourse">Discourse privacy policy</a>.</p>
     title: "%{instance} Terms of Service and Privacy Policy"
   themes:
+    mastodon: Mastodon Default Theme (dark)
+    blue: The Blue Theme (light)
+    mastoblue: The Masto Blue Theme (light)
+    material-light: Material Theme (light)
+    material-dark: Material Theme (dark)
+    mastodon-wide-light: Mastodon Default Theme, Full Width (light)
+    mastodon-wide-dark: Mastodon Default Theme, Full Width (dark)
     contrast: Mastodon (High contrast)
     default: Mastodon (Dark)
     instance-ticker-type-0-contrast: Mastodon instance ticker Type-0 (High contrast)
@@ -1421,6 +1428,7 @@ en:
     instance-ticker-type-2-light: Mastodon instance ticker Type-2 (Light / Favicon Images(White Outline) Style)
     instance-ticker-type-2: Mastodon instance ticker Type-2 (Dark / Favicon Images(White Outline) Style)
     mastodon-mask: Mastodon (Mask)
+    default: QOTO Default Theme
     mastodon-light: Mastodon (Light)
     missing: Mastodon-missing (Dark)
     missing-contrast: Mastodon-missing (High contrast)

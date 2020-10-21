@@ -1,0 +1,11 @@
+div.column {
+  flex-grow: 1;
+}
+
+@import 'application';
+
+.MathJax, .MathJax_Display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
