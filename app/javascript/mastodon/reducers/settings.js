@@ -65,6 +65,12 @@ const initialState = ImmutableMap({
     }),
   }),
 
+  community: ImmutableMap({
+    regex: ImmutableMap({
+      body: '',
+    }),
+  }),
+
   domain: ImmutableMap({
     regex: ImmutableMap({
       body: '',
