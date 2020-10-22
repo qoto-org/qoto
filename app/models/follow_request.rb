@@ -10,6 +10,8 @@
 #  target_account_id :bigint(8)        not null
 #  show_reblogs      :boolean          default(TRUE), not null
 #  uri               :string
+#  notify            :boolean          default(FALSE), not null
+#  delivery          :boolean          default(TRUE), not null
 #
 
 class FollowRequest < ApplicationRecord
@@ -28,8 +30,9 @@ class FollowRequest < ApplicationRecord
   validates_with FollowLimitValidator, on: :create
 
   def authorize!
-    account.follow!(target_account, reblogs: show_reblogs, uri: uri)
-    MergeWorker.perform_async(target_account.id, account.id) if account.local?
+    account.follow!(target_account, reblogs: show_reblogs, notify: notify, delivery: delivery, uri: uri)
+    UnsubscribeAccountService.new.call(account, target_account) if account.subscribing?(target_account)
+    MergeWorker.perform_async(target_account.id, account.id) if account.local? && delivery?
     destroy!
   end
 

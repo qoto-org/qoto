@@ -14,6 +14,13 @@ class AccountsIndex < Chewy::Index
       },
     },
 
+    normalizer: {
+      keyword: {
+        type: 'custom',
+        filter: %w(lowercase asciifolding cjk_width),
+      },
+    },
+
     tokenizer: {
       edge_ngram: {
         type: 'edge_ngram',
@@ -35,8 +42,13 @@ class AccountsIndex < Chewy::Index
         field :edge_ngram, type: 'text', analyzer: 'edge_ngram', search_analyzer: 'content'
       end
 
+      field :actor_type, type: 'keyword', normalizer: 'keyword'
+
+      field :discoverable, type: 'boolean'
+
       field :following_count, type: 'long', value: ->(account) { account.following.local.count }
       field :followers_count, type: 'long', value: ->(account) { account.followers.local.count }
+      field :subscribing_count, type: 'long', value: ->(account) { account.subscribing.local.count }
       field :last_status_at, type: 'date', value: ->(account) { account.last_status_at || account.created_at }
     end
   end

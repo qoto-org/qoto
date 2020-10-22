@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from 'mastodon/components/icon';
+import AnimatedNumber from 'mastodon/components/animated_number';
 
 export default class IconButton extends React.PureComponent {
 
@@ -15,6 +16,8 @@ export default class IconButton extends React.PureComponent {
     onKeyPress: PropTypes.func,
     size: PropTypes.number,
     active: PropTypes.bool,
+    passive: PropTypes.bool,
+    no_delivery: PropTypes.bool,
     pressed: PropTypes.bool,
     expanded: PropTypes.bool,
     style: PropTypes.object,
@@ -24,11 +27,15 @@ export default class IconButton extends React.PureComponent {
     animate: PropTypes.bool,
     overlay: PropTypes.bool,
     tabIndex: PropTypes.string,
+    counter: PropTypes.number,
+    obfuscateCount: PropTypes.bool,
   };
 
   static defaultProps = {
     size: 18,
     active: false,
+    passive: false,
+    no_delivery: false,
     disabled: false,
     animate: false,
     overlay: false,
@@ -89,14 +96,18 @@ export default class IconButton extends React.PureComponent {
     const {
       active,
       className,
+      no_delivery,
       disabled,
       expanded,
       icon,
       inverted,
       overlay,
+      passive,
       pressed,
       tabIndex,
       title,
+      counter,
+      obfuscateCount,
     } = this.props;
 
     const {
@@ -106,12 +117,19 @@ export default class IconButton extends React.PureComponent {
 
     const classes = classNames(className, 'icon-button', {
       active,
+      passive,
+      no_delivery,
       disabled,
       inverted,
       activate,
       deactivate,
       overlayed: overlay,
+      'icon-button--with-counter': typeof counter !== 'undefined',
     });
+
+    if (typeof counter !== 'undefined') {
+      style.width = 'auto';
+    }
 
     return (
       <button
@@ -128,7 +146,7 @@ export default class IconButton extends React.PureComponent {
         tabIndex={tabIndex}
         disabled={disabled}
       >
-        <Icon id={icon} fixedWidth aria-hidden='true' />
+        <Icon id={icon} fixedWidth aria-hidden='true' /> {typeof counter !== 'undefined' && <span className='icon-button__counter'><AnimatedNumber value={counter} obfuscate={obfuscateCount} /></span>}
       </button>
     );
   }

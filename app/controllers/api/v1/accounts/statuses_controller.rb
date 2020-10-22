@@ -7,8 +7,9 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   after_action :insert_pagination_headers, unless: -> { truthy_param?(:pinned) }
 
   def index
-    @statuses = load_statuses
-    render json: @statuses, each_serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
+    @statuses  = load_statuses
+    accountIds = @statuses.filter(&:quote?).map { |status| status.quote.account_id }.uniq
+    render json: @statuses, each_serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id), account_relationships: AccountRelationshipsPresenter.new(accountIds, current_user&.account_id)
   end
 
   private
@@ -18,14 +19,10 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   end
 
   def load_statuses
-    cached_account_statuses
+    @account.suspended? ? [] : cached_account_statuses
   end
 
   def cached_account_statuses
-    cache_collection account_statuses, Status
-  end
-
-  def account_statuses
     statuses = truthy_param?(:pinned) ? pinned_scope : permitted_account_statuses
 
     statuses.merge!(only_media_scope) if truthy_param?(:only_media)
@@ -33,25 +30,20 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
     statuses.merge!(no_reblogs_scope) if truthy_param?(:exclude_reblogs)
     statuses.merge!(hashtag_scope)    if params[:tagged].present?
 
-    statuses.paginate_by_id(limit_param(DEFAULT_STATUSES_LIMIT), params_slice(:max_id, :since_id, :min_id))
+    cache_collection_paginated_by_id(
+      statuses,
+      Status,
+      limit_param(DEFAULT_STATUSES_LIMIT),
+      params_slice(:max_id, :since_id, :min_id)
+    )
   end
 
   def permitted_account_statuses
-    @account.statuses.permitted_for(@account, current_account)
+    @account.permitted_statuses(current_account)
   end
 
   def only_media_scope
-    Status.where(id: account_media_status_ids)
-  end
-
-  def account_media_status_ids
-    # `SELECT DISTINCT id, updated_at` is too slow, so pluck ids at first, and then select id, updated_at with ids.
-    # Also, Avoid getting slow by not narrowing down by `statuses.account_id`.
-    # When narrowing down by `statuses.account_id`, `index_statuses_20180106` will be used
-    # and the table will be joined by `Merge Semi Join`, so the query will be slow.
-    @account.statuses.joins(:media_attachments).merge(@account.media_attachments).permitted_for(@account, current_account)
-            .paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
-            .reorder(id: :desc).distinct(:id).pluck(:id)
+    Status.include_expired.joins(:media_attachments).merge(@account.media_attachments.reorder(nil)).group(:id)
   end
 
   def pinned_scope
@@ -61,18 +53,18 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   end
 
   def no_replies_scope
-    Status.without_replies
+    Status.include_expired.without_replies
   end
 
   def no_reblogs_scope
-    Status.without_reblogs
+    Status.include_expired.without_reblogs
   end
 
   def hashtag_scope
     tag = Tag.find_normalized(params[:tagged])
 
     if tag
-      Status.tagged_with(tag.id)
+      Status.include_expired.tagged_with(tag.id)
     else
       Status.none
     end

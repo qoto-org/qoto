@@ -3,11 +3,12 @@
 #
 # Table name: lists
 #
-#  id         :bigint(8)        not null, primary key
-#  account_id :bigint(8)        not null
-#  title      :string           default(""), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :bigint(8)        not null, primary key
+#  account_id     :bigint(8)        not null
+#  title          :string           default(""), not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  replies_policy :integer          default("list_replies"), not null
 #
 
 class List < ApplicationRecord
@@ -15,10 +16,21 @@ class List < ApplicationRecord
 
   PER_ACCOUNT_LIMIT = 50
 
+  enum replies_policy: [:list_replies, :all_replies, :no_replies], _prefix: :show
+
   belongs_to :account, optional: true
 
   has_many :list_accounts, inverse_of: :list, dependent: :destroy
   has_many :accounts, through: :list_accounts
+
+  has_many :account_subscribes, inverse_of: :list, dependent: :destroy
+  has_many :subscribes, through: :account_subscribes, source: :target_account
+
+  has_many :follow_tags, inverse_of: :list, dependent: :destroy
+  has_many :tags, through: :follow_tags, source: :tag
+
+  has_many :domain_subscribes, inverse_of: :list, dependent: :destroy
+  has_many :keyword_subscribes, inverse_of: :list, dependent: :destroy
 
   validates :title, presence: true
 

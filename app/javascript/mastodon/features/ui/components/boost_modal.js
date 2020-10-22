@@ -18,6 +18,7 @@ const messages = defineMessages({
   public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },
   unlisted_short: { id: 'privacy.unlisted.short', defaultMessage: 'Unlisted' },
   private_short: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
+  limited_short: { id: 'privacy.limited.short', defaultMessage: 'Circle' },
   direct_short: { id: 'privacy.direct.short', defaultMessage: 'Direct' },
 });
 
@@ -46,9 +47,14 @@ class BoostModal extends ImmutablePureComponent {
 
   handleAccountClick = (e) => {
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
+      const { status } = this.props;
       e.preventDefault();
       this.props.onClose();
-      this.context.router.history.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
+      if (status.getIn(['account', 'group'], false)) {
+        this.context.router.history.push(`/timelines/groups/${status.getIn(['account', 'id'])}`);
+      } else {
+        this.context.router.history.push(`/accounts/${status.getIn(['account', 'id'])}`);
+      }
     }
   }
 
@@ -64,6 +70,7 @@ class BoostModal extends ImmutablePureComponent {
       'public': { icon: 'globe', text: intl.formatMessage(messages.public_short) },
       'unlisted': { icon: 'unlock', text: intl.formatMessage(messages.unlisted_short) },
       'private': { icon: 'lock', text: intl.formatMessage(messages.private_short) },
+      'limited': { icon: 'user-circle', text: intl.formatMessage(messages.limited_short) },
       'direct': { icon: 'envelope', text: intl.formatMessage(messages.direct_short) },
     };
 

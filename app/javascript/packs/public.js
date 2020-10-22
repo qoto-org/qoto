@@ -1,3 +1,4 @@
+import './public-path';
 import escapeTextContentForBrowser from 'escape-html';
 import loadPolyfills from '../mastodon/load_polyfills';
 import ready from '../mastodon/ready';
@@ -115,6 +116,28 @@ function main() {
     if (parallaxComponents.length > 0 ) {
       new Rellax('.parallax', { speed: -1 });
     }
+
+    delegate(document, '#registration_user_password_confirmation,#registration_user_password', 'input', () => {
+      const password = document.getElementById('registration_user_password');
+      const confirmation = document.getElementById('registration_user_password_confirmation');
+      if (password.value && password.value !== confirmation.value) {
+        confirmation.setCustomValidity((new IntlMessageFormat(messages['password_confirmation.mismatching'] || 'Password confirmation does not match', locale)).format());
+      } else {
+        confirmation.setCustomValidity('');
+      }
+    });
+
+    delegate(document, '#user_password,#user_password_confirmation', 'input', () => {
+      const password = document.getElementById('user_password');
+      const confirmation = document.getElementById('user_password_confirmation');
+      if (!confirmation) return;
+
+      if (password.value && password.value !== confirmation.value) {
+        confirmation.setCustomValidity((new IntlMessageFormat(messages['password_confirmation.mismatching'] || 'Password confirmation does not match', locale)).format());
+      } else {
+        confirmation.setCustomValidity('');
+      }
+    });
 
     delegate(document, '.custom-emoji', 'mouseover', getEmojiAnimationHandler('data-original'));
     delegate(document, '.custom-emoji', 'mouseout', getEmojiAnimationHandler('data-static'));
@@ -256,6 +279,29 @@ function main() {
     } else {
       target.style.display = 'block';
     }
+  });
+
+  delegate(document, '.quote-status', 'click', ({ target }) => {
+    if (target.closest('.status__content__spoiler-link') ||
+      target.closest('.media-gallery') ||
+      target.closest('.video-player') ||
+      target.closest('.audio-player')) {
+      return false;
+    }
+
+    let url = target.closest('.quote-status').getAttribute('dataurl');
+    if (target.closest('.status__display-name')) {
+      url = target.closest('.status__display-name').getAttribute('href');
+    } else if (target.closest('.status-card')) {
+      url = target.closest('.status-card').getAttribute('href');
+    }
+
+    if (window.location.hostname === url.split('/')[2].split(':')[0]) {
+      window.location.href = url;
+    } else {
+      window.open(url, 'blank');
+    }
+    return false;
   });
 }
 

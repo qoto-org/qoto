@@ -4,7 +4,7 @@ module AccountHeader
   extend ActiveSupport::Concern
 
   IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'].freeze
-  LIMIT = 2.megabytes
+  LIMIT = 4.megabytes
   MAX_PIXELS = 750_000 # 1500x500px
 
   class_methods do
@@ -19,7 +19,7 @@ module AccountHeader
 
   included do
     # Header upload
-    has_attached_file :header, styles: ->(f) { header_styles(f) }, convert_options: { all: '-strip' }, processors: [:lazy_thumbnail]
+    has_attached_file :header, styles: ->(f) { header_styles(f) }, convert_options: { all: '+profile exif' }, processors: [:lazy_thumbnail]
     validates_attachment_content_type :header, content_type: IMAGE_MIME_TYPES
     validates_attachment_size :header, less_than: LIMIT
     remotable_attachment :header, LIMIT

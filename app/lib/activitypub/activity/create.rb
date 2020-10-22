@@ -15,7 +15,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   private
 
   def create_encrypted_message
-    return reject_payload! if invalid_origin?(@object['id']) || @options[:delivered_to_account_id].blank?
+    return reject_payload! if invalid_origin?(object_uri) || @options[:delivered_to_account_id].blank?
 
     target_account = Account.find(@options[:delivered_to_account_id])
     target_device  = target_account.devices.find_by(device_id: @object.dig('to', 'deviceId'))
@@ -43,7 +43,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def create_status
-    return reject_payload! if unsupported_object_type? || invalid_origin?(@object['id']) || Tombstone.exists?(uri: @object['id']) || !related_to_local_activity?
+    return reject_payload! if unsupported_object_type? || invalid_origin?(object_uri) || tombstone_exists? || !related_to_local_activity?
 
     RedisLock.acquire(lock_options) do |lock|
       if lock.acquired?
@@ -77,6 +77,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     @mentions = []
     @params   = {}
 
+    process_quote
     process_status_params
     process_tags
     process_audience
@@ -90,7 +91,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     fetch_replies(@status)
     check_for_spam
     distribute(@status)
-    forward_for_reply if @status.distributable?
+    forward_for_conversation
+    forward_for_reply
   end
 
   def find_existing_status
@@ -102,8 +104,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   def process_status_params
     @params = begin
       {
-        uri: @object['id'],
-        url: object_url || @object['id'],
+        uri: object_uri,
+        url: object_url || object_uri,
         account: @account,
         text: text_from_content || '',
         language: detected_language,
@@ -111,19 +113,23 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
         created_at: @object['published'],
         override_timestamps: @options[:override_timestamps],
         reply: @object['inReplyTo'].present?,
-        sensitive: @object['sensitive'] || false,
+        sensitive: @account.sensitized? || @object['sensitive'] || false,
         visibility: visibility_from_audience,
         thread: replied_to_status,
-        conversation: conversation_from_uri(@object['conversation']),
+        conversation: conversation_from_context,
         media_attachment_ids: process_attachments.take(4).map(&:id),
         poll: process_poll,
+        quote: quote,
+        expires_at: @object['expiry'],
       }
     end
   end
 
   def process_audience
+    conversation_uri = value_or_id(@object['context'])
+
     (audience_to + audience_cc).uniq.each do |audience|
-      next if audience == ActivityPub::TagManager::COLLECTIONS[:public]
+      next if audience == ActivityPub::TagManager::COLLECTIONS[:public] || audience == conversation_uri
 
       # Unlike with tags, there is no point in resolving accounts we don't already
       # know here, because silent mentions would only be used for local access
@@ -313,7 +319,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     RedisLock.acquire(poll_lock_options) do |lock|
       if lock.acquired?
         already_voted = poll.votes.where(account: @account).exists?
-        poll.votes.create!(account: @account, choice: poll.options.index(@object['name']), uri: @object['id'])
+        poll.votes.create!(account: @account, choice: poll.options.index(@object['name']), uri: object_uri)
       else
         raise Mastodon::RaceConditionError
       end
@@ -340,15 +346,45 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     ActivityPub::FetchRepliesWorker.perform_async(status.id, uri) unless uri.nil?
   end
 
-  def conversation_from_uri(uri)
-    return nil if uri.nil?
-    return Conversation.find_by(id: OStatus::TagManager.instance.unique_tag_to_local_id(uri, 'Conversation')) if OStatus::TagManager.instance.local_id?(uri)
+  def conversation_from_context
+    atom_uri = @object['conversation']
 
-    begin
-      Conversation.find_or_create_by!(uri: uri)
-    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
-      retry
+    conversation = begin
+      if atom_uri.present? && OStatus::TagManager.instance.local_id?(atom_uri)
+        Conversation.find_by(id: OStatus::TagManager.instance.unique_tag_to_local_id(atom_uri, 'Conversation'))
+      elsif atom_uri.present? && @object['context'].present?
+        Conversation.find_by(uri: atom_uri)
+      elsif atom_uri.present?
+        begin
+          Conversation.find_or_create_by!(uri: atom_uri)
+        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+          retry
+        end
+      end
     end
+
+    return conversation if @object['context'].nil?
+
+    uri            = value_or_id(@object['context'])
+    conversation ||= ActivityPub::TagManager.instance.uri_to_resource(uri, Conversation)
+
+    return conversation if (conversation.present? && (conversation.local? || conversation.uri == uri)) || !uri.start_with?('https://')
+
+    conversation_json = begin
+      if @object['context'].is_a?(Hash) && !invalid_origin?(uri)
+        @object['context']
+      else
+        fetch_resource(uri, true)
+      end
+    end
+
+    return conversation if conversation_json.blank?
+
+    conversation ||= Conversation.new
+    conversation.uri = uri
+    conversation.inbox_url = conversation_json['inbox']
+    conversation.save! if conversation.changed?
+    conversation
   end
 
   def visibility_from_audience
@@ -385,9 +421,11 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def text_from_content
-    return Formatter.instance.linkify([[text_from_name, text_from_summary.presence].compact.join("\n\n"), object_url || @object['id']].join(' ')) if converted_object_type?
+    return Formatter.instance.linkify([[text_from_name, text_from_summary.presence].compact.join("\n\n"), object_url || object_uri].join(' ')) if converted_object_type?
 
-    if @object['content'].present?
+    if @object['quoteUrl'].blank? && @object['_misskey_quote'].present?
+      Formatter.instance.linkify(@object['_misskey_content'])
+    elsif @object['content'].present?
       @object['content']
     elsif content_language_map?
       @object['contentMap'].values.first
@@ -484,12 +522,22 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     Account.local.where(username: local_usernames).exists?
   end
 
+  def tombstone_exists?
+    Tombstone.exists?(uri: object_uri)
+  end
+
   def check_for_spam
     SpamCheck.perform(@status)
   end
 
+  def forward_for_conversation
+    return unless audience_to.include?(value_or_id(@object['context'])) && @json['signature'].present? && @status.conversation.local?
+
+    ActivityPub::ForwardDistributionWorker.perform_async(@status.conversation_id, Oj.dump(@json))
+  end
+
   def forward_for_reply
-    return unless @json['signature'].present? && reply_to_local?
+    return unless @status.distributable? && @json['signature'].present? && reply_to_local?
 
     ActivityPub::RawDistributionWorker.perform_async(Oj.dump(@json), replied_to_status.account_id, [@account.preferred_inbox_url])
   end
@@ -507,10 +555,30 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def lock_options
-    { redis: Redis.current, key: "create:#{@object['id']}" }
+    { redis: Redis.current, key: "create:#{object_uri}" }
   end
 
   def poll_lock_options
     { redis: Redis.current, key: "vote:#{replied_to_status.poll_id}:#{@account.id}" }
+  end
+
+  def quote
+    @quote ||= quote_from_url(@object['quoteUrl'] || @object['_misskey_quote'])
+  end
+
+  def process_quote
+    if quote.nil? && md = @object['content']&.match(/QT:\s*\[<a href=\"([^\"]+).*?\]/)
+      @quote = quote_from_url(md[1])
+      @object['content'] = @object['content'].sub(/QT:\s*\[.*?\]/, '<span class="quote-inline"><br/>\1</span>')
+    end
+  end
+
+  def quote_from_url(url)
+    return nil if url.nil?
+
+    quote = ResolveURLService.new.call(url)
+    status_from_uri(quote.uri) if quote
+  rescue
+    nil
   end
 end

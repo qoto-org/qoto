@@ -22,6 +22,7 @@ import {
 } from '../../actions/interactions';
 import {
   replyCompose,
+  quoteCompose,
   mentionCompose,
   directCompose,
 } from '../../actions/compose';
@@ -31,6 +32,8 @@ import {
   deleteStatus,
   hideStatus,
   revealStatus,
+  hideQuote,
+  revealQuote,
 } from '../../actions/statuses';
 import {
   unblockAccount,
@@ -67,6 +70,8 @@ const messages = defineMessages({
   detailedStatus: { id: 'status.detailed_status', defaultMessage: 'Detailed conversation view' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
+  quoteConfirm: { id: 'confirmations.quote.confirm', defaultMessage: 'Quote' },
+  quoteMessage: { id: 'confirmations.quote.message', defaultMessage: 'Quoting now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
   blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
 });
 
@@ -143,6 +148,7 @@ const makeMapStateToProps = () => {
       descendantsIds,
       askReplyConfirmation: state.getIn(['compose', 'text']).trim().length !== 0,
       domain: state.getIn(['meta', 'domain']),
+      usingPiP: state.get('picture_in_picture').statusId === props.params.statusId,
     };
   };
 
@@ -167,11 +173,13 @@ class Status extends ImmutablePureComponent {
     askReplyConfirmation: PropTypes.bool,
     multiColumn: PropTypes.bool,
     domain: PropTypes.string.isRequired,
+    usingPiP: PropTypes.bool,
   };
 
   state = {
     fullscreen: false,
     showMedia: defaultMediaVisibility(this.props.status),
+    showQuoteMedia: defaultMediaVisibility(this.props.status ? this.props.status.get('quote', null) : null),
     loadedStatusId: undefined,
   };
 
@@ -190,12 +198,17 @@ class Status extends ImmutablePureComponent {
     }
 
     if (nextProps.status && nextProps.status.get('id') !== this.state.loadedStatusId) {
-      this.setState({ showMedia: defaultMediaVisibility(nextProps.status), loadedStatusId: nextProps.status.get('id') });
+      this.setState({ showMedia: defaultMediaVisibility(nextProps.status), loadedStatusId: nextProps.status.get('id'),
+        showQuoteMedia: defaultMediaVisibility(nextProps.status.get('quote', null)) });
     }
   }
 
   handleToggleMediaVisibility = () => {
     this.setState({ showMedia: !this.state.showMedia });
+  }
+
+  handleToggleQuoteMediaVisibility = () => {
+    this.setState({ showQuoteMedia: !this.state.showQuoteMedia });
   }
 
   handleFavouriteClick = (status) => {
@@ -251,6 +264,19 @@ class Status extends ImmutablePureComponent {
     }
   }
 
+  handleQuoteClick = (status) => {
+    let { askReplyConfirmation, dispatch, intl } = this.props;
+    if (askReplyConfirmation) {
+      dispatch(openModal('CONFIRM', {
+        message: intl.formatMessage(messages.quoteMessage),
+        confirm: intl.formatMessage(messages.quoteConfirm),
+        onConfirm: () => dispatch(quoteCompose(status, this.context.router.history)),
+      }));
+    } else {
+      dispatch(quoteCompose(status, this.context.router.history));
+    }
+  }
+
   handleDeleteClick = (status, history, withRedraft = false) => {
     const { dispatch, intl } = this.props;
 
@@ -267,6 +293,10 @@ class Status extends ImmutablePureComponent {
 
   handleDirectClick = (account, router) => {
     this.props.dispatch(directCompose(account, router));
+  }
+
+  handleMemberListClick = (status, history) => {
+    history.push(`/statuses/${status.get('id')}/mentions`);
   }
 
   handleMentionClick = (account, router) => {
@@ -314,6 +344,14 @@ class Status extends ImmutablePureComponent {
       this.props.dispatch(revealStatus(status.get('id')));
     } else {
       this.props.dispatch(hideStatus(status.get('id')));
+    }
+  }
+
+  handleQuoteToggleHidden = (status) => {
+    if (status.get('quote_hidden')) {
+      this.props.dispatch(revealQuote(status.get('id')));
+    } else {
+      this.props.dispatch(hideQuote(status.get('id')));
     }
   }
 
@@ -492,7 +530,7 @@ class Status extends ImmutablePureComponent {
 
   render () {
     let ancestors, descendants;
-    const { shouldUpdateScroll, status, ancestorsIds, descendantsIds, intl, domain, multiColumn } = this.props;
+    const { shouldUpdateScroll, status, ancestorsIds, descendantsIds, intl, domain, multiColumn, usingPiP } = this.props;
     const { fullscreen } = this.state;
 
     if (status === null) {
@@ -550,6 +588,10 @@ class Status extends ImmutablePureComponent {
                   domain={domain}
                   showMedia={this.state.showMedia}
                   onToggleMediaVisibility={this.handleToggleMediaVisibility}
+                  usingPiP={usingPiP}
+                  onQuoteToggleHidden={this.handleQuoteToggleHidden}
+                  showQuoteMedia={this.state.showQuoteMedia}
+                  onToggleQuoteMediaVisibility={this.handleToggleQuoteMediaVisibility}
                 />
 
                 <ActionBar
@@ -559,8 +601,10 @@ class Status extends ImmutablePureComponent {
                   onFavourite={this.handleFavouriteClick}
                   onReblog={this.handleReblogClick}
                   onBookmark={this.handleBookmarkClick}
+                  onQuote={this.handleQuoteClick}
                   onDelete={this.handleDeleteClick}
                   onDirect={this.handleDirectClick}
+                  onMemberList={this.handleMemberListClick}
                   onMention={this.handleMentionClick}
                   onMute={this.handleMuteClick}
                   onUnmute={this.handleUnmuteClick}

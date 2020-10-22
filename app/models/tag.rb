@@ -22,7 +22,9 @@ class Tag < ApplicationRecord
   has_and_belongs_to_many :accounts
   has_and_belongs_to_many :sample_accounts, -> { local.discoverable.popular.limit(3) }, class_name: 'Account'
 
+  has_many :favourite_tags, dependent: :destroy, inverse_of: :tag
   has_many :featured_tags, dependent: :destroy, inverse_of: :tag
+  has_many :follow_tags, dependent: :destroy, inverse_of: :tag
   has_one :account_tag_stat, dependent: :destroy
 
   HASHTAG_SEPARATORS = "_\u00B7\u200c"
@@ -39,7 +41,7 @@ class Tag < ApplicationRecord
   scope :listable, -> { where(listable: [true, nil]) }
   scope :trendable, -> { Setting.trendable_by_default ? where(trendable: [true, nil]) : where(trendable: true) }
   scope :discoverable, -> { listable.joins(:account_tag_stat).where(AccountTagStat.arel_table[:accounts_count].gt(0)).order(Arel.sql('account_tag_stats.accounts_count desc')) }
-  scope :most_used, ->(account) { joins(:statuses).where(statuses: { account: account }).group(:id).order(Arel.sql('count(*) desc')) }
+  scope :recently_used, ->(account) { joins(:statuses).where(statuses: { id: account.statuses.select(:id).limit(1000) }).group(:id).order(Arel.sql('count(*) desc')) }
   scope :matches_name, ->(value) { where(arel_table[:name].matches("#{value}%")) }
 
   delegate :accounts_count,
@@ -47,6 +49,8 @@ class Tag < ApplicationRecord
            :increment_count!,
            :decrement_count!,
            to: :account_tag_stat
+
+  before_save :set_unlistable, if: :force_unlistable?
 
   after_save :save_account_tag_stat
 
@@ -81,6 +85,10 @@ class Tag < ApplicationRecord
   end
 
   alias trendable? trendable
+
+  def force_unlistable?
+    name.end_with?('_')
+  end
 
   def requires_review?
     reviewed_at.nil?
@@ -162,6 +170,10 @@ class Tag < ApplicationRecord
   end
 
   private
+
+  def set_unlistable
+    self.listable = false
+  end
 
   def save_account_tag_stat
     return unless account_tag_stat&.changed?

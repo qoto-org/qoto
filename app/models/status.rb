@@ -22,7 +22,10 @@
 #  application_id         :bigint(8)
 #  in_reply_to_account_id :bigint(8)
 #  poll_id                :bigint(8)
+#  quote_id               :bigint(8)
 #  deleted_at             :datetime
+#  expires_at             :datetime
+#  expires_action         :integer          default("delete"), not null
 #
 
 class Status < ApplicationRecord
@@ -33,6 +36,8 @@ class Status < ApplicationRecord
   include Cacheable
   include StatusThreadingConcern
   include RateLimitable
+  include Expireable
+  include Redisable
 
   rate_limit by: :account, family: :statuses
 
@@ -42,19 +47,25 @@ class Status < ApplicationRecord
   # will be based on current time instead of `created_at`
   attr_accessor :override_timestamps
 
+  attr_accessor :circle
+
   update_index('statuses#status', :proper)
 
   enum visibility: [:public, :unlisted, :private, :direct, :limited], _suffix: :visibility
+  enum expires_action: [:delete, :hint], _prefix: :expires
 
   belongs_to :application, class_name: 'Doorkeeper::Application', optional: true
 
   belongs_to :account, inverse_of: :statuses
   belongs_to :in_reply_to_account, foreign_key: 'in_reply_to_account_id', class_name: 'Account', optional: true
-  belongs_to :conversation, optional: true
+  belongs_to :conversation, optional: true, inverse_of: :statuses
   belongs_to :preloadable_poll, class_name: 'Poll', foreign_key: 'poll_id', optional: true
+
+  has_one :owned_conversation, class_name: 'Conversation', foreign_key: 'parent_status_id', inverse_of: :parent_status
 
   belongs_to :thread, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :replies, optional: true
   belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, optional: true
+  belongs_to :quote, foreign_key: 'quote_id', class_name: 'Status', inverse_of: :quoted, optional: true
 
   has_many :favourites, inverse_of: :status, dependent: :destroy
   has_many :bookmarks, inverse_of: :status, dependent: :destroy
@@ -63,6 +74,8 @@ class Status < ApplicationRecord
   has_many :mentions, dependent: :destroy, inverse_of: :status
   has_many :active_mentions, -> { active }, class_name: 'Mention', inverse_of: :status
   has_many :media_attachments, dependent: :nullify
+  has_many :quoted, foreign_key: 'quote_id', class_name: 'Status', inverse_of: :quote, dependent: :nullify
+  has_many :capability_tokens, class_name: 'StatusCapabilityToken', inverse_of: :status, dependent: :destroy
 
   has_and_belongs_to_many :tags
   has_and_belongs_to_many :preview_cards
@@ -77,31 +90,65 @@ class Status < ApplicationRecord
   validates_with DisallowedHashtagsValidator
   validates :reblog, uniqueness: { scope: :account }, if: :reblog?
   validates :visibility, exclusion: { in: %w(direct limited) }, if: :reblog?
+  validates :quote_visibility, inclusion: { in: %w(public unlisted) }, if: :quote?
+  validates_with ExpiresValidator, on: :create, if: :local?
 
   accepts_nested_attributes_for :poll
 
-  default_scope { recent.kept }
+  default_scope { recent.kept.not_expired }
 
   scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where(local: false).where.not(uri: nil) }
   scope :local,  -> { where(local: true).or(where(uri: nil)) }
 
+  scope :not_expired, -> { where(statuses: {expires_at: nil} ).or(where('statuses.expires_at >= ?', Time.now.utc)) }
+  scope :include_expired, ->(account = nil) {
+    if account.nil?
+      unscoped.recent.kept
+    else
+      unscoped.recent.kept.where(<<-SQL, account_id: account.id, current_utc: Time.now.utc)
+        (
+          statuses.expires_at IS NULL
+        ) OR
+        NOT (
+          statuses.account_id != :account_id
+          AND NOT EXISTS (
+            SELECT *
+            FROM bookmarks b
+            WHERE b.status_id = statuses.id
+            AND b.account_id = :account_id
+          )
+          AND NOT EXISTS (
+            SELECT *
+            FROM favourites f
+            WHERE f.status_id = statuses.id
+            AND f.account_id = :account_id
+          )
+          AND statuses.expires_at IS NOT NULL
+          AND statuses.expires_at < :current_utc
+        )
+        SQL
+    end
+  }
+
   scope :with_accounts, ->(ids) { where(id: ids).includes(:account) }
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
   scope :with_public_visibility, -> { where(visibility: :public) }
-  scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
+  scope :tagged_with, ->(tag_ids) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag_ids }) }
+  scope :in_chosen_languages, ->(account) { where(language: nil).or where(language: account.chosen_languages) }
+  scope :mentioned_with, ->(account) { joins(:mentions).where(mentions: { account_id: account }) }
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced_at: nil }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where.not(accounts: { silenced_at: nil }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
   scope :not_domain_blocked_by_account, ->(account) { account.excluded_from_timeline_domains.blank? ? left_outer_joins(:account) : left_outer_joins(:account).where('accounts.domain IS NULL OR accounts.domain NOT IN (?)', account.excluded_from_timeline_domains) }
-  scope :tagged_with_all, ->(tags) {
-    Array(tags).map(&:id).map(&:to_i).reduce(self) do |result, id|
+  scope :tagged_with_all, ->(tag_ids) {
+    Array(tag_ids).reduce(self) do |result, id|
       result.joins("INNER JOIN statuses_tags t#{id} ON t#{id}.status_id = statuses.id AND t#{id}.tag_id = #{id}")
     end
   }
-  scope :tagged_with_none, ->(tags) {
-    Array(tags).map(&:id).map(&:to_i).reduce(self) do |result, id|
+  scope :tagged_with_none, ->(tag_ids) {
+    Array(tag_ids).reduce(self) do |result, id|
       result.joins("LEFT OUTER JOIN statuses_tags t#{id} ON t#{id}.status_id = statuses.id AND t#{id}.tag_id = #{id}")
             .where("t#{id}.tag_id IS NULL")
     end
@@ -165,6 +212,20 @@ class Status < ApplicationRecord
     !reblog_of_id.nil?
   end
 
+  def quote?
+    !quote_id.nil? && quote
+  end
+
+  def quote_visibility
+    quote&.visibility
+  end
+
+  def mentioning?(source_account_id)
+    source_account_id = source_account_id.id if source_account_id.is_a?(Account)
+
+    mentions.where(account_id: source_account_id).exists?
+  end
+
   def within_realtime_window?
     created_at >= REAL_TIME_WINDOW.ago
   end
@@ -205,7 +266,9 @@ class Status < ApplicationRecord
     public_visibility? || unlisted_visibility?
   end
 
-  alias sign? distributable?
+  def sign?
+    distributable? || limited_visibility?
+  end
 
   def with_media?
     media_attachments.any?
@@ -225,7 +288,11 @@ class Status < ApplicationRecord
     fields  = [spoiler_text, text]
     fields += preloadable_poll.options unless preloadable_poll.nil?
 
-    @emojis = CustomEmoji.from_text(fields.join(' '), account.domain)
+    @emojis = CustomEmoji.from_text(fields.join(' '), account.domain) + (quote? ? CustomEmoji.from_text([quote.spoiler_text, quote.text].join(' '), quote.account.domain) : [])
+  end
+
+  def index_text
+    @index_text ||= [spoiler_text, Formatter.instance.plaintext(self)].concat(media_attachments.map(&:description)).concat(preloadable_poll ? preloadable_poll.options : []).concat(quote? ? ["QT: [#{quote.url || ActivityPub::TagManager.instance.url_for(quote)}]"] : []).filter(&:present?).join("\n\n")
   end
 
   def mark_for_mass_destruction!
@@ -264,37 +331,18 @@ class Status < ApplicationRecord
 
   around_create Mastodon::Snowflake::Callbacks
 
-  before_validation :prepare_contents, if: :local?
-  before_validation :set_reblog
-  before_validation :set_visibility
-  before_validation :set_conversation
-  before_validation :set_local
+  before_validation :prepare_contents, on: :create, if: :local?
+  before_validation :set_reblog, on: :create
+  before_validation :set_visibility, on: :create
+  before_validation :set_conversation, on: :create
+  before_validation :set_local, on: :create
 
   after_create :set_poll_id
+  after_create :set_circle
 
   class << self
     def selectable_visibilities
       visibilities.keys - %w(direct limited)
-    end
-
-    def in_chosen_languages(account)
-      where(language: nil).or where(language: account.chosen_languages)
-    end
-
-    def as_public_timeline(account = nil, local_only = false)
-      query = timeline_scope(local_only).without_replies
-
-      apply_timeline_filters(query, account, [:local, true].include?(local_only))
-    end
-
-    def as_tag_timeline(tag, account = nil, local_only = false)
-      query = timeline_scope(local_only).tagged_with(tag)
-
-      apply_timeline_filters(query, account, local_only)
-    end
-
-    def as_outbox_timeline(account)
-      where(account: account, visibility: :public)
     end
 
     def favourites_map(status_ids, account_id)
@@ -373,51 +421,6 @@ class Status < ApplicationRecord
         status&.distributable? ? status : nil
       end.compact
     end
-
-    private
-
-    def timeline_scope(scope = false)
-      starting_scope = case scope
-                       when :local, true
-                         Status.local
-                       when :remote
-                         Status.remote
-                       else
-                         Status
-                       end
-
-      starting_scope
-        .with_public_visibility
-        .without_reblogs
-    end
-
-    def apply_timeline_filters(query, account, local_only)
-      if account.nil?
-        filter_timeline_default(query)
-      else
-        filter_timeline_for_account(query, account, local_only)
-      end
-    end
-
-    def filter_timeline_for_account(query, account, local_only)
-      query = query.not_excluded_by_account(account)
-      query = query.not_domain_blocked_by_account(account) unless local_only
-      query = query.in_chosen_languages(account) if account.chosen_languages.present?
-      query.merge(account_silencing_filter(account))
-    end
-
-    def filter_timeline_default(query)
-      query.excluding_silenced_accounts
-    end
-
-    def account_silencing_filter(account)
-      if account.silenced?
-        including_myself = left_outer_joins(:account).where(account_id: account.id).references(:accounts)
-        excluding_silenced_accounts.or(including_myself)
-      else
-        excluding_silenced_accounts
-      end
-    end
   end
 
   def status_stat
@@ -462,10 +465,23 @@ class Status < ApplicationRecord
 
     if reply? && !thread.nil?
       self.in_reply_to_account_id = carried_over_reply_to_account_id
-      self.conversation_id        = thread.conversation_id if conversation_id.nil?
-    elsif conversation_id.nil?
-      self.conversation = Conversation.new
     end
+
+    if conversation_id.nil?
+      if reply? && !thread.nil? && circle.nil?
+        self.conversation_id = thread.conversation_id
+      else
+        build_owned_conversation
+      end
+    end
+  end
+
+  def set_circle
+    redis.setex(circle_id_key, 3.days.seconds, circle.id) if circle.present?
+  end
+
+  def circle_id_key
+    "statuses/#{id}/circle_id"
   end
 
   def carried_over_reply_to_account_id

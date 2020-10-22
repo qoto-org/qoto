@@ -5,6 +5,12 @@ import {
   ACCOUNT_UNFOLLOW_SUCCESS,
   ACCOUNT_UNFOLLOW_REQUEST,
   ACCOUNT_UNFOLLOW_FAIL,
+  ACCOUNT_SUBSCRIBE_SUCCESS,
+  ACCOUNT_SUBSCRIBE_REQUEST,
+  ACCOUNT_SUBSCRIBE_FAIL,
+  ACCOUNT_UNSUBSCRIBE_SUCCESS,
+  ACCOUNT_UNSUBSCRIBE_REQUEST,
+  ACCOUNT_UNSUBSCRIBE_FAIL,
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_UNBLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
@@ -45,15 +51,25 @@ const initialState = ImmutableMap();
 export default function relationships(state = initialState, action) {
   switch(action.type) {
   case ACCOUNT_FOLLOW_REQUEST:
-    return state.setIn([action.id, action.locked ? 'requested' : 'following'], true);
+    return state.getIn([action.id, 'following']) ? state : state.setIn([action.id, action.locked ? 'requested' : 'following'], true);
   case ACCOUNT_FOLLOW_FAIL:
     return state.setIn([action.id, action.locked ? 'requested' : 'following'], false);
   case ACCOUNT_UNFOLLOW_REQUEST:
     return state.setIn([action.id, 'following'], false);
   case ACCOUNT_UNFOLLOW_FAIL:
     return state.setIn([action.id, 'following'], true);
+  case ACCOUNT_SUBSCRIBE_REQUEST:
+    return state.setIn([action.id, 'subscribing'], true);
+  case ACCOUNT_SUBSCRIBE_FAIL:
+    return state.setIn([action.id, 'subscribing'], false);
+  case ACCOUNT_UNSUBSCRIBE_REQUEST:
+    return state.setIn([action.id, 'subscribing'], false);
+  case ACCOUNT_UNSUBSCRIBE_FAIL:
+    return state.setIn([action.id, 'subscribing'], true);
   case ACCOUNT_FOLLOW_SUCCESS:
   case ACCOUNT_UNFOLLOW_SUCCESS:
+  case ACCOUNT_SUBSCRIBE_SUCCESS:
+  case ACCOUNT_UNSUBSCRIBE_SUCCESS:
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_UNBLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:

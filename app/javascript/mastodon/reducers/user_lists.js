@@ -15,6 +15,12 @@ import {
   FOLLOWING_EXPAND_SUCCESS,
   FOLLOWING_EXPAND_FAIL,
   FOLLOW_REQUESTS_FETCH_REQUEST,
+  SUBSCRIBING_FETCH_REQUEST,
+  SUBSCRIBING_FETCH_SUCCESS,
+  SUBSCRIBING_FETCH_FAIL,
+  SUBSCRIBING_EXPAND_REQUEST,
+  SUBSCRIBING_EXPAND_SUCCESS,
+  SUBSCRIBING_EXPAND_FAIL,
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_FETCH_FAIL,
   FOLLOW_REQUESTS_EXPAND_REQUEST,
@@ -26,6 +32,7 @@ import {
 import {
   REBLOGS_FETCH_SUCCESS,
   FAVOURITES_FETCH_SUCCESS,
+  MENTIONS_FETCH_SUCCESS,
 } from '../actions/interactions';
 import {
   BLOCKS_FETCH_REQUEST,
@@ -44,6 +51,14 @@ import {
   MUTES_EXPAND_FAIL,
 } from '../actions/mutes';
 import {
+  GROUP_DIRECTORY_FETCH_REQUEST,
+  GROUP_DIRECTORY_FETCH_SUCCESS,
+  GROUP_DIRECTORY_FETCH_FAIL,
+  GROUP_DIRECTORY_EXPAND_REQUEST,
+  GROUP_DIRECTORY_EXPAND_SUCCESS,
+  GROUP_DIRECTORY_EXPAND_FAIL,
+} from 'mastodon/actions/group_directory';
+import {
   DIRECTORY_FETCH_REQUEST,
   DIRECTORY_FETCH_SUCCESS,
   DIRECTORY_FETCH_FAIL,
@@ -56,8 +71,10 @@ import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 const initialState = ImmutableMap({
   followers: ImmutableMap(),
   following: ImmutableMap(),
+  subscribing: ImmutableMap(),
   reblogged_by: ImmutableMap(),
   favourited_by: ImmutableMap(),
+  mentioned_by: ImmutableMap(),
   follow_requests: ImmutableMap(),
   blocks: ImmutableMap(),
   mutes: ImmutableMap(),
@@ -105,10 +122,22 @@ export default function userLists(state = initialState, action) {
   case FOLLOWING_FETCH_FAIL:
   case FOLLOWING_EXPAND_FAIL:
     return state.setIn(['following', action.id, 'isLoading'], false);
+  case SUBSCRIBING_FETCH_SUCCESS:
+    return normalizeList(state, ['subscribing', action.id], action.accounts, action.next);
+  case SUBSCRIBING_EXPAND_SUCCESS:
+    return appendToList(state, ['subscribing', action.id], action.accounts, action.next);
+  case SUBSCRIBING_FETCH_REQUEST:
+  case SUBSCRIBING_EXPAND_REQUEST:
+    return state.setIn(['subscribing', action.id, 'isLoading'], true);
+  case SUBSCRIBING_FETCH_FAIL:
+  case SUBSCRIBING_EXPAND_FAIL:
+    return state.setIn(['subscribing', action.id, 'isLoading'], false);
   case REBLOGS_FETCH_SUCCESS:
     return state.setIn(['reblogged_by', action.id], ImmutableList(action.accounts.map(item => item.id)));
   case FAVOURITES_FETCH_SUCCESS:
     return state.setIn(['favourited_by', action.id], ImmutableList(action.accounts.map(item => item.id)));
+  case MENTIONS_FETCH_SUCCESS:
+    return state.setIn(['mentioned_by', action.id], ImmutableList(action.accounts.map(item => item.id)));
   case NOTIFICATIONS_UPDATE:
     return action.notification.type === 'follow_request' ? normalizeFollowRequest(state, action.notification) : state;
   case FOLLOW_REQUESTS_FETCH_SUCCESS:
@@ -144,6 +173,16 @@ export default function userLists(state = initialState, action) {
   case MUTES_FETCH_FAIL:
   case MUTES_EXPAND_FAIL:
     return state.setIn(['mutes', 'isLoading'], false);
+  case GROUP_DIRECTORY_FETCH_SUCCESS:
+    return normalizeList(state, ['group_directory'], action.accounts, action.next);
+  case GROUP_DIRECTORY_EXPAND_SUCCESS:
+    return appendToList(state, ['group_directory'], action.accounts, action.next);
+  case GROUP_DIRECTORY_FETCH_REQUEST:
+  case GROUP_DIRECTORY_EXPAND_REQUEST:
+    return state.setIn(['group_directory', 'isLoading'], true);
+  case GROUP_DIRECTORY_FETCH_FAIL:
+  case GROUP_DIRECTORY_EXPAND_FAIL:
+    return state.setIn(['group_directory', 'isLoading'], false);
   case DIRECTORY_FETCH_SUCCESS:
     return normalizeList(state, ['directory'], action.accounts, action.next);
   case DIRECTORY_EXPAND_SUCCESS:

@@ -27,6 +27,9 @@ import custom_emojis from './custom_emojis';
 import lists from './lists';
 import listEditor from './list_editor';
 import listAdder from './list_adder';
+import circles from './circles';
+import circleEditor from './circle_editor';
+import circleAdder from './circle_adder';
 import filters from './filters';
 import conversations from './conversations';
 import suggestions from './suggestions';
@@ -36,6 +39,9 @@ import trends from './trends';
 import missed_updates from './missed_updates';
 import announcements from './announcements';
 import markers from './markers';
+import picture_in_picture from './picture_in_picture';
+import favourite_domains from './favourite_domains';
+import favourite_tags from './favourite_tags';
 
 const reducers = {
   announcements,
@@ -68,6 +74,9 @@ const reducers = {
   lists,
   listEditor,
   listAdder,
+  circles,
+  circleEditor,
+  circleAdder,
   filters,
   conversations,
   suggestions,
@@ -75,6 +84,9 @@ const reducers = {
   trends,
   missed_updates,
   markers,
+  picture_in_picture,
+  favourite_domains,
+  favourite_tags,
 };
 
 export default combineReducers(reducers);

@@ -16,8 +16,10 @@ class BatchedRemoveStatusService < BaseService
 
     @mentions = statuses.each_with_object({}) { |s, h| h[s.id] = s.active_mentions.includes(:account).to_a }
     @tags     = statuses.each_with_object({}) { |s, h| h[s.id] = s.tags.pluck(:name) }
+    @domains  = statuses.each_with_object({}) { |s, h| h[s.id] = s.account.domain unless s.local? }
 
-    @json_payloads = statuses.each_with_object({}) { |s, h| h[s.id] = Oj.dump(event: :delete, payload: s.id.to_s) }
+    @payloads        = statuses.each_with_object({}) { |s, h| h[s.id] = Oj.dump(event: :delete, payload: s.id.to_s) }
+    @reblog_payloads = statuses.each_with_object({}) { |s, h| h[s.id] = Oj.dump(event: :delete, payload: s.reblog.id.to_s) if s.account.group? }
 
     # Ensure that rendered XML reflects destroyed state
     statuses.each do |status|
@@ -39,6 +41,7 @@ class BatchedRemoveStatusService < BaseService
 
     # Cannot be batched
     statuses.each do |status|
+      unpush_from_group_timelines(status)
       unpush_from_public_timelines(status)
     end
   end
@@ -65,10 +68,30 @@ class BatchedRemoveStatusService < BaseService
     end
   end
 
+  def unpush_from_group_timelines(status)
+    return unless status.account.group?
+
+    payload = status.reblog? ? @reblog_payloads[status.id] : @payloads[status.id]
+
+    redis.publish("timeline:group:#{status.account.id}", payload)
+
+    @tags[status.id].each do |hashtag|
+      redis.publish("timeline:group:#{status.account.id}:#{hashtag.mb_chars.downcase}", payload)
+    end
+
+    if status.media_attachments.any?
+      redis.publish("timeline:group:media:#{status.account.id}", payload)
+
+      @tags[status.id].each do |hashtag|
+        redis.publish("timeline:group:media:#{status.account.id}:#{hashtag.mb_chars.downcase}", payload)
+      end
+    end
+  end
+
   def unpush_from_public_timelines(status)
     return unless status.public_visibility?
 
-    payload = @json_payloads[status.id]
+    payload = @payloads[status.id]
 
     redis.pipelined do
       redis.publish('timeline:public', payload)
@@ -76,13 +99,16 @@ class BatchedRemoveStatusService < BaseService
         redis.publish('timeline:public:local', payload)
       else
         redis.publish('timeline:public:remote', payload)
+        redis.publish("timeline:public:domain:#{@domains[status.id].mb_chars.downcase}", payload)
       end
+
       if status.media_attachments.any?
         redis.publish('timeline:public:media', payload)
         if status.local?
           redis.publish('timeline:public:local:media', payload)
         else
           redis.publish('timeline:public:remote:media', payload)
+          redis.publish("timeline:public:domain:media:#{@domains[status.id].mb_chars.downcase}", payload)
         end
       end
 

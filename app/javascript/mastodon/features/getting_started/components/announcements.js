@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import IconButton from 'mastodon/components/icon_button';
 import Icon from 'mastodon/components/icon';
 import { defineMessages, injectIntl, FormattedMessage, FormattedDate } from 'react-intl';
-import { autoPlayGif, reduceMotion } from 'mastodon/initial_state';
+import { autoPlayGif, reduceMotion, disableSwiping } from 'mastodon/initial_state';
 import elephantUIPlane from 'mastodon/../images/elephant_ui_plane.svg';
 import { mascot } from 'mastodon/initial_state';
 import unicodeMapping from 'mastodon/features/emoji/emoji_unicode_mapping_light';
@@ -15,6 +15,7 @@ import EmojiPickerDropdown from 'mastodon/features/compose/containers/emoji_pick
 import AnimatedNumber from 'mastodon/components/animated_number';
 import TransitionMotion from 'react-motion/lib/TransitionMotion';
 import spring from 'react-motion/lib/spring';
+import { assetHost } from 'mastodon/utils/config';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -90,7 +91,11 @@ class Content extends ImmutablePureComponent {
       let mention = this.props.announcement.get('mentions').find(item => link.href === item.get('url'));
 
       if (mention) {
-        link.addEventListener('click', this.onMentionClick.bind(this, mention), false);
+        if (mention.get('group', false)) {
+          link.addEventListener('click', this.onGroupMentionClick.bind(this, mention), false);
+        } else {
+          link.addEventListener('click', this.onMentionClick.bind(this, mention), false);
+        }
         link.setAttribute('title', mention.get('acct'));
       } else if (link.textContent[0] === '#' || (link.previousSibling && link.previousSibling.textContent && link.previousSibling.textContent[link.previousSibling.textContent.length - 1] === '#')) {
         link.addEventListener('click', this.onHashtagClick.bind(this, link.text), false);
@@ -112,6 +117,13 @@ class Content extends ImmutablePureComponent {
     if (this.context.router && e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       this.context.router.history.push(`/accounts/${mention.get('id')}`);
+    }
+  }
+
+  onGroupMentionClick = (mention, e) => {
+    if (this.context.router && e.button === 0 && !(e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      this.context.router.history.push(`/timelines/groups/${mention.get('id')}`);
     }
   }
 
@@ -152,8 +164,6 @@ class Content extends ImmutablePureComponent {
   }
 
 }
-
-const assetHost = process.env.CDN_HOST || '';
 
 class Emoji extends React.PureComponent {
 
@@ -436,6 +446,7 @@ class Announcements extends ImmutablePureComponent {
                 removeReaction={this.props.removeReaction}
                 intl={intl}
                 selected={index === idx}
+                disabled={disableSwiping}
               />
             ))}
           </ReactSwipeableViews>

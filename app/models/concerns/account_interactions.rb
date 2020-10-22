@@ -8,12 +8,29 @@ module AccountInteractions
       Follow.where(target_account_id: target_account_ids, account_id: account_id).each_with_object({}) do |follow, mapping|
         mapping[follow.target_account_id] = {
           reblogs: follow.show_reblogs?,
+          notify: follow.notify?,
+          delivery: follow.delivery?,
         }
       end
     end
 
     def followed_by_map(target_account_ids, account_id)
+      Follow.where(account_id: target_account_ids, target_account_id: account_id).each_with_object({}) do |follow, mapping|
+        mapping[follow.account_id] = {
+          delivery: follow.delivery?,
+        }
+      end
       follow_mapping(Follow.where(account_id: target_account_ids, target_account_id: account_id), :account_id)
+    end
+
+    def subscribing_map(target_account_ids, account_id)
+      AccountSubscribe.where(target_account_id: target_account_ids, account_id: account_id).each_with_object({}) do |subscribe, mapping|
+        mapping[subscribe.target_account_id] = (mapping[subscribe.target_account_id] || {}).merge({
+          subscribe.list_id || -1 => {
+            reblogs: subscribe.show_reblogs?,
+          }
+        })
+      end
     end
 
     def blocking_map(target_account_ids, account_id)
@@ -36,6 +53,8 @@ module AccountInteractions
       FollowRequest.where(target_account_id: target_account_ids, account_id: account_id).each_with_object({}) do |follow_request, mapping|
         mapping[follow_request.target_account_id] = {
           reblogs: follow_request.show_reblogs?,
+          notify: follow_request.notify?,
+          delivery: follow_request.delivery?,
         }
       end
     end
@@ -78,6 +97,8 @@ module AccountInteractions
 
     has_many :following, -> { order('follows.id desc') }, through: :active_relationships,  source: :target_account
     has_many :followers, -> { order('follows.id desc') }, through: :passive_relationships, source: :account
+    has_many :delivery_following, -> { where('follows.delivery').order('follows.id desc') }, through: :active_relationships,  source: :target_account
+    has_many :delivery_followers, -> { where('follows.delivery').order('follows.id desc') }, through: :passive_relationships, source: :account
 
     # Block relationships
     has_many :block_relationships, class_name: 'Block', foreign_key: 'account_id', dependent: :destroy
@@ -93,27 +114,40 @@ module AccountInteractions
     has_many :conversation_mutes, dependent: :destroy
     has_many :domain_blocks, class_name: 'AccountDomainBlock', dependent: :destroy
     has_many :announcement_mutes, dependent: :destroy
+
+    # Subscribers
+    has_many :active_subscribes,  class_name: 'AccountSubscribe', foreign_key: 'account_id',        dependent: :destroy
+    has_many :passive_subscribes, class_name: 'AccountSubscribe', foreign_key: 'target_account_id', dependent: :destroy
+
+    has_many :subscribing, through: :active_subscribes,  source: :target_account
+    has_many :subscribers, through: :passive_subscribes, source: :account
   end
 
-  def follow!(other_account, reblogs: nil, uri: nil, rate_limit: false)
-    reblogs = true if reblogs.nil?
-
-    rel = active_relationships.create_with(show_reblogs: reblogs, uri: uri, rate_limit: rate_limit)
+  def follow!(other_account, reblogs: nil, notify: nil, delivery: nil, uri: nil, rate_limit: false)
+    rel = active_relationships.create_with(show_reblogs: reblogs.nil? ? true : reblogs, notify: notify.nil? ? false : notify, delivery: delivery.nil? ? true : delivery, uri: uri, rate_limit: rate_limit)
                               .find_or_create_by!(target_account: other_account)
 
-    rel.update!(show_reblogs: reblogs)
+    rel.show_reblogs = reblogs  unless reblogs.nil?
+    rel.notify       = notify   unless notify.nil?
+    rel.delivery     = delivery unless delivery.nil?
+
+    rel.save! if rel.changed?
+
     remove_potential_friendship(other_account)
 
     rel
   end
 
-  def request_follow!(other_account, reblogs: nil, uri: nil, rate_limit: false)
-    reblogs = true if reblogs.nil?
-
-    rel = follow_requests.create_with(show_reblogs: reblogs, uri: uri, rate_limit: rate_limit)
+  def request_follow!(other_account, reblogs: nil, notify: nil, delivery: nil, uri: nil, rate_limit: false)
+    rel = follow_requests.create_with(show_reblogs: reblogs.nil? ? true : reblogs, notify: notify.nil? ? false : notify, delivery: delivery.nil? ? true : delivery, uri: uri, rate_limit: rate_limit)
                          .find_or_create_by!(target_account: other_account)
 
-    rel.update!(show_reblogs: reblogs)
+    rel.show_reblogs = reblogs  unless reblogs.nil?
+    rel.notify       = notify   unless notify.nil?
+    rel.delivery     = delivery unless delivery.nil?
+
+    rel.save! if rel.changed?
+
     remove_potential_friendship(other_account)
 
     rel
@@ -125,9 +159,12 @@ module AccountInteractions
                        .find_or_create_by!(target_account: other_account)
   end
 
-  def mute!(other_account, notifications: nil)
+  def mute!(other_account, notifications: nil, duration: 0)
     notifications = true if notifications.nil?
-    mute = mute_relationships.create_with(hide_notifications: notifications).find_or_create_by!(target_account: other_account)
+    mute = mute_relationships.create_with(hide_notifications: notifications).find_or_initialize_by(target_account: other_account)
+    mute.expires_in = duration.zero? ? nil : duration
+    mute.save!
+
     remove_potential_friendship(other_account)
 
     # When toggling a mute between hiding and allowing notifications, the mute will already exist, so the find_or_create_by! call will return the existing Mute without updating the hide_notifications attribute. Therefore, we check that hide_notifications? is what we want and set it if it isn't.
@@ -171,8 +208,26 @@ module AccountInteractions
     block&.destroy
   end
 
+  def subscribe!(other_account, reblogs = true, list_id = nil)
+    rel = active_subscribes.create_with(show_reblogs: reblogs)
+                           .find_or_create_by!(target_account: other_account, list_id: list_id)
+
+    rel.update!(show_reblogs: reblogs)
+    remove_potential_friendship(other_account)
+
+    rel
+  end
+
   def following?(other_account)
     active_relationships.where(target_account: other_account).exists?
+  end
+
+  def delivery_following?(other_account)
+    active_relationships.where(target_account: other_account, delivery: true).exists?
+  end
+
+  def mutual?(other_account)
+    following?(other_account) && other_account.following?(self)
   end
 
   def blocking?(other_account)
@@ -223,15 +278,33 @@ module AccountInteractions
     account_pins.where(target_account: account).exists?
   end
 
+  def subscribing?(other_account, list_id = nil)
+    active_subscribes.where(target_account: other_account, list_id: list_id).exists?
+  end
+
   def followers_for_local_distribution
-    followers.local
-             .joins(:user)
-             .where('users.current_sign_in_at > ?', User::ACTIVE_DURATION.ago)
+    delivery_followers.local
+                      .joins(:user)
+                      .where('users.current_sign_in_at > ?', User::ACTIVE_DURATION.ago)
+  end
+
+  def subscribers_for_local_distribution
+    AccountSubscribe.home
+                    .joins(account: :user)
+                    .where(target_account_id: id)
+                    .where('users.current_sign_in_at > ?', User::ACTIVE_DURATION.ago)
   end
 
   def lists_for_local_distribution
     lists.joins(account: :user)
          .where('users.current_sign_in_at > ?', User::ACTIVE_DURATION.ago)
+  end
+
+  def list_subscribers_for_local_distribution
+    AccountSubscribe.list
+                    .joins(account: :user)
+                    .where(target_account_id: id)
+                    .where('users.current_sign_in_at > ?', User::ACTIVE_DURATION.ago)
   end
 
   private

@@ -12,11 +12,11 @@ class EntityCache
   end
 
   def mention(username, domain)
-    Rails.cache.fetch(to_key(:mention, username, domain), expires_in: MAX_EXPIRATION) { Account.select(:id, :username, :domain, :url).find_remote(username, domain) }
+    Rails.cache.fetch(to_key(:mention, username, domain), expires_in: MAX_EXPIRATION) { Account.select(:id, :username, :domain, :url, :actor_type).find_remote(username, domain) }
   end
 
   def emoji(shortcodes, domain)
-    shortcodes   = [shortcodes] unless shortcodes.is_a?(Array)
+    shortcodes   = Array(shortcodes)
     cached       = Rails.cache.read_multi(*shortcodes.map { |shortcode| to_key(:emoji, shortcode, domain) })
     uncached_ids = []
 

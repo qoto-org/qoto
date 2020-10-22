@@ -27,6 +27,7 @@ class RemoveStatusService < BaseService
         remove_from_affected
         remove_reblogs
         remove_from_hashtags
+        remove_from_group if status.account.group?
         remove_from_public
         remove_from_media if status.media_attachments.any?
         remove_from_spam_check
@@ -92,7 +93,7 @@ class RemoveStatusService < BaseService
 
   def remove_from_remote_followers
     # ActivityPub
-    ActivityPub::DeliveryWorker.push_bulk(@account.followers.inboxes) do |inbox_url|
+    ActivityPub::DeliveryWorker.push_bulk(@account.delivery_followers.inboxes) do |inbox_url|
       [signed_activity_json, @account.id, inbox_url]
     end
 
@@ -136,6 +137,24 @@ class RemoveStatusService < BaseService
     end
   end
 
+  def remove_from_group
+    payload = @status.reblog? ? Oj.dump(event: :delete, payload: @status.reblog.id.to_s) : @payload
+
+    redis.publish("timeline:group:#{@status.account.id}", payload)
+
+    @tags.each do |hashtag|
+      redis.publish("timeline:group:#{@status.account.id}:#{hashtag.mb_chars.downcase}", payload)
+    end
+
+    if @status.media_attachments.any?
+      redis.publish("timeline:group:media:#{@status.account.id}", payload)
+
+      @tags.each do |hashtag|
+        redis.publish("timeline:group:media:#{@status.account.id}:#{hashtag.mb_chars.downcase}", payload)
+      end
+    end
+  end
+
   def remove_from_public
     return unless @status.public_visibility?
 
@@ -144,6 +163,7 @@ class RemoveStatusService < BaseService
       redis.publish('timeline:public:local', @payload)
     else
       redis.publish('timeline:public:remote', @payload)
+      redis.publish("timeline:public:domain:#{@account.domain.mb_chars.downcase}", @payload)
     end
   end
 
@@ -155,6 +175,7 @@ class RemoveStatusService < BaseService
       redis.publish('timeline:public:local:media', @payload)
     else
       redis.publish('timeline:public:remote:media', @payload)
+      redis.publish("timeline:public:domain:media:#{@account.domain.mb_chars.downcase}", @payload)
     end
   end
 
