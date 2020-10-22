@@ -24,6 +24,7 @@ const messages = defineMessages({
   private_short: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
   limited_short: { id: 'privacy.limited.short', defaultMessage: 'Circle' },
   direct_short: { id: 'privacy.direct.short', defaultMessage: 'Direct' },
+  local_only: { id: 'status.local_only', defaultMessage: 'This post is only visible by other users of your instance' },
 });
 
 const mapStateToProps = (state, props) => {
@@ -170,6 +171,7 @@ class DetailedStatus extends ImmutablePureComponent {
     let media           = '';
     let applicationLink = '';
     let reblogLink = '';
+    let localOnly = '';
     let reblogIcon = 'retweet';
     let favouriteLink = '';
 
@@ -361,6 +363,10 @@ class DetailedStatus extends ImmutablePureComponent {
       );
     }
 
+    if(status.get('local_only')) {
+      localOnly = <span> · <i className='fa fa-chain-broken' title={intl.formatMessage(messages.local_only)} /></span>;
+    }
+
     if (this.context.router) {
       favouriteLink = (
         <Link to={`/statuses/${status.get('id')}/favourites`} className='detailed-status__link'>
@@ -409,7 +415,7 @@ class DetailedStatus extends ImmutablePureComponent {
                 </time>
               </span>
             }
-            {visibilityLink}{applicationLink}{reblogLink} · {favouriteLink}
+            {visibilityLink}{applicationLink}{reblogLink} · {favouriteLink}{localOnly}
           </div>
         </div>
       </div>

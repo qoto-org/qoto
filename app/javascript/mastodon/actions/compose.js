@@ -50,6 +50,7 @@ export const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
 export const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE';
 export const COMPOSE_CIRCLE_CHANGE = 'COMPOSE_CIRCLE_CHANGE';
+export const COMPOSE_FEDERATION_CHANGE  = 'COMPOSE_FEDERATION_CHANGE';
 export const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE';
 export const COMPOSE_COMPOSING_CHANGE = 'COMPOSE_COMPOSING_CHANGE';
 
@@ -169,6 +170,7 @@ export function submitCompose(routerHistory) {
       circle_id: getState().getIn(['compose', 'circle_id']),
       poll: getState().getIn(['compose', 'poll'], null),
       quote_id: getState().getIn(['compose', 'quote_from'], null),
+      local_only: !getState().getIn(['compose', 'federation']),
     }, {
       headers: {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),
@@ -621,6 +623,13 @@ export function changeComposeVisibility(value) {
 export function changeComposeCircle(value) {
   return {
     type: COMPOSE_CIRCLE_CHANGE,
+    value,
+  };
+};
+
+export function changeComposeFederation(value) {
+  return {
+    type: COMPOSE_FEDERATION_CHANGE,
     value,
   };
 };

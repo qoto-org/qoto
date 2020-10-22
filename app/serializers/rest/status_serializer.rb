@@ -4,7 +4,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   attributes :id, :created_at, :in_reply_to_id, :in_reply_to_account_id,
              :sensitive, :spoiler_text, :visibility, :language,
              :uri, :url, :replies_count, :reblogs_count,
-             :favourites_count, :limited
+             :favourites_count, :limited, :local_only
 
   attribute :favourited, if: :current_user?
   attribute :reblogged, if: :current_user?
@@ -206,7 +206,7 @@ class REST::NestedQuoteSerializer < REST::StatusSerializer
     if instance_options && instance_options[:account_relationships]
       instance_options[:account_relationships].muting[object.account_id] ? true : false || instance_options[:account_relationships].blocking[object.account_id] || instance_options[:account_relationships].blocked_by[object.account_id] || instance_options[:account_relationships].domain_blocking[object.account_id] || false
     else
-      current_user.account.muting?(object.account) || object.account.blocking?(current_user.account) || current_user.account.blocking?(object.account) || current_user.account.domain_blocking?(object.account.domain) 
+      current_user.account.muting?(object.account) || object.account.blocking?(current_user.account) || current_user.account.blocking?(object.account) || current_user.account.domain_blocking?(object.account.domain)
     end
   end
 
