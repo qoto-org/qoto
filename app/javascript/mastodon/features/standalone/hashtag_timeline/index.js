@@ -24,20 +24,25 @@ class HashtagTimeline extends React.PureComponent {
     isLoading: PropTypes.bool.isRequired,
     hasMore: PropTypes.bool.isRequired,
     hashtag: PropTypes.string.isRequired,
+    local: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    local: false,
   };
 
   componentDidMount () {
-    const { dispatch, hashtag } = this.props;
+    const { dispatch, hashtag, local } = this.props;
 
-    dispatch(expandHashtagTimeline(hashtag));
+    dispatch(expandHashtagTimeline(hashtag, { local }));
   }
 
   handleLoadMore = () => {
-    const { dispatch, hashtag, statusIds } = this.props;
+    const { dispatch, hashtag, local, statusIds } = this.props;
     const maxId = statusIds.last();
 
     if (maxId) {
-      dispatch(expandHashtagTimeline(hashtag, { maxId }));
+      dispatch(expandHashtagTimeline(hashtag, { maxId, local }));
     }
   }
 

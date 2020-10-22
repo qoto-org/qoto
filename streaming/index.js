@@ -374,6 +374,8 @@ const startWorker = (workerId) => {
       return onlyMedia ? 'public:domain:media' : 'public:domain';
     case '/api/v1/streaming/hashtag':
       return 'hashtag';
+    case '/api/v1/streaming/hashtag/local':
+      return 'hashtag:local';
     case '/api/v1/streaming/direct':
       return 'direct';
     case '/api/v1/streaming/list':
@@ -393,6 +395,7 @@ const startWorker = (workerId) => {
     'group',
     'group:media',
     'hashtag',
+    'hashtag:local',
   ];
 
   /**
@@ -766,6 +769,13 @@ const startWorker = (workerId) => {
       });
 
       break;
+    case 'public:local':
+      resolve({
+        channelIds: ['timeline:public:local'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
+      break;
     case 'public:remote':
       resolve({
         channelIds: ['timeline:public:remote'],
@@ -809,6 +819,13 @@ const startWorker = (workerId) => {
 
       resolve({
         channelIds: ['timeline:public:media'],
+        options: { needsFiltering: true, notificationOnly: false },
+      });
+
+      break;
+    case 'public:local:media':
+      resolve({
+        channelIds: ['timeline:public:local:media'],
         options: { needsFiltering: true, notificationOnly: false },
       });
 
@@ -860,6 +877,17 @@ const startWorker = (workerId) => {
       }
 
       break;
+    case 'hashtag:local':
+      if (!params.tag || params.tag.length === 0) {
+        reject('No tag for stream provided');
+      } else {
+        resolve({
+          channelIds: [`timeline:hashtag:${params.tag.toLowerCase()}:local`],
+          options: { needsFiltering: true, notificationOnly: false },
+        });
+      }
+
+      break;
     case 'list':
       authorizeListAccess(params.list, req).then(() => {
         resolve({
@@ -884,7 +912,7 @@ const startWorker = (workerId) => {
   const streamNameFromChannelName = (channelName, params) => {
     if (channelName === 'list') {
       return [channelName, params.list];
-    } else if (channelName === 'hashtag') {
+    } else if (['hashtag', 'hashtag:local'].includes(channelName)) {
       return [channelName, params.tag];
     } else if (['public:domain', 'public:domain:media'].includes(channelName)) {
       return [channelName, params.domain];
