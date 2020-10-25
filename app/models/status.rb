@@ -27,6 +27,7 @@
 #  expires_at             :datetime
 #  expires_action         :integer          default("delete"), not null
 #  local_only             :boolean
+#  content_type           :string
 #
 
 class Status < ApplicationRecord
@@ -93,6 +94,7 @@ class Status < ApplicationRecord
   validates :visibility, exclusion: { in: %w(direct limited) }, if: :reblog?
   validates :quote_visibility, inclusion: { in: %w(public unlisted) }, if: :quote?
   validates_with ExpiresValidator, on: :create, if: :local?
+  validates :content_type, inclusion: { in: %w(text/plain text/markdown) }, allow_nil: true
 
   accepts_nested_attributes_for :poll
 
@@ -351,6 +353,10 @@ class Status < ApplicationRecord
   class << self
     def selectable_visibilities
       visibilities.keys - %w(direct limited)
+    end
+
+    def selectable_content_types
+      %w(text/plain text/markdown)
     end
 
     def favourites_map(status_ids, account_id)

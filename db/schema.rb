@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_220312) do
+ActiveRecord::Schema.define(version: 2020_10_08_220313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -930,6 +930,7 @@ ActiveRecord::Schema.define(version: 2020_10_08_220312) do
     t.datetime "expires_at"
     t.integer "expires_action", default: 0, null: false
     t.boolean "local_only"
+    t.string "content_type"
     t.index ["account_id", "id", "visibility", "updated_at"], name: "index_statuses_20190820", order: { id: :desc }, where: "(deleted_at IS NULL)"
     t.index ["id", "account_id"], name: "index_statuses_local_20190824", order: { id: :desc }, where: "((local OR (uri IS NULL)) AND (deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
     t.index ["id", "account_id"], name: "index_statuses_public_20200119", order: { id: :desc }, where: "((deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
