@@ -66,6 +66,7 @@ class Settings::PreferencesController < Settings::BaseController
       :setting_show_quote_button,
       :setting_show_bookmark_button,
       :setting_show_target,
+      :setting_strip_formatting,
       notification_emails: %i(follow follow_request reblog favourite mention digest report pending_account trending_tag),
       interactions: %i(must_be_follower must_be_following must_be_following_dm)
     )
