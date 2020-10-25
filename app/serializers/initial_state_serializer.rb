@@ -43,6 +43,7 @@ class InitialStateSerializer < ActiveModel::Serializer
       store[:use_blurhash]                      = object.current_account.user.setting_use_blurhash
       store[:use_pending_items]                 = object.current_account.user.setting_use_pending_items
       store[:is_staff]                          = object.current_account.user.staff?
+      store[:strip_formatting]                  = object.current_account.user.setting_strip_formatting
       store[:trends]                            = Setting.trends && object.current_account.user.setting_trends
       store[:crop_images]                       = object.current_account.user.setting_crop_images
       store[:show_follow_button_on_timeline]    = object.current_account.user.setting_show_follow_button_on_timeline

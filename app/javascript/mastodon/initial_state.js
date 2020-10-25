@@ -35,5 +35,6 @@ export const show_navigation_panel = getMeta('show_navigation_panel');
 export const show_quote_button = getMeta('show_quote_button');
 export const show_bookmark_button = getMeta('show_bookmark_button');
 export const show_target = getMeta('show_target');
+export const stripFormatting = getMeta('strip_formatting');
 
 export default initialState;

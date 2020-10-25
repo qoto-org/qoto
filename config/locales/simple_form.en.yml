@@ -187,6 +187,7 @@ en:
         setting_show_subscribe_button_on_timeline: Show subscribe button on timeline
         setting_show_followed_by: Reflect the following status on the follow button
         setting_show_target: Enable targeting features
+        setting_strip_formatting: Strip advanced formatting from toots
         setting_system_font_ui: Use system's default font
         setting_theme: Site theme
         setting_trends: Show today's trends
