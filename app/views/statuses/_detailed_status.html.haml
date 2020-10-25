@@ -15,7 +15,7 @@
 
   = account_action_button(status.account)
 
-  .status__content.emojify{ :data => ({ spoiler: current_account&.user&.setting_expand_spoilers ? 'expanded' : 'folded' } if status.spoiler_text?) }<
+  .status__content.emojify{ :data => ({ spoiler: current_account&.user&.setting_expand_spoilers ? 'expanded' : 'folded' } if status.spoiler_text?) }{ class: text_formatting_classes }<
     - if status.spoiler_text?
       %p<
         %span.p-summary> #{Formatter.instance.format_spoiler(status, autoplay: autoplay)}&nbsp;

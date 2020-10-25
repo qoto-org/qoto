@@ -61,6 +61,9 @@
   .fields-group
     = f.input :setting_show_bookmark_button, as: :boolean, wrapper: :with_label
 
+  .fields-group
+    = f.input :setting_strip_formatting, collection: ['none', 'blocks', 'all'], wrapper: :with_floating_label, include_blank: false, label_method: lambda { |value| safe_join([I18n.t("statuses.strip_formatting.#{value}"), content_tag(:span, I18n.t("statuses.strip_formatting.#{value}_long"), class: 'hint')]) }, required: false, as: :radio_buttons, collection_wrapper_tag: 'ul', item_wrapper_tag: 'li', hint: false
+
   -# .fields-group
   -#   = f.input :setting_show_target, as: :boolean, wrapper: :with_label
 

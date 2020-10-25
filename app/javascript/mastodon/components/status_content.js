@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import PollContainer from 'mastodon/containers/poll_container';
 import Icon from 'mastodon/components/icon';
 import { autoPlayGif } from 'mastodon/initial_state';
+import { stripFormatting } from 'mastodon/initial_state';
 
 const MAX_HEIGHT = 642; // 20px * 32 (+ 2px padding at the top)
 
@@ -210,6 +211,8 @@ export default class StatusContent extends React.PureComponent {
       'status__content--with-action': this.props.onClick && this.context.router,
       'status__content--with-spoiler': status.get('spoiler_text').length > 0,
       'status__content--collapsed': renderReadMore,
+      'rich-text': stripFormatting !== 'all',
+      'rich-blocks': stripFormatting === 'none',
     });
 
     if (isRtl(status.get('search_index'))) {
