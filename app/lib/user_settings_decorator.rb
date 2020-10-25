@@ -50,6 +50,7 @@ class UserSettingsDecorator
     user.settings['show_quote_button']                 = show_quote_button_preference if change?('setting_show_quote_button')
     user.settings['show_bookmark_button']              = show_bookmark_button_preference if change?('setting_show_bookmark_button')
     user.settings['show_target']                       = show_target_preference if change?('setting_show_target')
+    user.settings['strip_formatting']    = strip_formatting_preference if change?('setting_strip_formatting')
   end
 
   def merged_notification_emails
@@ -71,7 +72,7 @@ class UserSettingsDecorator
   def default_federation_preference
     boolean_cast_setting 'setting_default_federation'
   end
-  
+
   def default_content_type_preference
     settings['setting_default_content_type']
   end
@@ -190,6 +191,10 @@ class UserSettingsDecorator
 
   def show_target_preference
     boolean_cast_setting 'setting_show_target'
+  end
+
+  def strip_formatting_preference
+    settings['setting_strip_formatting']
   end
 
   def boolean_cast_setting(key)
