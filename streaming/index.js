@@ -765,17 +765,6 @@ const startWorker = (workerId) => {
 
       break;
     case 'public:local':
-      if (!isImast(req)) {
-        reject('No local stream provided');
-      }
-
-      resolve({
-        channelIds: ['timeline:public'],
-        options: { needsFiltering: true, notificationOnly: false },
-      });
-
-      break;
-    case 'public:local':
       resolve({
         channelIds: ['timeline:public:local'],
         options: { needsFiltering: true, notificationOnly: false },
