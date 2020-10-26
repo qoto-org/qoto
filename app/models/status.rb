@@ -359,6 +359,12 @@ class Status < ApplicationRecord
       %w(text/plain text/markdown)
     end
 
+    def as_public_timeline(account = nil, local_only = false)
+      query = timeline_scope(local_only).without_replies
+
+      apply_timeline_filters(query, account, [:local, true].include?(local_only))
+    end
+
     def favourites_map(status_ids, account_id)
       Favourite.select('status_id').where(status_id: status_ids).where(account_id: account_id).each_with_object({}) { |f, h| h[f.status_id] = true }
     end
