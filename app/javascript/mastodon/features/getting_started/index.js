@@ -13,6 +13,8 @@ import { List as ImmutableList } from 'immutable';
 import NavigationContainer from '../compose/containers/navigation_container';
 import Icon from 'mastodon/components/icon';
 import LinkFooter from 'mastodon/features/ui/components/link_footer';
+import FavouriteDomainPanel from 'mastodon/features/ui/components/favourite_domain_panel';
+import FavouriteTagPanel from 'mastodon/features/ui/components/favourite_tag_panel';
 import TrendsContainer from './containers/trends_container';
 
 const messages = defineMessages({
@@ -206,6 +208,9 @@ class GettingStarted extends ImmutablePureComponent {
             {!multiColumn && <NavigationContainer />}
             {navItems}
           </div>
+
+          <FavouriteDomainPanel />
+          <FavouriteTagPanel />
 
           {!multiColumn && <div className='flex-spacer' />}
 
