@@ -15,6 +15,8 @@
 #
 
 class SessionActivation < ApplicationRecord
+  include Redisable
+
   belongs_to :user, inverse_of: :session_activations
   belongs_to :access_token, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, optional: true
   belongs_to :web_push_subscription, class_name: 'Web::PushSubscription', dependent: :destroy, optional: true
@@ -37,6 +39,7 @@ class SessionActivation < ApplicationRecord
 
   before_create :assign_access_token
   before_save   :assign_user_agent
+  after_destroy :kill_streaming_api_sessions
 
   class << self
     def active?(id)
@@ -72,10 +75,20 @@ class SessionActivation < ApplicationRecord
   def assign_access_token
     superapp = Doorkeeper::Application.find_by(superapp: true)
 
-    self.access_token = Doorkeeper::AccessToken.create!(application_id: superapp&.id,
-                                                        resource_owner_id: user_id,
-                                                        scopes: 'read write follow',
-                                                        expires_in: Doorkeeper.configuration.access_token_expires_in,
-                                                        use_refresh_token: Doorkeeper.configuration.refresh_token_enabled?)
+    self.access_token = Doorkeeper::AccessToken.create!(access_token_attributes)
+  end
+
+  def access_token_attributes
+    {
+      application_id: superapp&.id,
+      resource_owner_id: user_id,
+      scopes: 'read write follow',
+      expires_in: Doorkeeper.configuration.access_token_expires_in,
+      use_refresh_token: Doorkeeper.configuration.refresh_token_enabled?
+    }
+  end
+
+  def kill_streaming_api_sessions
+    redis.publish("timeline:access_token:#{access_token_id}", Oj.dump(event: :kill)) if access_token_id.present?
   end
 end

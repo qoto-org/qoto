@@ -294,7 +294,7 @@ const startWorker = (workerId) => {
         return;
       }
 
-      client.query('SELECT oauth_access_tokens.resource_owner_id, users.account_id, users.chosen_languages, oauth_access_tokens.scopes, devices.device_id FROM oauth_access_tokens INNER JOIN users ON oauth_access_tokens.resource_owner_id = users.id LEFT OUTER JOIN devices ON oauth_access_tokens.id = devices.access_token_id WHERE oauth_access_tokens.token = $1 AND oauth_access_tokens.revoked_at IS NULL LIMIT 1', [token], (err, result) => {
+      client.query('SELECT oauth_access_tokens.id, oauth_access_tokens.resource_owner_id, users.account_id, users.chosen_languages, oauth_access_tokens.scopes, devices.device_id FROM oauth_access_tokens INNER JOIN users ON oauth_access_tokens.resource_owner_id = users.id LEFT OUTER JOIN devices ON oauth_access_tokens.id = devices.access_token_id WHERE oauth_access_tokens.token = $1 AND oauth_access_tokens.revoked_at IS NULL LIMIT 1', [token], (err, result) => {
         done();
 
         if (err) {
@@ -310,6 +310,7 @@ const startWorker = (workerId) => {
           return;
         }
 
+        req.accessTokenId = result.rows[0].id;
         req.scopes = result.rows[0].scopes.split(' ');
         req.accountId = result.rows[0].account_id;
         req.chosenLanguages = result.rows[0].chosen_languages;
@@ -902,6 +903,33 @@ const startWorker = (workerId) => {
       socket.send(JSON.stringify({ error: err.toString() }));
     });
 
+  const subscribeWebsocketToSystemChannel = ({ socket, request, subscriptions }) => {
+    const systemChannelId = `timeline:access_token:${request.accessTokenId}`;
+
+    const listener = message => {
+      const json = parseJSON(message);
+
+      if (!json) return;
+
+      const { event } = json;
+
+      log.silly(request.requestId, `System message for ${request.accountId}: ${event}`);
+
+      if (event === 'kill') {
+        log.verbose(request.requestId, `Closing connection for ${request.accountId} due to expired access token`);
+        socket.close();
+      }
+    };
+
+    subscribe(`${redisPrefix}${systemChannelId}`, listener);
+
+    subscriptions[systemChannelId] = {
+      listener,
+      stopHeartbeat: () => {},
+    };
+  };
+
+  const unsubscribeWebsocketFromSystemChannel = () => {};
   /**
    * @param {string|string[]} arrayOrString
    * @return {string}
@@ -948,7 +976,9 @@ const startWorker = (workerId) => {
 
     ws.on('message', data => {
       const json = parseJSON(data);
+
       if (!json) return;
+
       const { type, stream, ...params } = json;
 
       if (type === 'subscribe') {
@@ -959,6 +989,8 @@ const startWorker = (workerId) => {
         // Unknown action type
       }
     });
+
+    subscribeWebsocketToSystemChannel(session);
 
     if (location.query.stream) {
       subscribeWebsocketToChannel(session, firstParam(location.query.stream), location.query);
