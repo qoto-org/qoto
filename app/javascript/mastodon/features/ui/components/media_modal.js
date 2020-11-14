@@ -16,6 +16,8 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
   previous: { id: 'lightbox.previous', defaultMessage: 'Previous' },
   next: { id: 'lightbox.next', defaultMessage: 'Next' },
+  compress: { id: 'lightbox.compress', defaultMessage: 'Compress image view box' },
+  expand: { id: 'lightbox.expand', defaultMessage: 'Expand image view box' },
 });
 
 export const previewState = 'previewMediaModal';
@@ -38,42 +40,40 @@ class MediaModal extends ImmutablePureComponent {
   state = {
     index: null,
     navigationHidden: false,
-    zoomButtonHidden: false,
+    zoomedIn: false,
   };
 
   handleSwipe = (index) => {
-    this.setState({ index: index % this.props.media.size });
-  }
-
-  handleTransitionEnd = () => {
     this.setState({
-      zoomButtonHidden: false,
+      index: index % this.props.media.size,
+      zoomedIn: false,
     });
   }
 
   handleNextClick = () => {
     this.setState({
       index: (this.getIndex() + 1) % this.props.media.size,
-      zoomButtonHidden: true,
+      zoomedIn: false,
     });
   }
 
   handlePrevClick = () => {
     this.setState({
       index: (this.props.media.size + this.getIndex() - 1) % this.props.media.size,
-      zoomButtonHidden: true,
+      zoomedIn: false,
     });
   }
 
   handleChangeIndex = (e) => {
     const index = Number(e.currentTarget.getAttribute('data-index'));
+
     this.setState({
       index: index % this.props.media.size,
-      zoomButtonHidden: true,
+      zoomedIn: false,
     });
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = e => {
     switch(e.key) {
     case 'ArrowLeft':
       this.handlePrevClick();
@@ -86,6 +86,10 @@ class MediaModal extends ImmutablePureComponent {
       e.stopPropagation();
       break;
     }
+  }
+
+  handleZoomClick = e => {
+    this.setState({ zoomedIn: !this.state.zoomedIn });
   }
 
   componentDidMount () {
@@ -133,7 +137,7 @@ class MediaModal extends ImmutablePureComponent {
 
   render () {
     const { media, status, intl, onClose } = this.props;
-    const { navigationHidden } = this.state;
+    const { navigationHidden, zoomedIn } = this.state;
 
     const index = this.getIndex();
     let pagination = [];
@@ -144,9 +148,11 @@ class MediaModal extends ImmutablePureComponent {
     if (media.size > 1) {
       pagination = media.map((item, i) => {
         const classes = ['media-modal__button'];
+
         if (i === index) {
           classes.push('media-modal__button--active');
         }
+
         return (<li className='media-modal__page-dot' key={i}><button tabIndex='0' className={classes.join(' ')} onClick={this.handleChangeIndex} data-index={i}>{i + 1}</button></li>);
       });
     }
@@ -165,7 +171,7 @@ class MediaModal extends ImmutablePureComponent {
             alt={image.get('description')}
             key={image.get('url')}
             onClick={this.toggleNavigation}
-            zoomButtonHidden={this.state.zoomButtonHidden}
+            zoomedIn={zoomedIn}
           />
         );
       } else if (image.get('type') === 'video') {
@@ -238,7 +244,22 @@ class MediaModal extends ImmutablePureComponent {
         </div>
 
         <div className={navigationClassName}>
-          <IconButton className='media-modal__close' title={intl.formatMessage(messages.close)} icon='times' onClick={onClose} size={40} />
+          <IconButton
+            className='media-modal__zoom-button modal-icon-button'
+            title={zoomedIn ? intl.formatMessage(messages.compress) : intl.formatMessage(messages.expand)}
+            icon={zoomedIn ? 'compress' : 'expand'}
+            onClick={this.handleZoomClick}
+            size={40}
+            style={{ fontSize: '30px' }}
+          />
+
+          <IconButton
+            className='media-modal__close modal-icon-button'
+            title={intl.formatMessage(messages.close)}
+            icon='times'
+            onClick={onClose}
+            size={40}
+          />
 
           {leftNav}
           {rightNav}

@@ -13,7 +13,7 @@ export default class ImageLoader extends React.PureComponent {
     width: PropTypes.number,
     height: PropTypes.number,
     onClick: PropTypes.func,
-    zoomButtonHidden: PropTypes.bool,
+    zoomedIn: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -129,7 +129,7 @@ export default class ImageLoader extends React.PureComponent {
   }
 
   render () {
-    const { alt, src, width, height, onClick } = this.props;
+    const { alt, src, width, height, zoomedIn, onClick } = this.props;
     const { loading } = this.state;
 
     const className = classNames('image-loader', {
@@ -140,6 +140,7 @@ export default class ImageLoader extends React.PureComponent {
     return (
       <div className={className}>
         <LoadingBar loading={loading ? 1 : 0} className='loading-bar' style={{ width: this.state.width || width }} />
+
         {loading ? (
           <canvas
             className='image-loader__preview-canvas'
@@ -154,7 +155,7 @@ export default class ImageLoader extends React.PureComponent {
             onClick={onClick}
             width={width}
             height={height}
-            zoomButtonHidden={this.props.zoomButtonHidden}
+            zoomedIn={zoomedIn}
           />
         )}
       </div>

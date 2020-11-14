@@ -4439,8 +4439,6 @@ a.status-card.compact:hover {
 
 .modal-root {
   position: relative;
-  transition: opacity 0.3s linear;
-  will-change: opacity;
   z-index: 9999;
 }
 
@@ -4531,6 +4529,20 @@ a.status-card.compact:hover {
     * {
       pointer-events: none;
     }
+  }
+}
+
+.icon-button.modal-icon-button {
+  color: rgba($primary-text-color, 0.7);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: rgba($primary-text-color, 0.1);
+  }
+
+  &:focus {
+    background-color: rgba($primary-text-color, 0.2);
   }
 }
 
