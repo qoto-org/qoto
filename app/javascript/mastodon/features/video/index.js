@@ -266,6 +266,69 @@ class Video extends React.PureComponent {
     }
   }, 15);
 
+  seekBy (time) {
+    const currentTime = this.video.currentTime + time;
+
+    if (!isNaN(currentTime)) {
+      this.setState({ currentTime }, () => {
+        this.video.currentTime = currentTime;
+      });
+    }
+  }
+
+  handleVideoKeyDown = e => {
+    // On the video element or the seek bar, we can safely use the space bar
+    // for playback control because there are no buttons to press
+
+    if (e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.togglePlay();
+    }
+  }
+
+  handleKeyDown = e => {
+    const frameTime = 1 / 25;
+
+    switch(e.key) {
+    case 'k':
+      e.preventDefault();
+      e.stopPropagation();
+      this.togglePlay();
+      break;
+    case 'm':
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggleMute();
+      break;
+    case 'f':
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggleFullscreen();
+      break;
+    case 'j':
+      e.preventDefault();
+      e.stopPropagation();
+      this.seekBy(-10);
+      break;
+    case 'l':
+      e.preventDefault();
+      e.stopPropagation();
+      this.seekBy(10);
+      break;
+    case ',':
+      e.preventDefault();
+      e.stopPropagation();
+      this.seekBy(-frameTime);
+      break;
+    case '.':
+      e.preventDefault();
+      e.stopPropagation();
+      this.seekBy(frameTime);
+      break;
+    }
+  }
+
   togglePlay = () => {
     if (this.state.paused) {
       this.setState({ paused: false }, () => this.video.play());
@@ -484,6 +547,7 @@ class Video extends React.PureComponent {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onClick={this.handleClickRoot}
+        onKeyDown={this.handleKeyDown}
         tabIndex={0}
       >
         <Blurhash
@@ -507,6 +571,7 @@ class Video extends React.PureComponent {
           height={height}
           volume={volume}
           onClick={this.togglePlay}
+          onKeyDown={this.handleVideoKeyDown}
           onPlay={this.handlePlay}
           onPause={this.handlePause}
           onLoadedData={this.handleLoadedData}
@@ -529,6 +594,7 @@ class Video extends React.PureComponent {
               className={classNames('video-player__seek__handle', { active: dragging })}
               tabIndex='0'
               style={{ left: `${progress}%` }}
+              onKeyDown={this.handleVideoKeyDown}
             />
           </div>
 
