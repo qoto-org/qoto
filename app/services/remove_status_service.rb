@@ -80,18 +80,14 @@ class RemoveStatusService < BaseService
     # delete notification - so here, we explicitly
     # send it to them
 
-    target_accounts = (@mentions.map(&:account).reject(&:local?) + @reblogs.map(&:account).reject(&:local?))
-    target_accounts << @status.reblog.account if @status.reblog? && !@status.reblog.account.local?
-    target_accounts.uniq!(&:id)
+    status_reach_finder = StatusReachFinder.new(@status)
 
-    # ActivityPub
-    ActivityPub::DeliveryWorker.push_bulk(target_accounts.select(&:activitypub?).uniq(&:preferred_inbox_url)) do |target_account|
-      [signed_activity_json, @account.id, target_account.preferred_inbox_url]
+    ActivityPub::DeliveryWorker.push_bulk(status_reach_finder.inboxes) do |inbox_url|
+      [signed_activity_json, @account.id, inbox_url]
     end
   end
 
   def remove_from_remote_followers
-    # ActivityPub
     ActivityPub::DeliveryWorker.push_bulk(@account.followers.inboxes) do |inbox_url|
       [signed_activity_json, @account.id, inbox_url]
     end
@@ -140,6 +136,7 @@ class RemoveStatusService < BaseService
     return unless @status.public_visibility?
 
     redis.publish('timeline:public', @payload)
+
     if @status.local?
       redis.publish('timeline:public:local', @payload)
     else
@@ -151,6 +148,7 @@ class RemoveStatusService < BaseService
     return unless @status.public_visibility?
 
     redis.publish('timeline:public:media', @payload)
+
     if @status.local?
       redis.publish('timeline:public:local:media', @payload)
     else
