@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_17_234926) do
+ActiveRecord::Schema.define(version: 2020_12_06_004238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1045,4 +1045,17 @@ ActiveRecord::Schema.define(version: 2020_10_17_234926) do
   add_foreign_key "web_push_subscriptions", "users", on_delete: :cascade
   add_foreign_key "web_settings", "users", name: "fk_11910667b2", on_delete: :cascade
   add_foreign_key "webauthn_credentials", "users"
+
+  create_view "instances", sql_definition: <<-SQL
+      SELECT accounts.domain
+     FROM accounts
+    WHERE (accounts.domain IS NOT NULL)
+    GROUP BY accounts.domain
+  UNION
+   SELECT domain_blocks.domain
+     FROM domain_blocks
+  UNION
+   SELECT domain_allows.domain
+     FROM domain_allows;
+  SQL
 end
