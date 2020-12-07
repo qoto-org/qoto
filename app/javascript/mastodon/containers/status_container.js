@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Status from '../components/status';
-import { makeGetStatus } from '../selectors';
+import { makeGetStatus, makeGetPictureInPicture } from '../selectors';
 import {
   replyCompose,
   mentionCompose,
@@ -41,6 +41,7 @@ import { deployPictureInPicture } from '../actions/picture_in_picture';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { boostModal, deleteModal } from '../initial_state';
 import { showAlertForError } from '../actions/alerts';
+import { Map as ImmutableMap } from 'immutable';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
@@ -54,14 +55,11 @@ const messages = defineMessages({
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
+  const getPictureInPicture = makeGetPictureInPicture();
 
   const mapStateToProps = (state, props) => ({
     status: getStatus(state, props),
-
-    pictureInPicture: {
-      inUse: state.getIn(['meta', 'layout']) !== 'mobile' && state.get('picture_in_picture').statusId === props.id,
-      available: state.getIn(['meta', 'layout']) !== 'mobile',
-    },
+    pictureInPicture: getPictureInPicture(state, props),
   });
 
   return mapStateToProps;
