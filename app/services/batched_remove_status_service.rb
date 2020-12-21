@@ -12,23 +12,25 @@ class BatchedRemoveStatusService < BaseService
   # @param [Hash] options
   # @option [Boolean] :skip_side_effects
   def call(statuses, **options)
-    statuses = Status.where(id: statuses.map(&:id)).includes(:account).flat_map { |status| [status] + status.reblogs.includes(:account).to_a }
+    ActiveRecord::Associations::Preloader.new.preload(statuses, [:account, reblogs: :account])
 
-    @mentions = statuses.each_with_object({}) { |s, h| h[s.id] = s.active_mentions.includes(:account).to_a }
-    @tags     = statuses.each_with_object({}) { |s, h| h[s.id] = s.tags.pluck(:name) }
+    statuses_and_reblogs = statuses.flat_map { |status| [status] + status.reblogs }
 
-    @json_payloads = statuses.each_with_object({}) { |s, h| h[s.id] = Oj.dump(event: :delete, payload: s.id.to_s) }
-
-    # Ensure that rendered XML reflects destroyed state
-    statuses.each do |status|
+    statuses_and_reblogs.each do |status|
       status.mark_for_mass_destruction!
       status.destroy
     end
 
     return if options[:skip_side_effects]
 
+    ActiveRecord::Associations::Preloader.new.preload(statuses_and_reblogs, [:tags, active_mentions: :account])
+
+    @mentions      = statuses_and_reblogs.each_with_object({}) { |s, h| h[s.id] = s.active_mentions }
+    @tags          = statuses_and_reblogs.each_with_object({}) { |s, h| h[s.id] = s.tags.map(&:name) }
+    @json_payloads = statuses_and_reblogs.each_with_object({}) { |s, h| h[s.id] = Oj.dump(event: :delete, payload: s.id.to_s) }
+
     # Batch by source account
-    statuses.group_by(&:account_id).each_value do |account_statuses|
+    statuses_and_reblogs.group_by(&:account_id).each_value do |account_statuses|
       account = account_statuses.first.account
 
       next unless account
@@ -38,27 +40,31 @@ class BatchedRemoveStatusService < BaseService
     end
 
     # Cannot be batched
-    statuses.each do |status|
-      unpush_from_public_timelines(status)
+    redis.pipelined do
+      statuses_and_reblogs.each do |status|
+        unpush_from_public_timelines(status)
+      end
     end
   end
 
   private
 
   def unpush_from_home_timelines(account, statuses)
-    recipients = account.followers_for_local_distribution.to_a
-
-    recipients << account if account.local?
-
-    recipients.each do |follower|
+    recipients = account.followers_for_local_distribution.includes(:user).find_each do |follower|
       statuses.each do |status|
         FeedManager.instance.unpush_from_home(follower, status)
       end
     end
+
+    return unless account.local?
+
+    statuses.each do |status|
+      FeedManager.instance.unpush_from_home(account, status)
+    end
   end
 
   def unpush_from_list_timelines(account, statuses)
-    account.lists_for_local_distribution.select(:id, :account_id).each do |list|
+    account.lists_for_local_distribution.select(:id, :account_id).includes(account: :user).find_each do |list|
       statuses.each do |status|
         FeedManager.instance.unpush_from_list(list, status)
       end
@@ -70,26 +76,17 @@ class BatchedRemoveStatusService < BaseService
 
     payload = @json_payloads[status.id]
 
-    redis.pipelined do
-      redis.publish('timeline:public', payload)
-      if status.local?
-        redis.publish('timeline:public:local', payload)
-      else
-        redis.publish('timeline:public:remote', payload)
-      end
-      if status.media_attachments.any?
-        redis.publish('timeline:public:media', payload)
-        if status.local?
-          redis.publish('timeline:public:local:media', payload)
-        else
-          redis.publish('timeline:public:remote:media', payload)
-        end
-      end
+    redis.publish('timeline:public', payload)
+    redis.publish(status.local? ? 'timeline:public:local' : 'timeline:public:remote', payload)
 
-      @tags[status.id].each do |hashtag|
-        redis.publish("timeline:hashtag:#{hashtag.mb_chars.downcase}", payload)
-        redis.publish("timeline:hashtag:#{hashtag.mb_chars.downcase}:local", payload) if status.local?
-      end
+    if status.media_attachments.any?
+      redis.publish('timeline:public:media', payload)
+      redis.publish(status.local? ? 'timeline:public:local:media' : 'timeline:public:remote:media', payload)
+    end
+
+    @tags[status.id].each do |hashtag|
+      redis.publish("timeline:hashtag:#{hashtag.mb_chars.downcase}", payload)
+      redis.publish("timeline:hashtag:#{hashtag.mb_chars.downcase}:local", payload) if status.local?
     end
   end
 end
