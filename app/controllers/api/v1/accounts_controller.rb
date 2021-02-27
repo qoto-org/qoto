@@ -27,6 +27,8 @@ class Api::V1::AccountsController < Api::BaseController
 
     self.response_body = Oj.dump(response.body)
     self.status        = response.status
+  rescue ActiveRecord::RecordInvalid => e
+    render json: ValidationErrorFormatter.new(e, :'account.username' => :username).as_json, status: 422
   end
 
   def follow

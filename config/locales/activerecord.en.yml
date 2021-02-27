@@ -10,7 +10,8 @@ en:
         account:
           attributes:
             username:
-              invalid: only letters, numbers and underscores
+              reserved: is reserved
+              invalid: must contain only letters, numbers and underscores
         status:
           attributes:
             reblog:

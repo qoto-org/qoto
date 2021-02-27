@@ -80,7 +80,6 @@ en:
       other: Toots
     posts_tab_heading: Toots
     posts_with_replies: Toots and replies
-    reserved_username: The username is reserved
     roles:
       admin: Admin
       bot: Bot
