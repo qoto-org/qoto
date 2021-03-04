@@ -31,7 +31,7 @@ gem 'bootsnap', '~> 1.6.0', require: false
 gem 'browser'
 gem 'charlock_holmes', '~> 0.7.7'
 gem 'iso-639'
-gem 'chewy', '~> 5.2'
+gem 'chewy', '~> 7.1'
 gem 'cld3', '~> 3.4.1'
 gem 'devise', '~> 4.7'
 gem 'devise-two-factor', '~> 3.1'
@@ -143,7 +143,7 @@ group :development do
   gem 'brakeman', '~> 4.10', require: false
   gem 'bundler-audit', '~> 0.7', require: false
 
-  gem 'capistrano', '~> 3.15'
+  gem 'capistrano', '~> 3.16'
   gem 'capistrano-rails', '~> 1.6'
   gem 'capistrano-rbenv', '~> 2.2'
   gem 'capistrano-yarn', '~> 2.0'
