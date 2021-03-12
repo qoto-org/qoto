@@ -433,23 +433,23 @@ class Account < ApplicationRecord
     end
 
     def search_for(terms, limit = 10, offset = 0)
-      textsearch, query = generate_query_for_search(terms)
+      language            = Arel::Nodes.build_quoted('simple')
+      display_name_vector = Arel::Nodes::NamedFunction.new('setweight', [Arel::Nodes::NamedFunction.new('to_tsvector', [language, Account.arel_table[:display_name]]), Arel::Nodes.build_quoted('A')])
+      username_vector     = Arel::Nodes::NamedFunction.new('setweight', [Arel::Nodes::NamedFunction.new('to_tsvector', [language, Account.arel_table[:username]]), Arel::Nodes.build_quoted('B')])
+      domain_vector       = Arel::Nodes::NamedFunction.new('setweight', [Arel::Nodes::NamedFunction.new('to_tsvector', [language, Arel::Nodes::NamedFunction.new('coalesce', [Account.arel_table[:domain], Arel::Nodes.build_quoted('')])]), Arel::Nodes.build_quoted('C')])
 
-      sql = <<-SQL.squish
-        SELECT
-          accounts.*,
-          ts_rank_cd(#{textsearch}, #{query}, 32) AS rank
-        FROM accounts
-        WHERE #{query} @@ #{textsearch}
-          AND accounts.suspended_at IS NULL
-          AND accounts.moved_to_account_id IS NULL
-        ORDER BY rank DESC
-        LIMIT ? OFFSET ?
-      SQL
+      description_vector = Arel::Nodes::Grouping.new(Arel::Nodes::Concat.new(display_name_vector, Arel::Nodes::Concat.new(username_vector, domain_vector)))
+      query_vector       = Arel::Nodes::NamedFunction.new('to_tsquery', [language, Arel::Nodes.build_quoted(terms)])
 
-      records = find_by_sql([sql, limit, offset])
-      ActiveRecord::Associations::Preloader.new.preload(records, :account_stat)
-      records
+      rank = Arel::Nodes::NamedFunction.new('ts_rank_cd', [description_vector, query_vector, 32])
+
+      select([arel_table[Arel.star], rank.as('rank')])
+        .where(Arel::Nodes::InfixOperation.new('@@', description_vector, query_vector))
+        .searchable
+        .includes(:account_stat)
+        .order(rank: :desc)
+        .limit(limit)
+        .offset(offset)
     end
 
     def advanced_search_for(terms, account, limit = 10, following = false, offset = 0)
