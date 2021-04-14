@@ -22,6 +22,8 @@ describe Api::Web::PushSubscriptionsController do
   let(:alerts_payload) do
     {
       data: {
+        policy: 'all',
+
         alerts: {
           follow: true,
           favourite: false,
@@ -59,6 +61,8 @@ describe Api::Web::PushSubscriptionsController do
 
         push_subscription = Web::PushSubscription.find_by(endpoint: create_payload[:subscription][:endpoint])
 
+        expect(push_subscription.data['policy']).to eq 'all'
+        expect(push_subscription.data['alerts']['follow']).to eq(alerts_payload[:data][:alerts][:follow].to_s)
         expect(push_subscription.data['alerts']['follow']).to eq(alerts_payload[:data][:alerts][:follow].to_s)
         expect(push_subscription.data['alerts']['favourite']).to eq(alerts_payload[:data][:alerts][:favourite].to_s)
         expect(push_subscription.data['alerts']['reblog']).to eq(alerts_payload[:data][:alerts][:reblog].to_s)
@@ -81,6 +85,7 @@ describe Api::Web::PushSubscriptionsController do
 
       push_subscription = Web::PushSubscription.find_by(endpoint: create_payload[:subscription][:endpoint])
 
+      expect(push_subscription.data['policy']).to eq 'all'
       expect(push_subscription.data['alerts']['follow']).to eq(alerts_payload[:data][:alerts][:follow].to_s)
       expect(push_subscription.data['alerts']['favourite']).to eq(alerts_payload[:data][:alerts][:favourite].to_s)
       expect(push_subscription.data['alerts']['reblog']).to eq(alerts_payload[:data][:alerts][:reblog].to_s)
