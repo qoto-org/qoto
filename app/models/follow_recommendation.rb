@@ -27,7 +27,8 @@ class FollowRecommendation < ApplicationRecord
 
     return [] if account_ids.empty? || limit < 1
 
-    accounts = Account.followable_by(account)
+    accounts = Account.searchable
+                      .followable_by(account)
                       .not_excluded_by_account(account)
                       .not_domain_blocked_by_account(account)
                       .where(id: account_ids)
