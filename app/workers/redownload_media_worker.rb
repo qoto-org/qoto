@@ -14,7 +14,9 @@ class RedownloadMediaWorker
     media_attachment.download_file!
     media_attachment.download_thumbnail!
     media_attachment.save
-  rescue ActiveRecord::RecordNotFound
-    true
+  rescue ActiveRecord::RecordNotFound, Mastodon::UnexpectedResponseError
+    # We mainly retry connection/timeout errors. If a static file
+    # returns an unexpected response code, there is in most cases
+    # no sense in retrying
   end
 end
