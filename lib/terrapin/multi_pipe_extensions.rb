@@ -60,8 +60,3 @@ module Terrapin
 end
 
 Terrapin::CommandLine::MultiPipe.prepend(Terrapin::MultiPipeExtensions)
-
-# And because paperclip-av-transcoder still depends on the version of
-# the gem that was named cocaine...
-
-Cocaine::CommandLine::MultiPipe.prepend(Terrapin::MultiPipeExtensions)
