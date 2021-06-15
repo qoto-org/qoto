@@ -1,5 +1,16 @@
 ---
 en:
+  login_activities:
+    title: Authentication history
+    empty: No authentication history available
+    successful_sign_in_html: Successful sign-in with %{method} from %{ip} (%{browser})
+    failed_sign_in_html: Failed sign-in attempt with %{method} from %{ip} (%{browser})
+    authentication_methods:
+      password: password
+      otp: two-factor authentication app
+      sign_in_token: e-mail security code
+      webauthn: security keys
+    description_html: If you see activity that you don't recognize, consider changing your password and enabling two-factor authentication.
   about:
     about_hashtag_html: These are public posts tagged with <strong>#%{hashtag}</strong>. You can interact with them if you have an account anywhere in the fediverse.
     about_mastodon_html: 'The social network of the future: No ads, no corporate surveillance, ethical design, and decentralization! Own your data with Mastodon!'

@@ -23,6 +23,9 @@
 #  in_reply_to_account_id :bigint(8)
 #  poll_id                :bigint(8)
 #  deleted_at             :datetime
+#  longitude              :decimal(, )
+#  latitude               :decimal(, )
+#  place_name             :string
 #
 
 class Status < ApplicationRecord
