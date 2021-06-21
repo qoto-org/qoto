@@ -42,6 +42,7 @@
 #  sign_in_token_sent_at     :datetime
 #  webauthn_id               :string
 #  sign_up_ip                :inet
+#  skip_sign_in_token        :boolean
 #
 
 class User < ApplicationRecord
@@ -200,7 +201,7 @@ class User < ApplicationRecord
   end
 
   def suspicious_sign_in?(ip)
-    !otp_required_for_login? && current_sign_in_at.present? && current_sign_in_at < 2.weeks.ago && !recent_ip?(ip)
+    !otp_required_for_login? && !skip_sign_in_token? && !recent_ip?(ip)
   end
 
   def functional?
