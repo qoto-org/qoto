@@ -1,0 +1,18 @@
+name: Support
+description: Ask for help with your deployment
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We primarily use GitHub as a bug and feature tracker. For usage questions, troubleshooting of deployments and other individual technical assistance, please use one of the resources below:
+
+        - https://discourse.joinmastodon.org
+        - #mastodon on irc.libera.chat
+  - type: dropdown
+    attributes:
+      label: Okay?
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
