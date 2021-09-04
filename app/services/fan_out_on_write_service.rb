@@ -7,6 +7,7 @@ class FanOutOnWriteService < BaseService
     raise Mastodon::RaceConditionError if status.visibility.nil?
 
     deliver_to_self(status) if status.account.local?
+    deliver_to_mentioned_accounts(status)
 
     if status.direct_visibility?
       deliver_to_mentioned_followers(status)
@@ -35,6 +36,14 @@ class FanOutOnWriteService < BaseService
   def deliver_to_self(status)
     Rails.logger.debug "Delivering status #{status.id} to author"
     FeedManager.instance.push_to_home(status.account, status)
+  end
+
+  def deliver_to_mentioned_accounts(status)
+    status.active_mentions.joins(:account).merge(Account.local).select(:id, :account_id).reorder(nil).find_in_batches do |mentions|
+      LocalNotificationWorker.push_bulk(mentions) do |mention|
+        [mention.account_id, mention.id, 'Mention', :mention]
+      end
+    end
   end
 
   def deliver_to_followers(status)
