@@ -28,6 +28,7 @@ class StatusReachFinder
       reblog_of_account_id,
       mentioned_account_ids,
       reblogs_account_ids,
+      reblogger_follower_account_ids,
       favourites_account_ids,
       replies_account_ids,
     ].tap do |arr|
@@ -50,7 +51,11 @@ class StatusReachFinder
   end
 
   def reblogs_account_ids
-    @status.reblogs.pluck(:account_id)
+    @reblogs_account_ids ||= @status.reblogs.pluck(:account_id)
+  end
+
+  def reblogger_follower_account_ids
+    Follow.where(target_account_id: reblogs_account_ids).pluck(:account_id)
   end
 
   def favourites_account_ids

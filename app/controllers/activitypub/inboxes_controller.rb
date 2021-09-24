@@ -5,20 +5,23 @@ class ActivityPub::InboxesController < ActivityPub::BaseController
   include JsonLdHelper
   include AccountOwnedConcern
 
-  before_action :skip_unknown_actor_activity
+  before_action :skip_unknown_actor_activity!
   before_action :require_signature!
   skip_before_action :authenticate_user!
 
+  ACCEPTED_HEADERS = %w(
+    Collection-Synchronization
+  ).freeze
+
   def create
     upgrade_account
-    process_collection_synchronization
     process_payload
     head 202
   end
 
   private
 
-  def skip_unknown_actor_activity
+  def skip_unknown_actor_activity!
     head 202 if unknown_affected_account?
   end
 
@@ -57,20 +60,12 @@ class ActivityPub::InboxesController < ActivityPub::BaseController
     DeliveryFailureTracker.reset!(signed_request_account.inbox_url)
   end
 
-  def process_collection_synchronization
-    raw_params = request.headers['Collection-Synchronization']
-    return if raw_params.blank? || ENV['DISABLE_FOLLOWERS_SYNCHRONIZATION'] == 'true'
-
-    # Re-using the syntax for signature parameters
-    tree   = SignatureParamsParser.new.parse(raw_params)
-    params = SignatureParamsTransformer.new.apply(tree)
-
-    ActivityPub::PrepareFollowersSynchronizationService.new.call(signed_request_account, params)
-  rescue Parslet::ParseFailed
-    Rails.logger.warn 'Error parsing Collection-Synchronization header'
-  end
-
   def process_payload
-    ActivityPub::ProcessingWorker.perform_async(signed_request_account.id, body, @account&.id)
+    ActivityPub::ProcessingWorker.perform_async(
+      signed_request_account.id,
+      body,
+      @account&.id,
+      request.headers.slice(*ACCEPTED_HEADERS)
+    )
   end
 end
