@@ -309,6 +309,9 @@ Rails.application.routes.draw do
         post :batch
       end
     end
+
+    get :measures, to: 'measures#index'
+    get :retention, to: 'retention#index'
   end
 
   get '/admin', to: redirect('/admin/dashboard', status: 302)
