@@ -6,6 +6,7 @@ class Scheduler::TrendingTagsScheduler
   sidekiq_options retry: 0
 
   def perform
-    TrendingTags.update! if Setting.trends
+    Trends.tags.calculate if Setting.trends
+    Trends.links.calculate
   end
 end

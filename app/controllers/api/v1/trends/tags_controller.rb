@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::TrendsController < Api::BaseController
+class Api::V1::Trends::TagsController < Api::BaseController
   before_action :set_tags
 
   def index
@@ -10,6 +10,6 @@ class Api::V1::TrendsController < Api::BaseController
   private
 
   def set_tags
-    @tags = TrendingTags.get(limit_param(10))
+    @tags = Trends.tags.get(limit_param(10))
   end
 end

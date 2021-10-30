@@ -11,6 +11,6 @@ class Api::V1::Admin::TrendsController < Api::BaseController
   private
 
   def set_trends
-    @trends = TrendingTags.get(10, filtered: false)
+    @trends = Trends.tags.get(10, filtered: false)
   end
 end

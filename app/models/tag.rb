@@ -76,11 +76,11 @@ class Tag < ApplicationRecord
   end
 
   def use!(account, status: nil, at_time: Time.now.utc)
-    TrendingTags.record_use!(self, account, status: status, at_time: at_time)
+    Trends.tags.add(self, account, status: status, at_time: at_time)
   end
 
   def trending?
-    TrendingTags.trending?(self)
+    Trends.tags.trending?(self)
   end
 
   def history

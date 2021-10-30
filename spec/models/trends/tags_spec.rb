@@ -1,11 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe TrendingTags do
-  describe '.record_use!' do
+RSpec.describe Trends::Tags do
+  subject { described_class.new }
+
+  describe '#add' do
     pending
   end
 
-  describe '.update!' do
+  describe '#calculate' do
     let!(:at_time) { Time.now.utc }
     let!(:tag1) { Fabricate(:tag, name: 'Catstodon', trendable: true) }
     let!(:tag2) { Fabricate(:tag, name: 'DogsOfMastodon', trendable: true) }
@@ -32,15 +34,15 @@ RSpec.describe TrendingTags do
 
       tag3.update(max_score: 0.9, max_score_at: (at_time - 1.day).beginning_of_day + 12.hours)
 
-      described_class.update!(at_time)
+      subject.calculate(at_time)
     end
 
     it 'calculates and re-calculates scores' do
-      expect(described_class.get(10, filtered: false)).to eq [tag1, tag3]
+      expect(subject.get(10, filtered: false)).to eq [tag1, tag3]
     end
 
     it 'omits hashtags below threshold' do
-      expect(described_class.get(10, filtered: false)).to_not include(tag2)
+      expect(subject.get(10, filtered: false)).to_not include(tag2)
     end
 
     it 'decays scores' do
@@ -48,7 +50,7 @@ RSpec.describe TrendingTags do
     end
   end
 
-  describe '.trending?' do
+  describe '#trending?' do
     let(:tag) { Fabricate(:tag) }
 
     before do
@@ -57,12 +59,12 @@ RSpec.describe TrendingTags do
 
     it 'returns true if the hashtag is within limit' do
       Redis.current.zadd('trending_tags', 11, tag.id)
-      expect(described_class.trending?(tag)).to be true
+      expect(subject.trending?(tag)).to be true
     end
 
     it 'returns false if the hashtag is outside the limit' do
       Redis.current.zadd('trending_tags', 0, tag.id)
-      expect(described_class.trending?(tag)).to be false
+      expect(subject.trending?(tag)).to be false
     end
   end
 end
