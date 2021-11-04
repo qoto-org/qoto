@@ -139,39 +139,10 @@ class FetchLinkCardService < BaseService
   def attempt_opengraph
     return if html.nil?
 
-    detector = CharlockHolmes::EncodingDetector.new
-    detector.strip_tags = true
+    link_details_extractor = LinkDetailsExtractor.new(@url, @html, @html_charset)
 
-    guess      = detector.detect(@html, @html_charset)
-    encoding   = guess&.fetch(:confidence, 0).to_i > 60 ? guess&.fetch(:encoding, nil) : nil
-    page       = Nokogiri::HTML(@html, nil, encoding)
-    player_url = meta_property(page, 'twitter:player')
-
-    if player_url && !bad_url?(Addressable::URI.parse(player_url))
-      @card.type   = :video
-      @card.width  = meta_property(page, 'twitter:player:width') || 0
-      @card.height = meta_property(page, 'twitter:player:height') || 0
-      @card.html   = content_tag(:iframe, nil, src: player_url,
-                                               width: @card.width,
-                                               height: @card.height,
-                                               allowtransparency: 'true',
-                                               scrolling: 'no',
-                                               frameborder: '0')
-    else
-      @card.type = :link
-    end
-
-    @card.title            = meta_property(page, 'og:title').presence || page.at_xpath('//title')&.content || ''
-    @card.description      = meta_property(page, 'og:description').presence || meta_property(page, 'description') || ''
-    @card.image_remote_url = (Addressable::URI.parse(@url) + meta_property(page, 'og:image')).to_s if meta_property(page, 'og:image')
-
-    return if @card.title.blank? && @card.html.blank?
-
-    @card.save_with_optional_image!
-  end
-
-  def meta_property(page, property)
-    page.at_xpath("//meta[contains(concat(' ', normalize-space(@property), ' '), ' #{property} ')]")&.attribute('content')&.value || page.at_xpath("//meta[@name=\"#{property}\"]")&.attribute('content')&.value
+    @card.assign_attributes(link_details_extractor.to_preview_card_attributes)
+    @card.save_with_optional_image! unless @card.title.blank? && @card.html.blank?
   end
 
   def lock_options
