@@ -35,6 +35,7 @@ class Notification < ApplicationRecord
     follow_request
     favourite
     poll
+    admin.new_user
   ).freeze
 
   TARGET_STATUS_INCLUDES_BY_TYPE = {
@@ -140,6 +141,8 @@ class Notification < ApplicationRecord
       self.from_account_id = activity&.account_id
     when 'Mention'
       self.from_account_id = activity&.status&.account_id
+    when 'Account'
+      self.from_account_id = activity&.id
     end
   end
 end

@@ -311,6 +311,28 @@ class Notification extends ImmutablePureComponent {
     );
   }
 
+  renderAdminNewUser (notification, account, link) {
+    const { intl, unread } = this.props;
+
+    return (
+      <HotKeys handlers={this.getHandlers()}>
+        <div className={classNames('notification notification-admin-new-user focusable', { unread })} tabIndex='0' aria-label={notificationForScreenReader(intl, intl.formatMessage(messages.follow, { name: account.get('acct') }), notification.get('created_at'))}>
+          <div className='notification__message'>
+            <div className='notification__favourite-icon-wrapper'>
+              <Icon id='user-plus' fixedWidth />
+            </div>
+
+            <span title={notification.get('created_at')}>
+              <FormattedMessage id='notification.admin.new_user' defaultMessage='{name} signed up' values={{ name: link }} />
+            </span>
+          </div>
+
+          <AccountContainer id={account.get('id')} hidden={this.props.hidden} />
+        </div>
+      </HotKeys>
+    );
+  }
+
   render () {
     const { notification } = this.props;
     const account          = notification.get('account');
@@ -332,6 +354,8 @@ class Notification extends ImmutablePureComponent {
       return this.renderStatus(notification, link);
     case 'poll':
       return this.renderPoll(notification, account);
+    case 'admin.new_user':
+      return this.renderAdminNewUser(notification, account, link);
     }
 
     return null;
