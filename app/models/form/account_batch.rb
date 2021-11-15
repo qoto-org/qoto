@@ -3,6 +3,7 @@
 class Form::AccountBatch
   include ActiveModel::Model
   include Authorization
+  include AccountableConcern
   include Payloadable
 
   attr_accessor :account_ids, :action, :current_account
@@ -25,19 +26,21 @@ class Form::AccountBatch
       suppress_follow_recommendation!
     when 'unsuppress_follow_recommendation'
       unsuppress_follow_recommendation!
+    when 'suspend'
+      suspend!
     end
   end
 
   private
 
   def follow!
-    accounts.find_each do |target_account|
+    accounts.each do |target_account|
       FollowService.new.call(current_account, target_account)
     end
   end
 
   def unfollow!
-    accounts.find_each do |target_account|
+    accounts.each do |target_account|
       UnfollowService.new.call(current_account, target_account)
     end
   end
@@ -61,17 +64,29 @@ class Form::AccountBatch
   end
 
   def approve!
-    users = accounts.includes(:user).map(&:user)
-
-    users.each { |user| authorize(user, :approve?) }
-         .each(&:approve!)
+    accounts.includes(:user).each do |account|
+      authorize(account.user, :approve?)
+      log_action(:reject, account.user)
+      account.user.approve!
+    end
   end
 
   def reject!
-    records = accounts.includes(:user)
+    accounts.includes(:user).each do |account|
+      authorize(account.user, :reject?)
+      log_action(:reject, account.user)
+      account.suspend!(origin: :local)
+      AccountDeletionWorker.perform_async(account.id, reserve_username: false)
+   end
+  end
 
-    records.each { |account| authorize(account.user, :reject?) }
-           .each { |account| DeleteAccountService.new.call(account, reserve_email: false, reserve_username: false) }
+  def suspend!
+    accounts.each do |account|
+      authorize(account, :suspend?)
+      log_action(:suspend, account)
+      account.suspend!(origin: :local)
+      Admin::SuspensionWorker.perform_async(account.id)
+    end
   end
 
   def suppress_follow_recommendation!

@@ -8,7 +8,18 @@ module Admin
 
     def index
       authorize :account, :index?
+
       @accounts = filtered_accounts.page(params[:page])
+      @form     = Form::AccountBatch.new
+    end
+
+    def batch
+      @form = Form::AccountBatch.new(form_account_batch_params.merge(current_account: current_account, action: action_from_button))
+      @form.save
+    rescue ActionController::ParameterMissing
+      flash[:alert] = I18n.t('admin.accounts.no_account_selected')
+    ensure
+      redirect_to admin_accounts_path(filter_params)
     end
 
     def show
@@ -121,7 +132,7 @@ module Admin
     end
 
     def filtered_accounts
-      AccountFilter.new(filter_params).results
+      AccountFilter.new(filter_params.with_defaults(status: 'active', order: 'recent')).results
     end
 
     def filter_params
