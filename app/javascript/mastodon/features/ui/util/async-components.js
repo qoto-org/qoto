@@ -157,3 +157,7 @@ export function Directory () {
 export function FollowRecommendations () {
   return import(/* webpackChunkName: "features/follow_recommendations" */'../../follow_recommendations');
 }
+
+export function Explore () {
+  return import(/* webpackChunkName: "features/explore" */'../../explore');
+}
