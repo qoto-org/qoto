@@ -492,7 +492,6 @@
       are_you_sure: Er du sikker?
       assign_to_self: Tilegn til meg
       assigned: Tilegnet moderator
-      by_target_domain: Domenet av rapportert bruker
       comment:
         none: Ingen
       created_at: Rapportert
@@ -513,6 +512,7 @@
       resolved: Løst
       resolved_msg: Rapport løst!
       status: Status
+      target_domain: Domenet av rapportert bruker
       target_origin: Opprinnelse for innrapportert konto
       title: Rapporter
       unassign: Fjern tilegning

@@ -456,7 +456,6 @@ pt-BR:
       are_you_sure: Você tem certeza?
       assign_to_self: Pegar
       assigned: Moderador responsável
-      by_target_domain: Domínio da conta denunciada
       comment:
         none: Nenhum
       created_at: Denunciado
@@ -476,6 +475,7 @@ pt-BR:
       reported_by: Denunciada por
       resolved: Resolvido
       resolved_msg: Denúncia resolvida com sucesso!
+      target_domain: Domínio da conta denunciada
       title: Denúncias
       unassign: Largar
       unresolved: Não resolvido

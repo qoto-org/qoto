@@ -526,7 +526,6 @@ zh-HK:
       are_you_sure: 你確認嗎？
       assign_to_self: 指派給自己
       assigned: 指派版主
-      by_target_domain: 被舉報帳號的域名
       comment:
         none: 沒有
       created_at: 日期
@@ -547,6 +546,7 @@ zh-HK:
       resolved: 已處理
       resolved_msg: 舉報個案已被處理！
       status: 狀態
+      target_domain: 被舉報帳號的域名
       target_origin: 被檢舉帳號來源
       title: 舉報
       unassign: 取消指派

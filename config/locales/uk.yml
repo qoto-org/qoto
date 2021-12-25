@@ -576,7 +576,6 @@ uk:
       are_you_sure: Ви впевнені?
       assign_to_self: Призначити мені
       assigned: Призначений модератор
-      by_target_domain: Домен облікового запису, на який скаржаться
       comment:
         none: Немає
       created_at: Створено
@@ -597,6 +596,7 @@ uk:
       resolved: Вирішено
       resolved_msg: Скаргу успішно вирішено!
       status: Статус
+      target_domain: Домен облікового запису, на який скаржаться
       target_origin: Походження облікового запису, на який скаржаться
       title: Скарги
       unassign: Зняти призначення

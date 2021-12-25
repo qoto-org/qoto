@@ -516,7 +516,6 @@ ms:
       are_you_sure: Adakah anda pasti?
       assign_to_self: Menugaskan kepada saya
       assigned: Penyederhana yang ditugaskan
-      by_target_domain: Domain bagi akaun yang dilaporkan
       comment:
         none: Tiada
       created_at: Dilaporkan
@@ -537,6 +536,7 @@ ms:
       resolved: Diselesaikan
       resolved_msg: Laporan berjaya diselesaikan!
       status: Status
+      target_domain: Domain bagi akaun yang dilaporkan
       title: Laporan
       unassign: Nyahtugaskan
       unresolved: Nyahselesaikan

@@ -583,7 +583,6 @@ ru:
       are_you_sure: Вы уверены?
       assign_to_self: Назначить себе
       assigned: Назначенный модератор
-      by_target_domain: Домен объекта жалобы
       comment:
         none: Нет
       created_at: Создана
@@ -604,6 +603,7 @@ ru:
       resolved: Решённые
       resolved_msg: Жалоба обработана, спасибо!
       status: Статус
+      target_domain: Домен объекта жалобы
       target_origin: Происхождение объекта жалобы
       title: Жалобы
       unassign: Снять назначение

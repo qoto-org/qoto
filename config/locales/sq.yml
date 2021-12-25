@@ -545,7 +545,6 @@ sq:
       are_you_sure: A jeni i sigurt?
       assign_to_self: Caktojani vetes
       assigned: Iu caktua moderator
-      by_target_domain: Përkatësi e llogarisë së raportuar
       comment:
         none: Asnjë
       created_at: Raportuar më
@@ -566,6 +565,7 @@ sq:
       resolved: I zgjidhur
       resolved_msg: Raportimi u zgjidh me sukses!
       status: Gjendje
+      target_domain: Përkatësi e llogarisë së raportuar
       target_origin: Origjinë e llogarisë së raportuar
       title: Raportime
       unassign: Hiqja

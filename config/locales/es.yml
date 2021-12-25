@@ -554,7 +554,6 @@ es:
       are_you_sure: "¿Estás seguro?"
       assign_to_self: Asignármela a mí
       assigned: Moderador asignado
-      by_target_domain: Dominio de la cuenta reportada
       comment:
         none: Ninguno
       created_at: Denunciado
@@ -575,6 +574,7 @@ es:
       resolved: Resuelto
       resolved_msg: "¡La denuncia se ha resuelto correctamente!"
       status: Estado
+      target_domain: Dominio de la cuenta reportada
       target_origin: Origen de la cuenta reportada
       title: Reportes
       unassign: Desasignar

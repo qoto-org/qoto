@@ -476,7 +476,6 @@ sv:
       are_you_sure: Är du säker?
       assign_to_self: Tilldela till mig
       assigned: Tilldelad moderator
-      by_target_domain: Domän för rapporterat konto
       comment:
         none: Ingen
       created_at: Anmäld
@@ -497,6 +496,7 @@ sv:
       resolved: Löst
       resolved_msg: Anmälan har lösts framgångsrikt!
       status: Status
+      target_domain: Domän för rapporterat konto
       target_origin: Ursprung för anmält konto
       title: Anmälningar
       unassign: Otilldela

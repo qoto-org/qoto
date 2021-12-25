@@ -475,7 +475,6 @@ eo:
       are_you_sure: Ĉu vi certas?
       assign_to_self: Asigni al mi
       assigned: Asignita kontrolanto
-      by_target_domain: Domajno de la signalita konto
       comment:
         none: Nenio
       created_at: Signalita
@@ -496,6 +495,7 @@ eo:
       resolved: Solvitaj
       resolved_msg: Signalo sukcese solvita!
       status: Mesaĝoj
+      target_domain: Domajno de la signalita konto
       title: Signaloj
       unassign: Malasigni
       unresolved: Nesolvitaj

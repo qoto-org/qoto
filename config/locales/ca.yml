@@ -554,7 +554,6 @@ ca:
       are_you_sure: N'estàs segur?
       assign_to_self: Assignar-me
       assigned: Moderador assignat
-      by_target_domain: Domini del compte reportat
       comment:
         none: Cap
       created_at: Reportat
@@ -575,6 +574,7 @@ ca:
       resolved: Resolt
       resolved_msg: Informe resolt amb èxit!
       status: Estat
+      target_domain: Domini del compte reportat
       target_origin: Origen del compte reportat
       title: Informes
       unassign: Treu l'assignació

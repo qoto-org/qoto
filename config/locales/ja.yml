@@ -516,7 +516,6 @@ ja:
       are_you_sure: 本当に実行しますか？
       assign_to_self: 担当になる
       assigned: 担当者
-      by_target_domain: ドメイン
       comment:
         none: なし
       created_at: 通報日時
@@ -537,6 +536,7 @@ ja:
       resolved: 解決済み
       resolved_msg: 通報を解決済みにしました！
       status: ステータス
+      target_domain: ドメイン
       title: 通報
       unassign: 担当を外す
       unresolved: 未解決

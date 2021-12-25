@@ -578,7 +578,6 @@ cs:
       are_you_sure: Opravu?
       assign_to_self: Přidělit ke mně
       assigned: Přiřazený moderátor
-      by_target_domain: Doména nahlášeného účtu
       comment:
         none: Žádné
       created_at: Nahlášené
@@ -599,6 +598,7 @@ cs:
       resolved: Vyřešeno
       resolved_msg: Hlášení úspěšně vyřešeno!
       status: Stav
+      target_domain: Doména nahlášeného účtu
       target_origin: Původ nahlášeného účtu
       title: Hlášení
       unassign: Odebrat

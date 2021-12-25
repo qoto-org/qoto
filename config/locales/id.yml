@@ -540,7 +540,6 @@ id:
       are_you_sure: Apakah Anda yakin?
       assign_to_self: Tugaskan kpd saya
       assigned: Moderator tertugas
-      by_target_domain: Domain akun yang dilaporkan
       comment:
         none: Tidak ada
       created_at: Dilaporkan
@@ -561,6 +560,7 @@ id:
       resolved: Terseleseikan
       resolved_msg: Laporan berhasil diselesaikan!
       status: Status
+      target_domain: Domain akun yang dilaporkan
       target_origin: Akun asal yang dilaporkan
       title: Laporan
       unassign: Bebas Tugas

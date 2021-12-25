@@ -523,7 +523,6 @@ nl:
       are_you_sure: Weet je het zeker?
       assign_to_self: Aan mij toewijzen
       assigned: Toegewezen moderator
-      by_target_domain: Domein van gerapporteerde account
       comment:
         none: Geen
       created_at: Gerapporteerd op
@@ -544,6 +543,7 @@ nl:
       resolved: Opgelost
       resolved_msg: Rapportage succesvol opgelost!
       status: Toot
+      target_domain: Domein van gerapporteerde account
       title: Rapportages
       unassign: Niet langer toewijzen
       unresolved: Onopgelost

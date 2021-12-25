@@ -528,7 +528,6 @@ ko:
       are_you_sure: 정말로 실행하시겠습니까?
       assign_to_self: 나에게 할당하기
       assigned: 할당 된 중재자
-      by_target_domain: 신고된 계정의 도메인
       comment:
         none: 없음
       created_at: 리포트 시각
@@ -549,6 +548,7 @@ ko:
       resolved: 해결됨
       resolved_msg: 리포트가 성공적으로 해결되었습니다!
       status: 상태
+      target_domain: 신고된 계정의 도메인
       target_origin: 신고된 계정의 소속
       title: 신고
       unassign: 할당 해제

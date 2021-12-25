@@ -554,7 +554,6 @@ tr:
       are_you_sure: Emin misiniz?
       assign_to_self: Bana ata
       assigned: Denetleyici atandı
-      by_target_domain: Şikayet edilen hesabın alan adı
       comment:
         none: Yok
       created_at: Şikayet edildi
@@ -575,6 +574,7 @@ tr:
       resolved: Giderildi
       resolved_msg: Şikayet başarıyla çözümlendi!
       status: Durum
+      target_domain: Şikayet edilen hesabın alan adı
       target_origin: Şikayet edilen hesabın kökeni
       title: Şikayetler
       unassign: Atamayı geri al

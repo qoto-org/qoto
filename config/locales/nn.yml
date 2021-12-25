@@ -476,7 +476,6 @@ nn:
       are_you_sure: Er du sikker?
       assign_to_self: Tilegn til meg
       assigned: Tilsett moderator
-      by_target_domain: Domenet av rapportert bruker
       comment:
         none: Ingen
       created_at: Rapportert
@@ -497,6 +496,7 @@ nn:
       resolved: Oppløyst
       resolved_msg: Rapporten er løyst!
       status: Status
+      target_domain: Domenet av rapportert bruker
       target_origin: Opprinnelse for innrapportert konto
       title: Rapportar
       unassign: Avset

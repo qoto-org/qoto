@@ -535,7 +535,6 @@ de:
       are_you_sure: Bist du dir sicher?
       assign_to_self: Mir zuweisen
       assigned: Zugewiesener Moderator
-      by_target_domain: Domain des gemeldeten Kontos
       comment:
         none: Kein
       created_at: Gemeldet
@@ -556,6 +555,7 @@ de:
       resolved: Gelöst
       resolved_msg: Meldung erfolgreich gelöst!
       status: Zustand
+      target_domain: Domain des gemeldeten Kontos
       target_origin: Domain des gemeldeten Kontos
       title: Meldungen
       unassign: Zuweisung entfernen

@@ -404,7 +404,6 @@ et:
       are_you_sure: Olete kindel?
       assign_to_self: Määra mulle
       assigned: Määratud moderaator
-      by_target_domain: Teavitatud konto domeen
       comment:
         none: Pole
       created_at: Teavitatud
@@ -423,6 +422,7 @@ et:
       resolved: Lahendatud
       resolved_msg: Teavituse lahendamine õnnestus!
       status: Staatus
+      target_domain: Teavitatud konto domeen
       title: Teavitused
       unassign: Eemalda määramine
       unresolved: Lahendamata

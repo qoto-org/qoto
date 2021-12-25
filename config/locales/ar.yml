@@ -571,7 +571,6 @@ ar:
       are_you_sure: هل أنت متأكد ؟
       assign_to_self: عين لي
       assigned: تعين رئيس
-      by_target_domain: نطاق الحساب المبلّغ عنه
       comment:
         none: لا شيء
       created_at: ذكرت
@@ -592,6 +591,7 @@ ar:
       resolved: معالجة
       resolved_msg: تم حل تقرير بنجاح!
       status: الحالة
+      target_domain: نطاق الحساب المبلّغ عنه
       target_origin: مصدر الحساب المبلغ عنه
       title: الشكاوى
       unassign: إلغاء تعيين

@@ -14,13 +14,7 @@ class Api::V1::Admin::ReportsController < Api::BaseController
 
   after_action :insert_pagination_headers, only: :index
 
-  FILTER_PARAMS = %i(
-    resolved
-    account_id
-    target_account_id
-  ).freeze
-
-  PAGINATION_PARAMS = (%i(limit) + FILTER_PARAMS).freeze
+  PAGINATION_PARAMS = (%i(limit) + ReportFilter::KEYS).freeze
 
   def index
     authorize :report, :index?
@@ -75,7 +69,7 @@ class Api::V1::Admin::ReportsController < Api::BaseController
   end
 
   def filter_params
-    params.permit(*FILTER_PARAMS)
+    params.slice(*ReportFilter::KEYS).permit(*ReportFilter::KEYS)
   end
 
   def insert_pagination_headers

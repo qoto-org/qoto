@@ -554,7 +554,6 @@ fr:
       are_you_sure: Voulez-vous vraiment faire ça ?
       assign_to_self: Me l’assigner
       assigned: Modérateur assigné
-      by_target_domain: Domaine du compte signalé
       comment:
         none: Aucun
       created_at: Signalé
@@ -575,6 +574,7 @@ fr:
       resolved: Résolus
       resolved_msg: Signalement résolu avec succès !
       status: Statut
+      target_domain: Domaine du compte signalé
       target_origin: Origine du compte signalé
       title: Signalements
       unassign: Dés-assigner

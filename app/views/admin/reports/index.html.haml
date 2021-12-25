@@ -5,8 +5,8 @@
   .filter-subset
     %strong= t('admin.reports.status')
     %ul
-      %li= filter_link_to t('admin.reports.unresolved'), resolved: nil
-      %li= filter_link_to t('admin.reports.resolved'), resolved: '1'
+      %li= filter_link_to t('admin.reports.unresolved'), status: 'unresolved'
+      %li= filter_link_to t('admin.reports.resolved'), status: 'resolved'
   .filter-subset
     %strong= t('admin.reports.target_origin')
     %ul
@@ -19,7 +19,7 @@
     - ReportFilter::KEYS.each do |key|
       = hidden_field_tag key, params[key] if params[key].present?
 
-    - %i(by_target_domain).each do |key|
+    - %i(target_domain).each do |key|
       .input.string.optional
         = text_field_tag key, params[key], class: 'string optional', placeholder: I18n.t("admin.reports.#{key}")
 

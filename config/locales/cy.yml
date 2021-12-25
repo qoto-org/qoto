@@ -435,7 +435,6 @@ cy:
       are_you_sure: Ydych chi'n sicr?
       assign_to_self: Aseinio i mi
       assigned: Arolygwr wedi'i aseinio
-      by_target_domain: Parth cyfrif a adroddir
       comment:
         none: Dim
       created_at: Adroddwyd
@@ -454,6 +453,7 @@ cy:
       resolved: Wedi ei ddatrys
       resolved_msg: Llwyddwyd i ddatrys yr adroddiad!
       status: Statws
+      target_domain: Parth cyfrif a adroddir
       title: Adroddiadau
       unassign: Dadneilltuo
       unresolved: Heb ei ddatrys

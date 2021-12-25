@@ -542,7 +542,6 @@ zh-TW:
       are_you_sure: 你確定嗎?
       assign_to_self: 指派給自己
       assigned: 指派負責人
-      by_target_domain: 檢舉帳戶之網域
       comment:
         none: 無
       created_at: 日期
@@ -563,6 +562,7 @@ zh-TW:
       resolved: 已解決
       resolved_msg: 檢舉已處理!
       status: 嘟文
+      target_domain: 檢舉帳戶之網域
       target_origin: 檢舉帳戶之來源
       title: 檢舉
       unassign: 取消指派

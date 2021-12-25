@@ -556,7 +556,6 @@ hu:
       are_you_sure: Biztos vagy benne?
       assign_to_self: Magamhoz rendelés
       assigned: Hozzárendelt moderátor
-      by_target_domain: A bejelentett fiók domainje
       comment:
         none: Egyik sem
       created_at: Jelentve
@@ -577,6 +576,7 @@ hu:
       resolved: Megoldott
       resolved_msg: A bejelentést sikeresen megoldottuk!
       status: Állapot
+      target_domain: A bejelentett fiók domainje
       target_origin: A jelentett fiók eredete
       title: Bejelentések
       unassign: Hozzárendelés törlése

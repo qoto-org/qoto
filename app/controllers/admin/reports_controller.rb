@@ -48,7 +48,7 @@ module Admin
     private
 
     def filtered_reports
-      ReportFilter.new(filter_params).results.order(id: :desc).includes(:account, :target_account)
+      ReportFilter.new(filter_params).results.includes(:account, :target_account)
     end
 
     def filter_params

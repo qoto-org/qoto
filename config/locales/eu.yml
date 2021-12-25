@@ -523,7 +523,6 @@ eu:
       are_you_sure: Ziur zaude?
       assign_to_self: Esleitu niri
       assigned: Esleitutako moderatzailea
-      by_target_domain: Jakinarazitako kontuaren domeinua
       comment:
         none: Bat ere ez
       created_at: Salatua
@@ -544,6 +543,7 @@ eu:
       resolved: Konponduta
       resolved_msg: Salaketa ongi konpondu da!
       status: Mezua
+      target_domain: Jakinarazitako kontuaren domeinua
       title: Salaketak
       unassign: Kendu esleipena
       unresolved: Konpondu gabea

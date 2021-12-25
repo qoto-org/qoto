@@ -553,7 +553,6 @@ da:
       are_you_sure: Sikker?
       assign_to_self: Tildel til mig
       assigned: Tildelt moderator
-      by_target_domain: Domæne for anmeldt konto
       comment:
         none: Ingen
       created_at: Anmeldt
@@ -574,6 +573,7 @@ da:
       resolved: Løst
       resolved_msg: Anmeldelse er nu løst!
       status: Status
+      target_domain: Domæne for anmeldt konto
       target_origin: Anmeldte kontos oprindelse
       title: Anmeldelser
       unassign: Utildel

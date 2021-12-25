@@ -552,7 +552,6 @@ gl:
       are_you_sure: Estás seguro?
       assign_to_self: Asignarme
       assigned: Moderador asignado
-      by_target_domain: Dominio da conta denunciada
       comment:
         none: Ningún
       created_at: Denunciado
@@ -573,6 +572,7 @@ gl:
       resolved: Resolto
       resolved_msg: Resolveuse con éxito a denuncia!
       status: Estado
+      target_domain: Dominio da conta denunciada
       target_origin: Orixe da conta denunciada
       title: Denuncias
       unassign: Non asignar

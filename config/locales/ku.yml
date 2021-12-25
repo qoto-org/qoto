@@ -467,7 +467,6 @@ ku:
       are_you_sure: دڵنیای?
       assign_to_self: دیاریکردن بۆ من
       assigned: بەڕێوەبەری بەرپرس
-      by_target_domain: دۆمەینی هەژمارەی گوزارشتدراو
       comment:
         none: هیچ
       created_at: گوزارشتکرا
@@ -486,6 +485,7 @@ ku:
       resolved: چارەسەرکرا
       resolved_msg: گوزارشتکردن بە سەرکەوتوویی چارەسەر کرا!
       status: دۆخ
+      target_domain: دۆمەینی هەژمارەی گوزارشتدراو
       title: گوزارشتکرا
       unassign: دیارینەکراوە
       unresolved: چارەسەر نەکراوە

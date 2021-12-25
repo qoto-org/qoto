@@ -346,7 +346,6 @@ kk:
       are_you_sure: Шынымен бе?
       assign_to_self: Мені тағайындау
       assigned: Модератор тағайындау
-      by_target_domain: Шағымдалған аккаунт домені
       comment:
         none: Ештеңе
       created_at: Шағым тасталды
@@ -365,6 +364,7 @@ kk:
       resolved: Қайта шешілді
       resolved_msg: Шағым қайтадан шешілді!
       status: Статус
+      target_domain: Шағымдалған аккаунт домені
       title: Шағымдар
       unassign: Қайтып алу
       unresolved: Шешілмеген

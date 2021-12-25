@@ -578,7 +578,6 @@ pl:
       are_you_sure: Czy na pewno?
       assign_to_self: Przypisz do siebie
       assigned: Przypisany moderator
-      by_target_domain: Domena zgłaszanego konta
       comment:
         none: Brak
       created_at: Zgłoszono
@@ -599,6 +598,7 @@ pl:
       resolved: Rozwiązane
       resolved_msg: Pomyślnie rozwiązano zgłoszenie.
       status: Stan
+      target_domain: Domena zgłaszanego konta
       target_origin: Pochodzenie zgłaszanego konta
       title: Zgłoszenia
       unassign: Cofnij przypisanie

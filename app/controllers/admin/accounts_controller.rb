@@ -48,12 +48,14 @@ module Admin
 
     def approve
       authorize @account.user, :approve?
+      log_action :approve, @account.user
       @account.user.approve!
       redirect_to admin_accounts_path(status: 'pending'), notice: I18n.t('admin.accounts.approved_msg', username: @account.acct)
     end
 
     def reject
       authorize @account.user, :reject?
+      log_action :reject, @account.user, username: @account.username
       DeleteAccountService.new.call(@account, reserve_email: false, reserve_username: false)
       redirect_to admin_accounts_path(status: 'pending'), notice: I18n.t('admin.accounts.rejected_msg', username: @account.acct)
     end

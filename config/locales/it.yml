@@ -551,7 +551,6 @@ it:
       are_you_sure: Sei sicuro?
       assign_to_self: Assegna a me
       assigned: Moderatore assegnato
-      by_target_domain: Dominio dell'account segnalato
       comment:
         none: Nessuno
       created_at: Segnalato
@@ -572,6 +571,7 @@ it:
       resolved: Risolto
       resolved_msg: Rapporto risolto!
       status: Stato
+      target_domain: Dominio dell'account segnalato
       target_origin: Origine dell'account segnalato
       title: Rapporti
       unassign: Non assegnare

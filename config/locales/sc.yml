@@ -502,7 +502,6 @@ sc:
       are_you_sure: Seguru?
       assign_to_self: Assigna a mie
       assigned: Moderatzione assignada
-      by_target_domain: Domìniu de su contu signaladu
       comment:
         none: Perunu
       created_at: Sinnaladu
@@ -523,6 +522,7 @@ sc:
       resolved: Isòrvidu
       resolved_msg: Informe isòrvidu.
       status: Istadu
+      target_domain: Domìniu de su contu signaladu
       title: Informes
       unassign: Boga s'assignatzione
       unresolved: No isòrvidu

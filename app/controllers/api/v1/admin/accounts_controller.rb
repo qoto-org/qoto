@@ -15,24 +15,7 @@ class Api::V1::Admin::AccountsController < Api::BaseController
 
   after_action :insert_pagination_headers, only: :index
 
-  FILTER_PARAMS = %i(
-    local
-    remote
-    by_domain
-    active
-    pending
-    disabled
-    sensitized
-    silenced
-    suspended
-    username
-    display_name
-    email
-    ip
-    staff
-  ).freeze
-
-  PAGINATION_PARAMS = (%i(limit) + FILTER_PARAMS).freeze
+  PAGINATION_PARAMS = (%i(limit) + AccountFilter::KEYS).freeze
 
   def index
     authorize :account, :index?
@@ -53,12 +36,14 @@ class Api::V1::Admin::AccountsController < Api::BaseController
 
   def approve
     authorize @account.user, :approve?
+    log_action(:approve, @account.user)
     @account.user.approve!
     render json: @account, serializer: REST::Admin::AccountSerializer
   end
 
   def reject
     authorize @account.user, :reject?
+    log_action(:reject, @account.user, username: @account.username)
     DeleteAccountService.new.call(@account, reserve_email: false, reserve_username: false)
     render json: @account, serializer: REST::Admin::AccountSerializer
   end
@@ -94,7 +79,7 @@ class Api::V1::Admin::AccountsController < Api::BaseController
   private
 
   def set_accounts
-    @accounts = filtered_accounts.order(id: :desc).includes(user: [:invite_request, :invite]).to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
+    @accounts = filtered_accounts.to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
   end
 
   def set_account
@@ -102,11 +87,11 @@ class Api::V1::Admin::AccountsController < Api::BaseController
   end
 
   def filtered_accounts
-    AccountFilter.new(filter_params).results
+    AccountFilter.new(filter_params.with_defaults(order: 'recent')).results
   end
 
   def filter_params
-    params.permit(*FILTER_PARAMS)
+    params.slice(*AccountFilter::KEYS).permit(*AccountFilter::KEYS)
   end
 
   def insert_pagination_headers

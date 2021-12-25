@@ -452,7 +452,6 @@ el:
       are_you_sure: Σίγουρα;
       assign_to_self: Ανάθεση σε μένα
       assigned: Αρμόδιος συντονιστής
-      by_target_domain: Κόμβος του λογαριασμού υπό καταγγελία
       comment:
         none: Κανένα
       created_at: Καταγγέλθηκε
@@ -473,6 +472,7 @@ el:
       resolved: Επιλύθηκε
       resolved_msg: Η καταγγελία επιλύθηκε επιτυχώς!
       status: Κατάσταση
+      target_domain: Κόμβος του λογαριασμού υπό καταγγελία
       title: Αναφορές
       unassign: Αποσύνδεση
       unresolved: Άλυτη

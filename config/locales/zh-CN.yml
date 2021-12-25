@@ -524,7 +524,6 @@ zh-CN:
       are_you_sure: 你确定吗？
       assign_to_self: 接管
       assigned: 已接管的监察员
-      by_target_domain: 被举报账户的域名
       comment:
         none: 没有
       created_at: 举报时间
@@ -545,6 +544,7 @@ zh-CN:
       resolved: 已处理
       resolved_msg: 举报处理成功！
       status: 状态
+      target_domain: 被举报账户的域名
       target_origin: 被举报账号的来源
       title: 举报
       unassign: 取消接管

@@ -534,7 +534,6 @@ fa:
       are_you_sure: مطمئنید؟
       assign_to_self: به عهدهٔ من بگذار
       assigned: مدیر عهده‌دار
-      by_target_domain: دامنهٔ حساب گزارش‌شده
       comment:
         none: هیچ
       created_at: گزارش‌شده
@@ -555,6 +554,7 @@ fa:
       resolved: حل‌شده
       resolved_msg: گزارش با موفقیت حل شد!
       status: نوشته
+      target_domain: دامنهٔ حساب گزارش‌شده
       target_origin: خاستگاه حساب گزارش‌شده
       title: گزارش‌ها
       unassign: پس‌گرفتن مسئولیت

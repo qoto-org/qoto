@@ -554,7 +554,6 @@ kmr:
       are_you_sure: Gelo tu bawerî?
       assign_to_self: Bo min diyar bike
       assigned: Çavdêrê diyarkirî
-      by_target_domain: Navperê ya ajimêrê ragihandî
       comment:
         none: Ne yek
       created_at: Hate ragihandin
@@ -575,6 +574,7 @@ kmr:
       resolved: Çareserkirî
       resolved_msg: Ragihandin bi awayekî serkeftî hate çareserkirin!
       status: Rewş
+      target_domain: Navperê ya ajimêrê ragihandî
       target_origin: Jêdera ajimêrê ragihandî
       title: Ragihandinên
       unassign: Diyar neke

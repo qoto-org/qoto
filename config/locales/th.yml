@@ -497,7 +497,6 @@ th:
       are_you_sure: คุณแน่ใจหรือไม่?
       assign_to_self: มอบหมายให้ฉัน
       assigned: ผู้ควบคุมที่ได้รับมอบหมาย
-      by_target_domain: โดเมนของบัญชีที่ได้รับการรายงาน
       comment:
         none: ไม่มี
       created_at: รายงานเมื่อ
@@ -517,6 +516,7 @@ th:
       resolved: แก้ปัญหาแล้ว
       resolved_msg: แก้ปัญหารายงานสำเร็จ!
       status: สถานะ
+      target_domain: โดเมนของบัญชีที่ได้รับการรายงาน
       target_origin: จุดเริ่มต้นของบัญชีที่ได้รับการรายงาน
       title: รายงาน
       unassign: เลิกมอบหมาย

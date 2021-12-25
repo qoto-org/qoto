@@ -532,7 +532,6 @@ co:
       are_you_sure: Site sicuru·a?
       assign_to_self: Assignallu à mè
       assigned: Muderatore assignatu
-      by_target_domain: Duminiu di u contu signalatu
       comment:
         none: Nisunu
       created_at: Palisatu
@@ -553,6 +552,7 @@ co:
       resolved: Scioltu è chjosu
       resolved_msg: Signalamentu scioltu!
       status: Statutu
+      target_domain: Duminiu di u contu signalatu
       title: Signalamenti
       unassign: Disassignà
       unresolved: Micca sciolti

@@ -554,7 +554,6 @@ pt-PT:
       are_you_sure: Tens a certeza?
       assign_to_self: Atribuí-me a mim
       assigned: Atribuído ao moderador
-      by_target_domain: Domínio da conta reportada
       comment:
         none: Nenhum
       created_at: Relatado
@@ -575,6 +574,7 @@ pt-PT:
       resolved: Resolvido
       resolved_msg: Relatório resolvido com sucesso!
       status: Estado
+      target_domain: Domínio da conta reportada
       target_origin: Origem da conta reportada
       title: Relatórios
       unassign: Não atribuir

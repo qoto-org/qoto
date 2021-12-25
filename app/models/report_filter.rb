@@ -2,10 +2,10 @@
 
 class ReportFilter
   KEYS = %i(
-    resolved
+    status
     account_id
     target_account_id
-    by_target_domain
+    target_domain
     target_origin
   ).freeze
 
@@ -16,7 +16,7 @@ class ReportFilter
   end
 
   def results
-    scope = Report.unresolved
+    scope = Report.order(id: :desc)
 
     params.each do |key, value|
       scope = scope.merge scope_for(key, value)
@@ -27,10 +27,10 @@ class ReportFilter
 
   def scope_for(key, value)
     case key.to_sym
-    when :by_target_domain
+    when :target_domain
       Report.where(target_account: Account.where(domain: value))
-    when :resolved
-      Report.resolved
+    when :status
+      status_scope(value)
     when :account_id
       Report.where(account_id: value)
     when :target_account_id
@@ -48,6 +48,17 @@ class ReportFilter
       Report.where(target_account: Account.local)
     when :remote
       Report.where(target_account: Account.remote)
+    else
+      raise "Unknown value: #{value}"
+    end
+  end
+
+  def status_scope(value)
+    case value.to_sym
+    when :resolved
+      Report.resolved
+    when :unresolved
+      Report.unresolved
     else
       raise "Unknown value: #{value}"
     end

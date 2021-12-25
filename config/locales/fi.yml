@@ -522,7 +522,6 @@ fi:
       are_you_sure: Oletko varma?
       assign_to_self: Ota tehtäväksi
       assigned: Määritetty valvoja
-      by_target_domain: Ilmoitetun tilin verkkotunnus
       comment:
         none: Ei mitään
       created_at: Raportoitu
@@ -543,6 +542,7 @@ fi:
       resolved: Ratkaistut
       resolved_msg: Raportti onnistuneesti ratkaistu!
       status: Tila
+      target_domain: Ilmoitetun tilin verkkotunnus
       target_origin: Raportoidun tilin alkuperä
       title: Raportit
       unassign: Määrittämätön

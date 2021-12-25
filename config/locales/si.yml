@@ -201,7 +201,6 @@ si:
       status: තත්වය
     reports:
       are_you_sure: ඔබට විශ්වාසද?
-      by_target_domain: වාර්තා කළ ගිණුමෙහි වසම
       comment:
         none: කිසිවක් නැත
       notes:
@@ -210,6 +209,7 @@ si:
       report: "@%{id} වාර්තා කරන්න"
       reported_account: වාර්තා කළ ගිණුම
       status: තත්වය
+      target_domain: වාර්තා කළ ගිණුමෙහි වසම
       title: වාර්තා
     rules:
       add_new: නීතිය එකතු කරන්න

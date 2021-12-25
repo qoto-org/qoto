@@ -434,7 +434,6 @@ oc:
       are_you_sure: Es segur ?
       assign_to_self: Me l’assignar
       assigned: Moderador assignat
-      by_target_domain: Domeni del compte senhalat
       comment:
         none: Pas cap
       created_at: Creacion
@@ -453,6 +452,7 @@ oc:
       resolved: Resolgut
       resolved_msg: Rapòrt corrèctament resolgut !
       status: Estatut
+      target_domain: Domeni del compte senhalat
       title: Senhalament
       unassign: Levar
       unresolved: Pas resolgut

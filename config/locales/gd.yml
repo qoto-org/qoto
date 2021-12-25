@@ -553,7 +553,6 @@ gd:
       are_you_sure: A bheil thu cinnteach?
       assign_to_self: Iomruin dhomh-sa
       assigned: Maor iomruinte
-      by_target_domain: Àrainn cunntas a’ ghearain
       comment:
         none: Chan eil gin
       created_at: Chaidh an gearan a dhèanamh
@@ -574,6 +573,7 @@ gd:
       resolved: Air fhuasgladh
       resolved_msg: Chaidh an gearan fhuasgladh!
       status: Staid
+      target_domain: Àrainn cunntas a’ ghearain
       target_origin: Tùs cunntas a’ ghearain
       title: Gearanan
       unassign: Dì-iomruin
