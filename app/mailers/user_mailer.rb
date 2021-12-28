@@ -173,6 +173,18 @@ class UserMailer < Devise::Mailer
     end
   end
 
+  def statuses_deleted(user, status_ids)
+    @resource = user
+    @instance = Rails.configuration.x.local_domain
+    @statuses = Status.with_discarded.where(id: status_ids).includes(:account)
+
+    I18n.with_locale(@resource.locale || I18n.default_locale) do
+      mail to: @resource.email,
+           subject: I18n.t("user_mailer.statuses_deleted.subject", acct: "@#{user.account.local_username_and_domain}"),
+           reply_to: Setting.site_contact_email
+    end
+  end
+
   def sign_in_token(user, remote_ip, user_agent, timestamp)
     @resource   = user
     @instance   = Rails.configuration.x.local_domain

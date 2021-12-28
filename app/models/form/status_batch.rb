@@ -11,7 +11,7 @@ class Form::StatusBatch
     when 'nsfw_on', 'nsfw_off'
       change_sensitive(action == 'nsfw_on')
     when 'delete'
-      delete_statuses
+      # delete_statuses
     end
   end
 

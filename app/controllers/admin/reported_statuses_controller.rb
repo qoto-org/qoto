@@ -5,34 +5,22 @@ module Admin
     before_action :set_report
 
     def create
-      authorize :status, :update?
-
-      @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
-
-      redirect_to admin_report_path(@report)
+      @status_batch_action = Admin::StatusBatchAction.new(admin_status_batch_action_params.merge(current_account: current_account, target_account: @report.target_account, type: action_from_button, report_id: @report.id))
+      @status_batch_action.save!
     rescue ActionController::ParameterMissing
       flash[:alert] = I18n.t('admin.statuses.no_status_selected')
-
+    ensure
       redirect_to admin_report_path(@report)
     end
 
     private
 
-    def status_params
-      params.require(:status).permit(:sensitive)
-    end
-
-    def form_status_batch_params
-      params.require(:form_status_batch).permit(status_ids: [])
+    def admin_status_batch_action_params
+      params.require(:admin_status_batch_action).permit(status_ids: [])
     end
 
     def action_from_button
-      if params[:nsfw_on]
-        'nsfw_on'
-      elsif params[:nsfw_off]
-        'nsfw_off'
-      elsif params[:delete]
+      if params[:delete]
         'delete'
       end
     end

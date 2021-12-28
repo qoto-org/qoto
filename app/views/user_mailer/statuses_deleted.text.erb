@@ -1,0 +1,9 @@
+<%= t "user_mailer.statuses_deleted.title" %>
+
+===
+
+<% @statuses.each do |status| %>
+
+<%= render 'notification_mailer/status', status: status %>
+---
+<% end %>

@@ -14,7 +14,7 @@ module Admin
 
       @report_note  = @report.notes.new
       @report_notes = (@report.notes.latest + @report.history + @report.target_account.targeted_account_warnings.latest.custom).sort_by(&:created_at)
-      @form         = Form::StatusBatch.new
+      @form         = Admin::StatusBatchAction.new
     end
 
     def assign_to_self

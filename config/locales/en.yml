@@ -1483,6 +1483,9 @@ en:
       further_actions: 'If this wasn''t you, please change your password and enable two-factor authentication on your account. You can do so here:'
       subject: Please confirm attempted sign in
       title: Sign in attempt
+    statuses_deleted:
+      subject: Your posts have been removed
+      title: Posts removed
     warning:
       explanation:
         disable: You can no longer login to your account or use it in any other way, but your profile and other data remains intact.
