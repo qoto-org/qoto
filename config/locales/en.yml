@@ -1502,6 +1502,8 @@ en:
       subject: Please confirm attempted sign in
       title: Sign in attempt
     warning:
+      appeal: Submit an appeal
+      appeal_description: If you believe this is an error, you can submit an appeal to the staff of %{instance}.
       categories:
         spam: Spam
         violation: Content violates the following community guidelines
@@ -1513,7 +1515,6 @@ en:
         suspend: You can no longer use your account, and your profile and other data are no longer accessible. You can still login to request a backup of your data until the data is fully removed in about 30 days, but we will retain some basic data to prevent you from evading the suspension.
       get_in_touch: If you believe this is an error, you can reply to this e-mail to get in touch with the staff of %{instance}.
       reason: 'Reason:'
-      review_server_policies: Review server policies
       statuses: 'Posts that have been found in violation:'
       subject:
         delete_statuses: Your posts on %{acct} have been removed

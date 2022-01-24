@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_183123) do
+ActiveRecord::Schema.define(version: 2022_01_24_141035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,6 +241,16 @@ ActiveRecord::Schema.define(version: 2022_01_18_183123) do
     t.datetime "updated_at", null: false
     t.datetime "published_at"
     t.bigint "status_ids", array: true
+  end
+
+  create_table "appeals", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "account_warning_id", null: false
+    t.text "text", default: "", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_appeals_on_account_id"
+    t.index ["account_warning_id"], name: "index_appeals_on_account_warning_id", unique: true
   end
 
   create_table "backups", force: :cascade do |t|
@@ -1031,6 +1041,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_183123) do
   add_foreign_key "announcement_reactions", "accounts", on_delete: :cascade
   add_foreign_key "announcement_reactions", "announcements", on_delete: :cascade
   add_foreign_key "announcement_reactions", "custom_emojis", on_delete: :cascade
+  add_foreign_key "appeals", "account_warnings", on_delete: :cascade
+  add_foreign_key "appeals", "accounts", on_delete: :cascade
   add_foreign_key "backups", "users", on_delete: :nullify
   add_foreign_key "blocks", "accounts", column: "target_account_id", name: "fk_9571bfabc1", on_delete: :cascade
   add_foreign_key "blocks", "accounts", name: "fk_4269e03e65", on_delete: :cascade
@@ -1136,28 +1148,6 @@ ActiveRecord::Schema.define(version: 2022_01_18_183123) do
   SQL
   add_index "instances", ["domain"], name: "index_instances_on_domain", unique: true
 
-  create_view "user_ips", sql_definition: <<-SQL
-      SELECT t0.user_id,
-      t0.ip,
-      max(t0.used_at) AS used_at
-     FROM ( SELECT users.id AS user_id,
-              users.sign_up_ip AS ip,
-              users.created_at AS used_at
-             FROM users
-            WHERE (users.sign_up_ip IS NOT NULL)
-          UNION ALL
-           SELECT session_activations.user_id,
-              session_activations.ip,
-              session_activations.updated_at
-             FROM session_activations
-          UNION ALL
-           SELECT login_activities.user_id,
-              login_activities.ip,
-              login_activities.created_at
-             FROM login_activities
-            WHERE (login_activities.success = true)) t0
-    GROUP BY t0.user_id, t0.ip;
-  SQL
   create_view "account_summaries", materialized: true, sql_definition: <<-SQL
       SELECT accounts.id AS account_id,
       mode() WITHIN GROUP (ORDER BY t0.language) AS language,
@@ -1205,4 +1195,26 @@ ActiveRecord::Schema.define(version: 2022_01_18_183123) do
   SQL
   add_index "follow_recommendations", ["account_id"], name: "index_follow_recommendations_on_account_id", unique: true
 
+  create_view "user_ips", sql_definition: <<-SQL
+      SELECT t0.user_id,
+      t0.ip,
+      max(t0.used_at) AS used_at
+     FROM ( SELECT users.id AS user_id,
+              users.sign_up_ip AS ip,
+              users.created_at AS used_at
+             FROM users
+            WHERE (users.sign_up_ip IS NOT NULL)
+          UNION ALL
+           SELECT session_activations.user_id,
+              session_activations.ip,
+              session_activations.updated_at
+             FROM session_activations
+          UNION ALL
+           SELECT login_activities.user_id,
+              login_activities.ip,
+              login_activities.created_at
+             FROM login_activities
+            WHERE (login_activities.success = true)) t0
+    GROUP BY t0.user_id, t0.ip;
+  SQL
 end
