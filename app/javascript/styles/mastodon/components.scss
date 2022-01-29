@@ -1889,8 +1889,36 @@ a.account__display-name {
   box-shadow: 2px 4px 15px rgba($base-shadow-color, 0.4);
   z-index: 9999;
 
-  ul {
-    list-style: none;
+  &__text-button {
+    display: inline;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  &__container {
+    &__header {
+      border-bottom: 1px solid darken($ui-secondary-color, 8%);
+      padding: 4px 14px;
+      padding-bottom: 8px;
+      font-size: 13px;
+      line-height: 18px;
+      color: $inverted-text-color;
+    }
+
+    &__list {
+      list-style: none;
+
+      &--scrollable {
+        max-height: 300px;
+        overflow-y: scroll;
+      }
+    }
   }
 
   &.left {
@@ -1946,18 +1974,29 @@ a.account__display-name {
 }
 
 .dropdown-menu__item {
-  a {
-    font-size: 13px;
-    line-height: 18px;
+  font-size: 13px;
+  line-height: 18px;
+  display: block;
+  color: $inverted-text-color;
+
+  a,
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
     display: block;
+    width: 100%;
     padding: 4px 14px;
+    border: 0;
+    margin: 0;
     box-sizing: border-box;
     text-decoration: none;
     background: $ui-secondary-color;
-    color: $inverted-text-color;
+    color: inherit;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: inherit;
 
     &:focus,
     &:hover,
@@ -1967,6 +2006,13 @@ a.account__display-name {
       outline: 0;
     }
   }
+}
+
+.dropdown-menu__item--text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px 14px;
 }
 
 .dropdown--active .dropdown__content {
