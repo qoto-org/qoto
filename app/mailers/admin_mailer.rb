@@ -46,4 +46,15 @@ class AdminMailer < ApplicationMailer
       mail to: @me.user_email, subject: I18n.t('admin_mailer.new_trending_links.subject', instance: @instance)
     end
   end
+
+  def new_trending_statuses(recipient, statuses)
+    @statuses               = statuses
+    @me                     = recipient
+    @instance               = Rails.configuration.x.local_domain
+    @lowest_trending_status = Trends.statuses.get(true, Trends.statuses.options[:review_threshold]).last
+
+    locale_for_account(@me) do
+      mail to: @me.user_email, subject: I18n.t('admin_mailer.new_trending_statuses.subject', instance: @instance)
+    end
+  end
 end

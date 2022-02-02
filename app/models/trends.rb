@@ -13,12 +13,20 @@ module Trends
     @tags ||= Trends::Tags.new
   end
 
+  def self.statuses
+    @statuses ||= Trends::Statuses.new
+  end
+
+  def self.register!(status)
+    [links, tags, statuses].each { |trend_type| trend_type.register(status) }
+  end
+
   def self.refresh!
-    [links, tags].each(&:refresh)
+    [links, tags, statuses].each(&:refresh)
   end
 
   def self.request_review!
-    [links, tags].each(&:request_review) if enabled?
+    [links, tags, statuses].each(&:request_review) if enabled?
   end
 
   def self.enabled?

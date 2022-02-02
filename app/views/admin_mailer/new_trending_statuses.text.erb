@@ -1,0 +1,16 @@
+<%= raw t('application_mailer.salutation', name: display_name(@me)) %>
+
+<%= raw t('admin_mailer.new_trending_statuses.body') %>
+
+<% @statuses.each do |status| %>
+- <%= ActivityPub::TagManager.instance.url_for(status) %>
+  <%= t('admin.trends.tags.current_score', score: Trends.statuses.score(status.id).round(2)) %>
+<% end %>
+
+<% if @lowest_trending_status %>
+<%= t('admin_mailer.new_trending_statuses.requirements', lowest_status_url: ActivityPub::TagManager.instance.url_for(@lowest_trending_status), lowest_link_score: Trends.links.score(@lowest_trending_status.id).round(2)) %>
+<% else %>
+<%= t('admin_mailer.new_trending_statuses.no_approved_statuses') %>
+<% end %>
+
+<%= raw t('application_mailer.view')%> <%= admin_trends_statuses_url %>

@@ -788,6 +788,11 @@ en:
       no_approved_links: There are currently no approved trending links.
       requirements: The lowest approved trending link is currently "%{lowest_link_title}" with a score of %{lowest_link_score}.
       subject: New trending links up for review on %{instance}
+    new_trending_statuses:
+      body: The following posts are trending today, but their authors have not been previously reviewed. They will not be displayed publicly unless you approve them. Further notifications from the same authors will not be generated.
+      no_approved_statuses: There are currently no approved trending posts.
+      requirements: The lowest approved trending post is currently %{lowest_status_url} with a score of %{lowest_status_score}.
+      subject: New trending posts up for review on %{instance}
     new_trending_tags:
       body: 'The following hashtags are trending today, but they have not been previously reviewed. They will not be displayed publicly unless you approve them:'
       no_approved_tags: There are currently no approved trending hashtags.
