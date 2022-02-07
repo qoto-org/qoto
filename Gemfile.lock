@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    accept_language (2.0.2)
     actioncable (6.1.4.4)
       actionpack (= 6.1.4.4)
       activesupport (= 6.1.4.4)
@@ -283,7 +284,6 @@ GEM
     http-cookie (1.0.4)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    http_accept_language (2.1.1)
     httplog (1.5.0)
       rack (>= 1.0)
       rainbow (>= 2.0.0)
@@ -678,6 +678,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  accept_language (~> 2.0)
   active_model_serializers (~> 0.10)
   active_record_query_trace (~> 1.8)
   addressable (~> 2.8)
@@ -721,7 +722,6 @@ DEPENDENCIES
   hiredis (~> 0.6)
   htmlentities (~> 4.3)
   http (~> 5.0)
-  http_accept_language (~> 2.1)
   httplog (~> 1.5.0)
   i18n-tasks (~> 0.9)
   idn-ruby

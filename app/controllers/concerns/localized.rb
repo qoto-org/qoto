@@ -8,26 +8,19 @@ module Localized
   end
 
   def set_locale
-    locale   = current_user.locale if respond_to?(:user_signed_in?) && user_signed_in?
-    locale ||= session[:locale] ||= default_locale
-    locale   = default_locale unless I18n.available_locales.include?(locale.to_sym)
+    requested_locale_name   = params[:locale].presence
+    requested_locale_name ||= current_user.locale if respond_to?(:user_signed_in?) && user_signed_in?
+    requested_locale_name ||= request_locale unless ENV['DEFAULT_LOCALE'].present?
+    requested_locale_name ||= I18n.default_locale
 
-    I18n.with_locale(locale) do
+    I18n.with_locale(requested_locale_name) do
       yield
     end
   end
 
   private
 
-  def default_locale
-    if ENV['DEFAULT_LOCALE'].present?
-      I18n.default_locale
-    else
-      request_locale || I18n.default_locale
-    end
-  end
-
   def request_locale
-    http_accept_language.language_region_compatible_from(I18n.available_locales)
+    AcceptLanguage.parse(request.headers.fetch("HTTP_ACCEPT_LANGUAGE")).match(*I18n.available_locales) if request.headers.key?("HTTP_ACCEPT_LANGUAGE")
   end
 end
