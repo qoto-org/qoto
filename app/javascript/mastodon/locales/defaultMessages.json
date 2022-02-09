@@ -84,6 +84,32 @@
       {
         "defaultMessage": "Loading...",
         "id": "loading_indicator.label"
+      }
+    ],
+    "path": "app/javascript/mastodon/components/admin/Dimension.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "Other",
+        "id": "report.categories.other"
+      },
+      {
+        "defaultMessage": "Spam",
+        "id": "report.categories.spam"
+      },
+      {
+        "defaultMessage": "Content violates one or more server rules",
+        "id": "report.categories.violation"
+      }
+    ],
+    "path": "app/javascript/mastodon/components/admin/ReportReasonSelector.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "Loading...",
+        "id": "loading_indicator.label"
       },
       {
         "defaultMessage": "Sign-up month",
@@ -98,8 +124,12 @@
         "id": "admin.dashboard.retention.average"
       },
       {
-        "defaultMessage": "Retention",
-        "id": "admin.dashboard.retention"
+        "defaultMessage": "User retention rate by day after sign-up",
+        "id": "admin.dashboard.daily_retention"
+      },
+      {
+        "defaultMessage": "User retention rate by month after sign-up",
+        "id": "admin.dashboard.monthly_retention"
       }
     ],
     "path": "app/javascript/mastodon/components/admin/Retention.json"
@@ -207,6 +237,36 @@
       }
     ],
     "path": "app/javascript/mastodon/components/domain.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "Edited {date}",
+        "id": "status.edited"
+      }
+    ],
+    "path": "app/javascript/mastodon/components/edited_timestamp.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "Edited {count, plural, one {{count} time} other {{count} times}}",
+        "id": "status.edited_x_times"
+      },
+      {
+        "defaultMessage": "{name} created {date}",
+        "id": "status.history.created"
+      },
+      {
+        "defaultMessage": "{name} edited {date}",
+        "id": "status.history.edited"
+      },
+      {
+        "defaultMessage": "Edited {date}",
+        "id": "status.edited"
+      }
+    ],
+    "path": "app/javascript/mastodon/components/edited_timestamp/index.json"
   },
   {
     "descriptors": [
@@ -423,6 +483,23 @@
   {
     "descriptors": [
       {
+        "defaultMessage": "Loading...",
+        "id": "loading_indicator.label"
+      },
+      {
+        "defaultMessage": "Average",
+        "id": "admin.dashboard.retention.average"
+      },
+      {
+        "defaultMessage": "Retention",
+        "id": "admin.dashboard.retention"
+      }
+    ],
+    "path": "app/javascript/mastodon/components/Retention.json"
+  },
+  {
+    "descriptors": [
+      {
         "defaultMessage": "{count}K",
         "id": "units.short.thousand"
       },
@@ -446,6 +523,10 @@
       {
         "defaultMessage": "Delete & re-draft",
         "id": "status.redraft"
+      },
+      {
+        "defaultMessage": "Edit",
+        "id": "status.edit"
       },
       {
         "defaultMessage": "Direct message @{name}",
@@ -590,6 +671,19 @@
   {
     "descriptors": [
       {
+        "defaultMessage": "Edited {date}",
+        "id": "status.edited"
+      },
+      {
+        "defaultMessage": "edited",
+        "id": "status.edited_short"
+      }
+    ],
+    "path": "app/javascript/mastodon/components/status_history_dropdown.json"
+  },
+  {
+    "descriptors": [
+      {
         "defaultMessage": "Public",
         "id": "privacy.public.short"
       },
@@ -604,6 +698,10 @@
       {
         "defaultMessage": "Direct",
         "id": "privacy.direct.short"
+      },
+      {
+        "defaultMessage": "Edited {date}",
+        "id": "status.edited"
       },
       {
         "defaultMessage": "Filtered",
@@ -1106,6 +1204,10 @@
       {
         "defaultMessage": "{publish}!",
         "id": "compose_form.publish_loud"
+      },
+      {
+        "defaultMessage": "Save changes",
+        "id": "compose_form.save_changes"
       }
     ],
     "path": "app/javascript/mastodon/features/compose/components/compose_form.json"
@@ -1647,6 +1749,31 @@
       }
     ],
     "path": "app/javascript/mastodon/features/domain_blocks/index.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "Explore",
+        "id": "explore.title"
+      },
+      {
+        "defaultMessage": "Viral posts",
+        "id": "explore.trending_statuses"
+      },
+      {
+        "defaultMessage": "Trending hashtags",
+        "id": "explore.trending_tags"
+      },
+      {
+        "defaultMessage": "Top stories",
+        "id": "explore.trending_links"
+      },
+      {
+        "defaultMessage": "Suggested follows",
+        "id": "explore.suggested_follows"
+      }
+    ],
+    "path": "app/javascript/mastodon/features/explore/index.json"
   },
   {
     "descriptors": [
@@ -2594,6 +2721,10 @@
         "id": "status.redraft"
       },
       {
+        "defaultMessage": "Edit",
+        "id": "status.edit"
+      },
+      {
         "defaultMessage": "Direct message @{name}",
         "id": "status.direct"
       },
@@ -2726,6 +2857,10 @@
       {
         "defaultMessage": "Direct",
         "id": "privacy.direct.short"
+      },
+      {
+        "defaultMessage": "Edited {date}",
+        "id": "status.edited"
       }
     ],
     "path": "app/javascript/mastodon/features/status/components/detailed_status.json"
@@ -2904,6 +3039,19 @@
       }
     ],
     "path": "app/javascript/mastodon/features/ui/components/columns_area.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "{name} created {date}",
+        "id": "status.history.created"
+      },
+      {
+        "defaultMessage": "{name} edited {date}",
+        "id": "status.history.edited"
+      }
+    ],
+    "path": "app/javascript/mastodon/features/ui/components/compare_history_modal.json"
   },
   {
     "descriptors": [
