@@ -3,21 +3,28 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Toggle from 'react-toggle';
 import noop from 'lodash/noop';
-import StatusContent from '../../../components/status_content';
-import { MediaGallery, Video } from '../../ui/util/async-components';
-import Bundle from '../../ui/components/bundle';
+import StatusContent from 'mastodon/components/status_content';
+import { MediaGallery, Video } from 'mastodon/features/ui/util/async-components';
+import Bundle from 'mastodon/features/ui/components/bundle';
 
 export default class StatusCheckBox extends React.PureComponent {
 
   static propTypes = {
+    id: PropTypes.string.isRequired,
     status: ImmutablePropTypes.map.isRequired,
     checked: PropTypes.bool,
     onToggle: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
   };
 
+  handleToggle = (e) => {
+    const { onToggle, id } = this.props;
+    onToggle(id, e.target.checked);
+  };
+
   render () {
-    const { status, checked, onToggle, disabled } = this.props;
+    const { status, checked, disabled } = this.props;
+
     let media = null;
 
     if (status.get('reblog')) {
@@ -64,7 +71,7 @@ export default class StatusCheckBox extends React.PureComponent {
         </div>
 
         <div className='status-check-box-toggle'>
-          <Toggle checked={checked} onChange={onToggle} disabled={disabled} />
+          <Toggle checked={checked} onChange={this.handleToggle} disabled={disabled} />
         </div>
       </div>
     );
