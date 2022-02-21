@@ -7,6 +7,7 @@ module Admin
 
       @invites = filtered_invites.includes(user: :account).page(params[:page])
       @invite  = Invite.new
+      @user = current_user
     end
 
     def create
@@ -19,6 +20,7 @@ module Admin
         redirect_to admin_invites_path
       else
         @invites = Invite.page(params[:page])
+        @user = current_user
         render :index
       end
     end
@@ -39,7 +41,7 @@ module Admin
     private
 
     def resource_params
-      params.require(:invite).permit(:max_uses, :expires_in)
+      params.require(:invite).permit(:max_uses, :expires_in, :email)
     end
 
     def filtered_invites

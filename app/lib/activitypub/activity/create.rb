@@ -95,9 +95,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def process_status_params
-    @params = begin
-      {
-        uri: object_uri,
+    @params = {
+      uri: object_uri,
         url: object_url || object_uri,
         account: @account,
         text: text_from_content || '',
@@ -112,8 +111,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
         conversation: conversation_from_uri(@object['conversation']),
         media_attachment_ids: process_attachments.take(4).map(&:id),
         poll: process_poll,
-      }
-    end
+    }
   end
 
   def process_audience
@@ -268,15 +266,13 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   def process_poll
     return unless @object['type'] == 'Question' && (@object['anyOf'].is_a?(Array) || @object['oneOf'].is_a?(Array))
 
-    expires_at = begin
-      if @object['closed'].is_a?(String)
-        @object['closed']
-      elsif !@object['closed'].nil? && !@object['closed'].is_a?(FalseClass)
-        Time.now.utc
-      else
-        @object['endTime']
-      end
-    end
+    expires_at = if @object['closed'].is_a?(String)
+                   @object['closed']
+                 elsif !@object['closed'].nil? && !@object['closed'].is_a?(FalseClass)
+                   Time.now.utc
+                 else
+                   @object['endTime']
+                 end
 
     if @object['anyOf'].is_a?(Array)
       multiple = true

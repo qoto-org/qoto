@@ -45,6 +45,8 @@ he:
       disable_two_factor_authentication: ביטול הזדהות דו-שלבית
       disabled: נחסם
       display_name: שם לתצוגה
+      location: מקום
+      website: אתר אינטרנט
       domain: תחום
       edit: עריכה
       email: דוא"ל

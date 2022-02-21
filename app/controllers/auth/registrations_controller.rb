@@ -7,6 +7,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   layout :determine_layout
 
   before_action :set_invite, only: [:new, :create]
+  before_action :set_email, only: [:create]
   before_action :check_enabled_registrations, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
   before_action :set_sessions, only: [:edit, :update]
@@ -19,11 +20,21 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   skip_before_action :require_functional!, only: [:edit, :update]
 
   def new
+    confirm_invite_code
     super(&:build_invite_request)
+  rescue InvalidInvitationCodeError => e
+    redirect_to web_path, alert: e
   end
 
   def destroy
     not_found
+  end
+
+  def create
+    super
+    if @user.persisted? && @invite.present?
+      notify_about_new_registration
+    end
   end
 
   def update
@@ -114,6 +125,10 @@ class Auth::RegistrationsController < Devise::RegistrationsController
     @invite = invite&.valid_for_use? ? invite : nil
   end
 
+  def set_email
+    params[:user][:email] = @invite.email if @invite.present?
+  end
+
   def determine_layout
     %w(edit update).include?(action_name) ? 'admin' : 'auth'
   end
@@ -128,5 +143,15 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   def set_cache_headers
     response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
+  end
+
+  def notify_about_new_registration
+    NotifyService.new.call(@invite.user.account, :invite, @invite)
+  end
+
+  def confirm_invite_code
+    if invite_code.present? && !@invite
+      raise InvalidInvitationCodeError
+    end
   end
 end

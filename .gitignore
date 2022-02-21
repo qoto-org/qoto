@@ -25,14 +25,15 @@
 .env
 .env.production
 .env.development
+.env.test
 /node_modules/
 /build/
 
-# Ignore Vagrant files
-.vagrant/
-
 # Ignore Capistrano customizations
 /config/deploy/*
+
+# Ignore Vagrant files
+.vagrant/
 
 # Ignore IDE files
 .vscode/
@@ -65,3 +66,12 @@ yarn-debug.log
 
 # Ignore Docker option files
 docker-compose.override.yml
+
+# Redis
+dump.rdb
+
+# nvmrc
+.envrc
+.yarn-integrity
+
+/config/newrelic.yml

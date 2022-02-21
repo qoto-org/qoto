@@ -120,6 +120,8 @@ eu:
       disable_two_factor_authentication: Desgaitu 2FA
       disabled: Desgaituta
       display_name: Pantaila-izena
+      location: kokapena
+      website: webgunea
       domain: Domeinua
       edit: Editatu
       email: E-mail
@@ -1408,6 +1410,8 @@ eu:
         sensitive: Igotzen dituzun multimedia fitxategiak eta estekatutako edukiak hunkigarri bezala hartuko dira.
         silence: Zure kontua murriztua dagoen bitartean, jada zu jarraitzen zaituztenak besterik ez dituzte zure bidalketak ikusiko zerbitzari honetan, eta agian zerrenda publikoetatik kenduko zaizu. Hala ere besteek oraindik zu jarraitu zaitzakete.
         suspend: Zure kontua kanporatua izan da, zure toot guztiak eta multimedia fitxategiak behin betiko ezabatu dira zerbitzari honetatik, eta zure jarraitzaileen zerbitzarietatik.
+        verify: Komunitateko kide ziurtatua zara
+        unverify: Jada ez zara komunitateko kide ziurtatua
       get_in_touch: "%{instance} instantziako jendearekin harremanetan jartzeko e-mail honi erantzun ahal diozu."
       review_server_policies: Berrikusi zerbitzariko politikak
       statuses: 'Zehazki, honentzat:'
@@ -1417,12 +1421,16 @@ eu:
         sensitive: Zure %{acct} kontuaren multimedia bidalketak hunkigarri bezala markatu dira
         silence: Zure  %{acct} kontua murriztu da
         suspend: Zure %{acct} kontua kanporatua izan da
+        verify: Zure %{acct} kontua egiaztatu da
+        unverify: Zure kontuaren %{acct} egiaztapena kendu egin da
       title:
         disable: Kontu izoztua
         none: Abisua
         sensitive: Zure multimedia edukiak hunkigarri bezala markatu dira
         silence: Kontu murriztua
         suspend: Kontu kanporatua
+        verify: Kontua egiaztatu da
+        unverify: Kontuaren egiaztapena kendu da
     welcome:
       edit_profile_action: Ezarri profila
       edit_profile_step: Pertsonalizatu profila abatar bat igoz, goiburu bat, zure pantaila-izena aldatuz eta gehiago. Jarraitzaile berriak onartu aurretik gainbegiratu nahi badituzu, kontua giltzaperatu dezakezu.

@@ -73,17 +73,17 @@ describe ApplicationController, type: :controller do
     end
   end
 
-  describe 'helper_method :current_theme' do
+  describe 'helper_method :current_theme we only allow mastodon-light all instance should return mastodon-light' do
     it 'returns "default" when theme wasn\'t changed in admin settings' do
       allow(Setting).to receive(:default_settings).and_return({ 'theme' => 'default' })
 
-      expect(controller.view_context.current_theme).to eq 'default'
+      expect(controller.view_context.current_theme).to eq 'mastodon-light'
     end
 
     it 'returns instances\'s theme when user is not signed in' do
       allow(Setting).to receive(:[]).with('theme').and_return 'contrast'
 
-      expect(controller.view_context.current_theme).to eq 'contrast'
+      expect(controller.view_context.current_theme).to eq 'mastodon-light'
     end
 
     it 'returns instances\'s default theme when user didn\'t set theme' do
@@ -93,7 +93,7 @@ describe ApplicationController, type: :controller do
       allow(Setting).to receive(:[]).with('theme').and_return 'contrast'
       allow(Setting).to receive(:[]).with('noindex').and_return false
 
-      expect(controller.view_context.current_theme).to eq 'contrast'
+      expect(controller.view_context.current_theme).to eq 'mastodon-light'
     end
 
     it 'returns user\'s theme when it is set' do
@@ -169,10 +169,10 @@ describe ApplicationController, type: :controller do
       expect(response).to have_http_status(200)
     end
 
-    it 'redirects to account status page' do
+    it 'returns a 403 when a suspended user attempts to login' do
       sign_in(Fabricate(:user, account: Fabricate(:account, suspended: true)))
       get 'success'
-      expect(response).to redirect_to(edit_user_registration_path)
+      expect(response).to have_http_status(403)
     end
   end
 

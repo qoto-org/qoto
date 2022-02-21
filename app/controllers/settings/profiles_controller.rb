@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
 class Settings::ProfilesController < Settings::BaseController
-  before_action :set_account
+  before_action :set_account, :set_features
+
+  SHOWN_FEATURES = {
+    'locked' => false,
+    'bot_account' => false,
+    'metadata' => false,
+    'verification' => false,
+    'move_to' => false,
+    'move_from' => false,
+    'delete' => false,
+  }
 
   def show
     @account.build_fields
@@ -20,10 +30,14 @@ class Settings::ProfilesController < Settings::BaseController
   private
 
   def account_params
-    params.require(:account).permit(:display_name, :note, :avatar, :header, :locked, :bot, :discoverable, fields_attributes: [:name, :value])
+    params.require(:account).permit(:display_name, :location, :website, :note, :avatar, :header, :locked, :bot, :discoverable, fields_attributes: [:name, :value])
   end
 
   def set_account
     @account = current_account
+  end
+
+  def set_features
+    @features = SHOWN_FEATURES
   end
 end

@@ -10,17 +10,6 @@ describe Settings::ApplicationsController do
     sign_in user, scope: :user
   end
 
-  describe 'GET #index' do
-    let!(:other_app) { Fabricate(:application) }
-
-    it 'shows apps' do
-      get :index
-      expect(response).to have_http_status(200)
-      expect(assigns(:applications)).to include(app)
-      expect(assigns(:applications)).to_not include(other_app)
-    end
-  end
-
   describe 'GET #show' do
     it 'returns http success' do
       get :show, params: { id: app.id }

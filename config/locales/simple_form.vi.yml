@@ -130,6 +130,8 @@ vi:
         data: Dữ liệu
         discoverable: Liệt kê tài khoản trên danh sách thành viên
         display_name: Tên hiển thị
+        location: vị trí
+        website: trang mạng
         email: Địa chỉ email
         expires_in: Hết hạn sau
         fields: Metadata

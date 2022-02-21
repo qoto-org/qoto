@@ -98,6 +98,8 @@ kab:
       disable_two_factor_authentication: Gdel 2FA
       disabled: Yensa
       display_name: Isem ara d-yettwaskanen
+      location: lokazzjoni
+      website: websajt
       domain: Taγult
       edit: Ẓreg
       email: Imayl
@@ -695,6 +697,8 @@ kab:
         none: Γur-wat
         silence: Amiḍan yesɛa talast
         suspend: Amiḍan yettwaḥebsen
+        verify: An tabbatar da asusu
+        unverify: An cire tabbatar da asusu
     welcome:
       full_handle: Tansa umiḍan-ik takemmalit
       review_preferences_action: Beddel imenyafen

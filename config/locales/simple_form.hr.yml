@@ -22,6 +22,8 @@ hr:
         current_password: Trenutna lozinka
         data: Podatci
         display_name: Prikazano ime
+        location: mjesto
+        website: web stranica
         email: Adresa e-pošte
         locale: Jezik sučelja
         locked: Zaključaj račun

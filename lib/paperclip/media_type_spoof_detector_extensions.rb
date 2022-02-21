@@ -16,13 +16,11 @@ module Paperclip
 
     def type_from_mime_magic
       @type_from_mime_magic ||= begin
-        begin
-          File.open(@file.path) do |file|
-            MimeMagic.by_magic(file)&.type || ''
-          end
-        rescue Errno::ENOENT
-          ''
+        File.open(@file.path) do |file|
+          MimeMagic.by_magic(file)&.type || ''
         end
+      rescue Errno::ENOENT
+        ''
       end
     end
 

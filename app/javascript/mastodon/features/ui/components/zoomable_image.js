@@ -352,48 +352,6 @@ class ZoomableImage extends React.PureComponent {
     });
   }
 
-  handleZoomClick = e => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const { scale, zoomMatrix } = this.state;
-
-    if ( scale >= zoomMatrix.rate ) {
-      this.setState({
-        scale: MIN_SCALE,
-        lockScroll: {
-          x: 0,
-          y: 0,
-        },
-        lockTranslate: {
-          x: 0,
-          y: 0,
-        },
-      }, () => {
-        this.container.scrollLeft = 0;
-        this.container.scrollTop = 0;
-      });
-    } else {
-      this.setState({
-        scale: zoomMatrix.rate,
-        lockScroll: {
-          x: zoomMatrix.scrollLeft,
-          y: zoomMatrix.scrollTop,
-        },
-        lockTranslate: {
-          x: zoomMatrix.fullScreen ? 0 : zoomMatrix.translateX,
-          y: zoomMatrix.fullScreen ? 0 : zoomMatrix.translateY,
-        },
-      }, () => {
-        this.container.scrollLeft = zoomMatrix.scrollLeft;
-        this.container.scrollTop = zoomMatrix.scrollTop;
-      });
-    }
-
-    this.container.style.cursor = 'grab';
-    this.container.style.removeProperty('user-select');
-  }
-
   setContainerRef = c => {
     this.container = c;
   }
@@ -406,21 +364,9 @@ class ZoomableImage extends React.PureComponent {
     const { alt, src, width, height, intl } = this.props;
     const { scale, lockTranslate } = this.state;
     const overflow = scale === MIN_SCALE ? 'hidden' : 'scroll';
-    const zoomButtonShouldHide = this.state.navigationHidden || this.props.zoomButtonHidden || this.state.zoomMatrix.rate <= MIN_SCALE ? 'media-modal__zoom-button--hidden' : '';
-    const zoomButtonTitle = this.state.zoomState === 'compress' ? intl.formatMessage(messages.compress) : intl.formatMessage(messages.expand);
 
     return (
       <React.Fragment>
-        <IconButton
-          className={`media-modal__zoom-button ${zoomButtonShouldHide}`}
-          title={zoomButtonTitle}
-          icon={this.state.zoomState}
-          onClick={this.handleZoomClick}
-          size={40}
-          style={{
-            fontSize: '30px', /* Fontawesome's fa-compress fa-expand is larger than fa-close */
-          }}
-        />
         <div
           className='zoomable-image'
           ref={this.setContainerRef}

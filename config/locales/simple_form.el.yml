@@ -130,6 +130,8 @@ el:
         data: Δεδομένα
         discoverable: Εμφάνιση αυτού του λογαριασμού στον κατάλογο
         display_name: Όνομα εμφάνισης
+        location: τοποθεσία
+        website: δικτυακός τόπος
         email: Διεύθυνση email
         expires_in: Λήξη μετά από
         fields: Μεταδεδομένα προφίλ

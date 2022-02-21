@@ -130,6 +130,8 @@ zh-CN:
         data: 数据文件
         discoverable: 在本站用户目录中收录此账号
         display_name: 昵称
+        location: 地点
+        website: 网站
         email: 电子邮件地址
         expires_in: 失效时间
         fields: 个人资料附加信息

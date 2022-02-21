@@ -122,6 +122,8 @@ ca:
       disable_two_factor_authentication: Desactiva 2FA
       disabled: Inhabilitat
       display_name: Nom visible
+      location: ubicació
+      website: lloc web
       domain: Domini
       edit: Edita
       email: Adreça electrònica
@@ -1407,6 +1409,8 @@ ca:
         sensitive: Els fitxers multimèdia pujats i els enllaçats seran tractas com a sensibles.
         silence: Mentre el teu compte estigui limitat només les persones que ja et segueixen veuen les teves dades en aquest servidor i pots ser exclòs de diverses llistes públiques. No obstant això, d'altres encara poden seguir-te manualment.
         suspend: El teu compte s'ha suspès i tots els teus tuts i fitxers multimèdia penjats s'han eliminat de manera irreversible d'aquest servidor i dels servidors on tenies seguidors.
+        verify: Ets membre verificat de la comunitat
+        unverify: Ja no sou membre certificat de la comunitat.
       get_in_touch: Pots respondre a aquest correu electrònic per a contactar amb el personal de %{instance}.
       review_server_policies: Revisa les polítiques del servidor
       statuses: 'Concretament, per:'
@@ -1416,12 +1420,16 @@ ca:
         sensitive: El teu compte %{acct} de publicació de mèdia ha estat marcat com a sensible
         silence: El teu compte %{acct} ha estat limitat
         suspend: S'ha suspès el teu compte %{acct}
+        verify: El vostre compte s'ha verificat %{acct}
+        unverify: S'ha eliminat la verificació del vostre compte% {acct}
       title:
         disable: Compte congelat
         none: Avís
         sensitive: Els teus mèdia han estat marcats com a sensibles
         silence: Compte limitat
         suspend: Compte suspès
+        verify: Compte verificat
+        unverify: S'ha eliminat la verificació del compte
     welcome:
       edit_profile_action: Configura el perfil
       edit_profile_step: Pots personalitzar el teu perfil penjant un avatar, un encapçalament, canviant el teu nom de visualització i molt més. Si prefereixes revisar els seguidors nous abans de que et puguin seguir, pots blocar el teu compte.

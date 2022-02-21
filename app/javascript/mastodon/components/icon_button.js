@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from 'mastodon/components/icon';
+import IconSvg from 'mastodon/components/icon_svg';
 import AnimatedNumber from 'mastodon/components/animated_number';
 
 export default class IconButton extends React.PureComponent {
@@ -122,7 +123,6 @@ export default class IconButton extends React.PureComponent {
     if (typeof counter !== 'undefined') {
       style.width = 'auto';
     }
-
     return (
       <button
         aria-label={title}
@@ -138,7 +138,12 @@ export default class IconButton extends React.PureComponent {
         tabIndex={tabIndex}
         disabled={disabled}
       >
-        <Icon id={icon} fixedWidth aria-hidden='true' /> {typeof counter !== 'undefined' && <span className='icon-button__counter'><AnimatedNumber value={counter} obfuscate={obfuscateCount} /></span>}
+
+        {this.props.svg 
+          ? <IconSvg svg={this.props.svg + (this.props.active ? "-active" : "")} /> 
+          : <Icon id={icon} fixedWidth aria-hidden='true' /> 
+        }        
+        {typeof counter !== 'undefined' && <span className='icon-button__counter'><AnimatedNumber value={counter} obfuscate={obfuscateCount} /></span>}
       </button>
     );
   }

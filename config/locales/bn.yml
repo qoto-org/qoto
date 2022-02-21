@@ -114,6 +114,8 @@ bn:
       disable_two_factor_authentication: দুই পদ্ধতির প্রমাণীকরণ(2FA) বন্ধ করুন
       disabled: বন্ধ করা হয়েছে
       display_name: দেখানোর জন্য নাম
+      location: অবস্থান
+      website: ওয়েবসাইট
       domain: ওয়েবসাইট/কার্যক্ষেত্র
       edit: বদলান
       email: ইমেইল

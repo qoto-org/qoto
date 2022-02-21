@@ -14,6 +14,7 @@ import ShortNumber from 'mastodon/components/short_number';
 import { NavLink } from 'react-router-dom';
 import DropdownMenuContainer from 'mastodon/containers/dropdown_menu_container';
 import AccountNoteContainer from '../containers/account_note_container';
+import IconSvg from 'mastodon/components/icon_svg';
 
 const messages = defineMessages({
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
@@ -21,7 +22,7 @@ const messages = defineMessages({
   cancel_follow_request: { id: 'account.cancel_follow_request', defaultMessage: 'Cancel follow request' },
   requested: { id: 'account.requested', defaultMessage: 'Awaiting approval. Click to cancel follow request' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
-  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
+  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit Profile' },
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
   account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
   mention: { id: 'account.mention', defaultMessage: 'Mention @{name}' },
@@ -40,12 +41,12 @@ const messages = defineMessages({
   disableNotifications: { id: 'account.disable_notifications', defaultMessage: 'Stop notifying me when @{name} posts' },
   pins: { id: 'navigation_bar.pins', defaultMessage: 'Pinned toots' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
-  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow Requests' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   lists: { id: 'navigation_bar.lists', defaultMessage: 'Lists' },
-  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
-  domain_blocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Blocked domains' },
-  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
+  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked Users' },
+  domain_blocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Blocked Domains' },
+  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Mute Users' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
   unendorse: { id: 'account.unendorse', defaultMessage: 'Don\'t feature on profile' },
   add_or_remove_from_list: { id: 'account.add_or_remove_from_list', defaultMessage: 'Add or Remove from lists' },
@@ -136,6 +137,7 @@ class Header extends ImmutablePureComponent {
     let bellBtn     = '';
     let lockedIcon  = '';
     let menu        = [];
+    let verifiedIcon = account.get('verified') ? <span ><IconSvg svg="verified" /></span> : null;
 
     if (me !== account.get('id') && account.getIn(['relationship', 'followed_by'])) {
       info.push(<span key='followed_by' className='relationship-tag'><FormattedMessage id='account.follows_you' defaultMessage='Follows you' /></span>);
@@ -193,7 +195,6 @@ class Header extends ImmutablePureComponent {
       menu.push(null);
       menu.push({ text: intl.formatMessage(messages.follow_requests), to: '/follow_requests' });
       menu.push({ text: intl.formatMessage(messages.favourites), to: '/favourites' });
-      menu.push({ text: intl.formatMessage(messages.lists), to: '/lists' });
       menu.push(null);
       menu.push({ text: intl.formatMessage(messages.mutes), to: '/mutes' });
       menu.push({ text: intl.formatMessage(messages.blocks), to: '/blocks' });
@@ -248,7 +249,7 @@ class Header extends ImmutablePureComponent {
     const content         = { __html: account.get('note_emojified') };
     const displayNameHtml = { __html: account.get('display_name_html') };
     const fields          = account.get('fields');
-    const acct            = account.get('acct').indexOf('@') === -1 && domain ? `${account.get('acct')}@${domain}` : account.get('acct');
+    const acct            =  account.get('acct');
 
     let badge;
 
@@ -283,14 +284,14 @@ class Header extends ImmutablePureComponent {
                 {actionBtn}
                 {bellBtn}
 
-                <DropdownMenuContainer items={menu} icon='ellipsis-v' size={24} direction='right' />
+                <DropdownMenuContainer items={menu} svg='ellipsis-v' size={24} direction='right' />
               </div>
             )}
           </div>
 
           <div className='account__header__tabs__name'>
             <h1>
-              <span dangerouslySetInnerHTML={displayNameHtml} /> {badge}
+              <span dangerouslySetInnerHTML={displayNameHtml} /> {verifiedIcon}
               <small>@{acct} {lockedIcon}</small>
             </h1>
           </div>

@@ -254,7 +254,7 @@ module AccountInteractions
   def remote_followers_hash(url_prefix)
     Rails.cache.fetch("followers_hash:#{id}:#{url_prefix}") do
       digest = "\x00" * 32
-      followers.where(Account.arel_table[:uri].matches(url_prefix + '%', false, true)).pluck_each(:uri) do |uri|
+      followers.where(Account.arel_table[:uri].matches("#{url_prefix}%", false, true)).pluck_each(:uri) do |uri|
         Xorcist.xor!(digest, Digest::SHA256.digest(uri))
       end
       digest.unpack('H*')[0]

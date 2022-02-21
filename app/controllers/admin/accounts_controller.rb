@@ -75,6 +75,28 @@ module Admin
       redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.unsuspended_msg', username: @account.acct)
     end
 
+    def unverify
+      authorize @account, :unverify?
+      @account.unverify!
+      log_action :unverify, @account
+      redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.unverified_msg', username: @account.acct)
+    end
+
+    def bot
+      authorize @account, :bot?
+      @account.bot = true
+      @account.save
+      log_action :bot, @account
+      redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.bot_msg', username: @account.acct)
+    end
+
+    def unbot
+      authorize @account, :unbot?
+      @account.bot = false
+      @account.save
+      redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.unbot_msg', username: @account.acct)
+    end
+
     def redownload
       authorize @account, :redownload?
 

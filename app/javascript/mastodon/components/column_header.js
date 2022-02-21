@@ -84,10 +84,10 @@ class ColumnHeader extends React.PureComponent {
   }
 
   render () {
-    const { title, icon, active, children, pinned, multiColumn, extraButton, showBackButton, intl: { formatMessage }, placeholder, appendContent, collapseIssues } = this.props;
+    const { title, icon, additionalClass, active, children, pinned, multiColumn, extraButton, showBackButton, intl: { formatMessage }, placeholder, appendContent, collapseIssues } = this.props;
     const { collapsed, animating } = this.state;
 
-    const wrapperClassName = classNames('column-header__wrapper', {
+    const wrapperClassName = classNames('column-header__wrapper', additionalClass, {
       'active': active,
     });
 

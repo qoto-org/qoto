@@ -110,6 +110,8 @@ nn:
       disable_two_factor_authentication: Slå av 2FA
       disabled: Slege av
       display_name: Synleg namn
+      location: plats
+      website: hemsida
       domain: Domene
       edit: Rediger
       email: E-post
@@ -1215,6 +1217,8 @@ nn:
         disable: Mens kontoen din er fryst, forblir dine kontodata intakt, men du kan ikke utføre noen handlinger før den har blitt tint opp.
         silence: Mens kontoen din er begrenset, vil bare folk som allerede følger deg se dine tuter på denne tjeneren, og du kan bli ekskludert fra diverse offentlige oppføringer. Men andre kan fortsatt følge deg manuelt.
         suspend: Kontoen din har blitt suspendert, og alle dine tuter og opplastede media har blitt ugjenkallelig fjernet fra denne tjeneren, og fra tjenere der du hadde følgere.
+        verify: Du er et sertifisert medlem av samfunnet
+        unverify: Du er ikke lenger et sertifisert medlem av samfunnet.
       get_in_touch: Du kan svare på denne E-posten for å komme i kontakt med styret i %{instance}.
       review_server_policies: Gjennomgå serverretningslinjer
       statuses: 'Spesifikt for å:'
@@ -1223,11 +1227,15 @@ nn:
         none: Åtvaring for %{acct}
         silence: Kontoen din, %{acct}, er vorten avgrensa
         suspend: Kontoen din, %{acct}, er vorten utvist
+        verify: Kontoen din %{acct} er bekreftet
+        unverify: Verifiseringen av kontoen din %{acct} ble fjernet
       title:
         disable: Konto frosen
         none: Åtvaring
         silence: Konto avgrensa
         suspend: Konto utvist
+        verify: Konto bekreftet
+        unverify: Kontobekreftelse fjernet
     welcome:
       edit_profile_action: Lag til profil
       edit_profile_step: Du kan tilpasse din profil ved å laste opp en avatar, overskrift, endre ditt visningsnavn med mer. Hvis du vil godkjenne hvilke personer som får lov til å følge deg kan du låse kontoen.

@@ -10,23 +10,19 @@ class ActivityPub::ProcessPollService < BaseService
 
     previous_expires_at = poll.expires_at
 
-    expires_at = begin
-      if @json['closed'].is_a?(String)
-        @json['closed']
-      elsif !@json['closed'].nil? && !@json['closed'].is_a?(FalseClass)
-        Time.now.utc
-      else
-        @json['endTime']
-      end
-    end
+    expires_at = if @json['closed'].is_a?(String)
+                   @json['closed']
+                 elsif !@json['closed'].nil? && !@json['closed'].is_a?(FalseClass)
+                   Time.now.utc
+                 else
+                   @json['endTime']
+                 end
 
-    items = begin
-      if @json['anyOf'].is_a?(Array)
-        @json['anyOf']
-      else
-        @json['oneOf']
-      end
-    end
+    items = if @json['anyOf'].is_a?(Array)
+              @json['anyOf']
+            else
+              @json['oneOf']
+            end
 
     voters_count = @json['votersCount']
 

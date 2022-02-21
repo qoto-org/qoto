@@ -106,7 +106,7 @@ module Mastodon
         user.errors.to_h.each do |key, error|
           say('Failure/Error: ', :red)
           say(key)
-          say('    ' + error, :red)
+          say("    #{error}", :red)
         end
 
         exit(1)
@@ -172,7 +172,7 @@ module Mastodon
         user.errors.to_h.each do |key, error|
           say('Failure/Error: ', :red)
           say(key)
-          say('    ' + error, :red)
+          say("    #{error}", :red)
         end
 
         exit(1)
@@ -316,7 +316,7 @@ module Mastodon
 
       unless skip_domains.empty?
         say('The following domains were not available during the check:', :yellow)
-        skip_domains.each { |domain| say('    ' + domain) }
+        skip_domains.each { |domain| say("    #{domain}") }
       end
     end
 
@@ -443,14 +443,12 @@ module Mastodon
         scope = Account.where(id: ::Follow.where(account: account).select(:target_account_id))
 
         scope.find_each do |target_account|
-          begin
-            UnfollowService.new.call(account, target_account)
-          rescue => e
-            progress.log pastel.red("Error processing #{target_account.id}: #{e}")
-          ensure
-            progress.increment
-            processed += 1
-          end
+          UnfollowService.new.call(account, target_account)
+        rescue => e
+          progress.log pastel.red("Error processing #{target_account.id}: #{e}")
+        ensure
+          progress.increment
+          processed += 1
         end
 
         BootstrapTimelineWorker.perform_async(account.id)
@@ -460,14 +458,12 @@ module Mastodon
         scope = Account.where(id: ::Follow.where(target_account: account).select(:account_id))
 
         scope.find_each do |target_account|
-          begin
-            UnfollowService.new.call(target_account, account)
-          rescue => e
-            progress.log pastel.red("Error processing #{target_account.id}: #{e}")
-          ensure
-            progress.increment
-            processed += 1
-          end
+          UnfollowService.new.call(target_account, account)
+        rescue => e
+          progress.log pastel.red("Error processing #{target_account.id}: #{e}")
+        ensure
+          progress.increment
+          processed += 1
         end
       end
 

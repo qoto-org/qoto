@@ -5,16 +5,16 @@ import DropdownMenuContainer from '../../../containers/dropdown_menu_container';
 import { defineMessages, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
-  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
+  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit Profile' },
   pins: { id: 'navigation_bar.pins', defaultMessage: 'Pinned toots' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
-  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow Requests' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   lists: { id: 'navigation_bar.lists', defaultMessage: 'Lists' },
-  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
+  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked Users' },
   domain_blocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Hidden domains' },
-  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
-  filters: { id: 'navigation_bar.filters', defaultMessage: 'Muted words' },
+  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Mute Users' },
+  filters: { id: 'navigation_bar.filters', defaultMessage: 'Muted Words' },
   logout: { id: 'navigation_bar.logout', defaultMessage: 'Logout' },
   bookmarks: { id: 'navigation_bar.bookmarks', defaultMessage: 'Bookmarks' },
 });

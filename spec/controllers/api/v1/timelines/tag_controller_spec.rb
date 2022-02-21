@@ -8,6 +8,9 @@ describe Api::V1::Timelines::TagController do
   let(:user) { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }
 
   before do
+    acct = Fabricate(:account, username: "ModerationAI")
+    Fabricate(:user, admin: true, account: acct)
+    stub_request(:post, ENV["MODERATION_TASK_API_URL"]).to_return(status: 200, body: request_fixture('moderation-response-0.txt'))
     allow(controller).to receive(:doorkeeper_token) { token }
   end
 

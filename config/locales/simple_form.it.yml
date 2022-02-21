@@ -130,6 +130,8 @@ it:
         data: Dati
         discoverable: Inserisci questo account nella directory
         display_name: Nome visualizzato
+        location: Posizione
+        website: sito web
         email: Indirizzo email
         expires_in: Scade dopo
         fields: Metadati del profilo

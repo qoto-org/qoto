@@ -25,16 +25,27 @@ export const ANNOUNCEMENTS_TOGGLE_SHOW = 'ANNOUNCEMENTS_TOGGLE_SHOW';
 
 const noOp = () => {};
 
+/* eslint-disable-next-line no-unused-vars */
 export const fetchAnnouncements = (done = noOp) => (dispatch, getState) => {
   dispatch(fetchAnnouncementsRequest());
 
-  api(getState).get('/api/v1/announcements').then(response => {
-    dispatch(fetchAnnouncementsSuccess(response.data.map(x => normalizeAnnouncement(x))));
-  }).catch(error => {
-    dispatch(fetchAnnouncementsFail(error));
-  }).finally(() => {
-    done();
-  });
+  dispatch(fetchAnnouncementsSuccess([]));
+  /**
+   * TODO: @features announcements
+   * We have disabled announcements
+   * when re-enabled, remove the dispatch
+   * above and uncomment this api call.
+   *
+   * api(getState).get('/api/v1/announcements').then(response => {
+   *   dispatch(fetchAnnouncementsSuccess(response.data.map(x => normalizeAnnouncement(x))));
+   * }).catch(error => {
+   *   dispatch(fetchAnnouncementsFail(error));
+   * }).finally(() => {
+   *   done();
+   * });
+   *
+   *
+   */
 };
 
 export const fetchAnnouncementsRequest = () => ({

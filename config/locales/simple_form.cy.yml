@@ -110,6 +110,8 @@ cy:
         current_password: Cyfrinair presennol
         discoverable: Rhestrwch y cyfrif hwn ar y cyfeiriadur
         display_name: Enw arddangos
+        location: lleoliad
+        website: gwefan
         email: Cyfeiriad e-bost
         expires_in: Yn dod i ben ar ôl
         fields: Metadata proffil

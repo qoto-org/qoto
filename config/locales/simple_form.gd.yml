@@ -130,6 +130,8 @@ gd:
         data: Dàta
         discoverable: Mol an cunntas do chàch
         display_name: Ainm-taisbeanaidh
+        location: àite
+        website: làrach-lìn
         email: Seòladh puist-d
         expires_in: Falbhaidh an ùine air às dèidh
         fields: Meata-dàta na pròifile

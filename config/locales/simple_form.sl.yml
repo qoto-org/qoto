@@ -78,6 +78,8 @@ sl:
         data: Podatki
         discoverable: Dodaj ta račun v imenik
         display_name: Prikazno ime
+        location: lokacijo
+        website: Spletna stran
         email: E-poštni naslov
         expires_in: Preteče po
         fields: Metapodatki profila

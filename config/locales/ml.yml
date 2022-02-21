@@ -67,6 +67,8 @@ ml:
       disable_two_factor_authentication: ദ്വിഘടക നിർണ്ണയീകരണം പ്രവർത്തന രഹിതമാക്കുക
       disabled: പ്രവർത്തന രഹിതമാക്കപ്പെട്ടിരിക്കുന്നു
       display_name: കാണപ്പെടുന്ന നാമം
+      location: സ്ഥാനം
+      website: വെബ്സൈറ്റ്
       domain: മേഖല
       edit: തിരുത്തുക
       email: ഇമെയിൽ

@@ -17,6 +17,8 @@ br:
         header: Talbenn
         locale: Yezh ar c'hetal
         new_password: Ger-tremen nevez
+        location: elhelyezkedés
+        website: weboldal
         password: Ger-tremen
         setting_display_media_default: Dre ziouer
         setting_display_media_hide_all: Kuzhat pep tra

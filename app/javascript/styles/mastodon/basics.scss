@@ -6,9 +6,12 @@
   @return '%23' + unquote($color);
 }
 
+html {
+  height: 100%;
+}
+
 body {
   font-family: $font-sans-serif, sans-serif;
-  background: darken($ui-base-color, 7%);
   font-size: 13px;
   line-height: 18px;
   font-weight: 400;
@@ -55,7 +58,9 @@ body {
   }
 
   &.lighter {
-    background: $ui-base-color;
+    background: linear-gradient(135deg, $color-6, $color-6-light);
+    background-repeat: no-repeat;
+    height: 100%;
   }
 
   &.with-modals {
@@ -110,7 +115,7 @@ body {
   }
 
   &.admin {
-    background: darken($ui-base-color, 4%);
+    background: $color-6-light;
     padding: 0;
   }
 

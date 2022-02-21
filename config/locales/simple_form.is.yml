@@ -130,6 +130,8 @@ is:
         data: Gögn
         discoverable: Hafa þennan aðgang með í notendaskránni
         display_name: Birtingarnafn
+        location: staðsetning
+        website: vefsíðu
         email: Tölvupóstfang
         expires_in: Rennur út eftir
         fields: Lýsigögn notandasniðs

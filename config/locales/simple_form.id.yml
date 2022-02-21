@@ -130,6 +130,8 @@ id:
         data: Data
         discoverable: Daftarkan akun ini di direktori
         display_name: Nama yang ditampilkan
+        location: lokasi
+        website: situs web
         email: Alamat e-mail
         expires_in: Kedaluwarsa setelah
         fields: Metadata profil

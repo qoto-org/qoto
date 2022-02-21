@@ -19,6 +19,8 @@ sr-Latn:
         current_password: Trenutna lozinka
         data: Podaci
         display_name: Ime za prikaz
+        location: mjesto
+        website: web stranica
         email: Adresa e-pošte
         expires_in: Ističe nakon
         header: Zaglavlje

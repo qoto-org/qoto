@@ -130,6 +130,8 @@ de:
         data: Daten
         discoverable: Dieses Profil im Profilverzeichnis zeigen
         display_name: Anzeigename
+        location: Lage
+        website: Webseite
         email: E-Mail-Adresse
         expires_in: Läuft ab
         fields: Tabellenfelder

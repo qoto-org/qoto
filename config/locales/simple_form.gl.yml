@@ -130,6 +130,8 @@ gl:
         data: Datos
         discoverable: Suxerir esta conta a outras persoas
         display_name: Nome mostrado
+        location: localización
+        website: páxina web
         email: Enderezo de email
         expires_in: Caduca tras
         fields: Metadatos do perfil

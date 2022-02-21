@@ -4,7 +4,7 @@ class REST::Admin::AccountSerializer < ActiveModel::Serializer
   attributes :id, :username, :domain, :created_at,
              :email, :ip, :role, :confirmed, :suspended,
              :silenced, :disabled, :approved, :locale,
-             :invite_request
+             :invite_request, :verified, :location, :website
 
   attribute :created_by_application_id, if: :created_by_application?
   attribute :invited_by_account_id, if: :invited?
@@ -14,6 +14,12 @@ class REST::Admin::AccountSerializer < ActiveModel::Serializer
   def id
     object.id.to_s
   end
+
+  delegate :verified?, to: :object
+
+  delegate :location, to: :object
+
+  delegate :website, to: :object
 
   def email
     object.user_email

@@ -23,7 +23,7 @@ class ActivityPub::FollowersSynchronizationsController < ActivityPub::BaseContro
   end
 
   def set_items
-    @items = @account.followers.where(Account.arel_table[:uri].matches(uri_prefix + '%', false, true)).pluck(:uri)
+    @items = @account.followers.where(Account.arel_table[:uri].matches("#{uri_prefix}%", false, true)).pluck(:uri)
   end
 
   def collection_presenter

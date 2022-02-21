@@ -63,12 +63,6 @@
         - @endorsed_accounts.each do |account|
           = account_link_to account
 
-    - if @featured_hashtags.empty? && @account.id == current_account&.id
-      .placeholder-widget
-        = t('accounts.featured_tags_hint')
-        = link_to settings_featured_tags_path do
-          = t('featured_tags.add_new')
-          = fa_icon 'chevron-right fw'
     - else
       - @featured_hashtags.each do |featured_tag|
         .directory__tag{ class: params[:tag] == featured_tag.name ? 'active' : nil }
@@ -83,4 +77,4 @@
                   %time.formatted{ datetime: featured_tag.last_status_at.iso8601, title: l(featured_tag.last_status_at) }= l featured_tag.last_status_at
             .trends__item__current= number_to_human featured_tag.statuses_count, strip_insignificant_zeros: true
 
-    = render 'application/sidebar'
+    -# = render 'application/sidebar'

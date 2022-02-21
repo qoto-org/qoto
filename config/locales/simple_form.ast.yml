@@ -45,6 +45,8 @@ ast:
         data: Datos
         discoverable: Llistar esta cuenta nel direutoriu
         display_name: Nome a amosar
+        location: ubicació
+        website: lloc web
         email: Direición de corréu
         expires_in: Caduca dempués de
         fields: Metadatos del perfil

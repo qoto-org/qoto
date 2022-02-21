@@ -122,6 +122,8 @@ pt-BR:
       disable_two_factor_authentication: Desativar autenticação de dois fatores
       disabled: Desativada
       display_name: Nome de exibição
+      location: localização
+      website: local na rede Internet
       domain: Domínio
       edit: Editar
       email: E-mail
@@ -1306,6 +1308,8 @@ pt-BR:
         sensitive: Seus arquivos de mídia carregados e mídias vinculadas serão tratados como sensíveis.
         silence: Enquanto sua conta está silenciada, somente pessoas que já estão seguindo você poderão ver seus toots nessa instância, e você pode ser excluído de várias listas públicas. No entanto, outros ainda podem te seguir manualmente.
         suspend: Sua conta foi banida e todos os seus toots e mídias foram irreversivelmente excluídos desta instância e das instâncias dos seus seguidores.
+        verify: Você é um membro certificado da comunidade
+        unverify: Você não é mais um membro certificado da comunidade.
       get_in_touch: Você pode responder a este e-mail para entrar em contato com a equipe de %{instance}.
       review_server_policies: Revisar as políticas da instância
       statuses: 'Especificamente, para:'
@@ -1315,12 +1319,16 @@ pt-BR:
         sensitive: Sua conta %{acct} de postagem de mídia foi marcada como sensível
         silence: Sua conta %{acct} foi silenciada
         suspend: Sua conta %{acct} foi banida
+        verify: Sua conta% {acct} foi verificada
+        unverify: A verificação% {acct} da sua conta foi removida
       title:
         disable: Conta bloqueada
         none: Aviso
         sensitive: Sua mídia foi marcada como sensível
         silence: Conta silenciada
         suspend: Conta banida
+        verify: Conta verificada
+        unverify: Verificação de conta removida
     welcome:
       edit_profile_action: Configurar perfil
       edit_profile_step: Você pode personalizar o seu perfil enviando um avatar, uma capa, alterando seu nome de exibição e etc. Se você preferir aprovar seus novos seguidores antes de eles te seguirem, você pode trancar a sua conta.

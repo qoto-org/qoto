@@ -122,6 +122,8 @@ es:
       disable_two_factor_authentication: Desactivar autenticación de dos factores
       disabled: Deshabilitada
       display_name: Nombre
+      location: Residencia
+      website: Sitio Web
       domain: Dominio
       edit: Editar
       email: E-mail
@@ -213,6 +215,7 @@ es:
       unsilenced_msg: Se quitó con éxito el límite de la cuenta %{username}
       unsubscribe: Desuscribir
       unsuspended_msg: Se quitó con éxito la suspensión de la cuenta de %{username}
+      unverified_msg: La cuenta de %{username} ya no está verificada
       username: Nombre de usuario
       view_domain: Ver resumen del dominio
       warn: Adevertir
@@ -1410,6 +1413,8 @@ es:
         sensitive: Los archivos multimedia subidos y vinculados serán tratados como sensibles.
         silence: Mientras su cuenta está limitada, sólo las personas que ya te están siguiendo verán tus publicaciones en este servidor, y puede que se te excluya de varios listados públicos. Sin embargo, otros pueden seguirte manualmente.
         suspend: Su cuenta ha sido suspendida, y todas tus publicaciones y tus archivos multimedia subidos han sido irreversiblemente eliminados de este servidor, y de los servidores donde tenías seguidores.
+        verify: Eres un miembro certificado de la comunidad
+        unverify: Ya no eres un miembro certificado de la comunidad
       get_in_touch: Puede responder a esta dirección de correo electrónico para ponerse en contacto con el personal de %{instance}.
       review_server_policies: Revisar las políticas del servidor
       statuses: 'Específicamente, para:'
@@ -1419,12 +1424,16 @@ es:
         sensitive: Tu cuenta %{acct} ha sido marcada como sensible
         silence: Su cuenta %{acct} ha sido limitada
         suspend: Su cuenta %{acct} ha sido suspendida
+        verify: Su cuenta %{acct} ha sido verificada
+        unverify: La verificación de su cuenta ha sido removida
       title:
         disable: Cuenta congelada
         none: Advertencia
         sensitive: Tu multimedia ha sido marcado como sensible
         silence: Cuenta limitada
         suspend: Cuenta suspendida
+        verify: Cuenta verificada
+        unverify: Verificación de cuenta removida
     welcome:
       edit_profile_action: Configurar el perfil
       edit_profile_step: Puedes personalizar tu perfil subiendo un avatar, una cabecera, cambiando tu nombre de usuario y más cosas. Si quieres revisar a tus nuevos seguidores antes de que se les permita seguirte, puedes bloquear tu cuenta.

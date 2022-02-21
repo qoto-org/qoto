@@ -88,8 +88,8 @@ RSpec.describe Tag, type: :model do
 
   describe '.find_normalized' do
     it 'returns tag for a multibyte case-insensitive name' do
-      upcase_string   = 'abcABCａｂｃＡＢＣやゆよ'
-      downcase_string = 'abcabcａｂｃａｂｃやゆよ';
+      upcase_string   = 'abcABCａｂｃＡＢＣ'
+      downcase_string = 'abcabcａｂｃａｂｃ';
 
       tag = Fabricate(:tag, name: downcase_string)
       expect(Tag.find_normalized(upcase_string)).to eq tag
@@ -98,22 +98,22 @@ RSpec.describe Tag, type: :model do
 
   describe '.matches_name' do
     it 'returns tags for multibyte case-insensitive names' do
-      upcase_string   = 'abcABCａｂｃＡＢＣやゆよ'
-      downcase_string = 'abcabcａｂｃａｂｃやゆよ';
+      upcase_string   = 'abcABCａｂｃＡＢＣ'
+      downcase_string = 'abcabcａｂｃａｂｃ';
 
       tag = Fabricate(:tag, name: downcase_string)
       expect(Tag.matches_name(upcase_string)).to eq [tag]
     end
 
     it 'uses the LIKE operator' do
-      expect(Tag.matches_name('100%abc').to_sql).to eq %q[SELECT "tags".* FROM "tags" WHERE LOWER("tags"."name") LIKE LOWER('100\\%abc%')]
+      expect(Tag.matches_name('100%abc').to_sql).to eq %q[SELECT "tags".* FROM "tags" WHERE LOWER("tags"."name") LIKE '100\\%abc%']
     end
   end
 
   describe '.matching_name' do
     it 'returns tags for multibyte case-insensitive names' do
-      upcase_string   = 'abcABCａｂｃＡＢＣやゆよ'
-      downcase_string = 'abcabcａｂｃａｂｃやゆよ';
+      upcase_string   = 'abcABCａｂｃＡＢＣ'
+      downcase_string = 'abcabcａｂｃａｂｃ';
 
       tag = Fabricate(:tag, name: downcase_string)
       expect(Tag.matching_name(upcase_string)).to eq [tag]

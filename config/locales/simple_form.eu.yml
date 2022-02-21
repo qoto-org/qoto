@@ -130,6 +130,8 @@ eu:
         data: Datuak
         discoverable: Zerrendatu kontu hau direktorioan
         display_name: Pantaila-izena
+        location: kokapena
+        website: webgunea
         email: E-mail helbidea
         expires_in: Iraungitzea
         fields: Profilaren metadatuak

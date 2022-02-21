@@ -2,32 +2,34 @@
 en:
   about:
     about_hashtag_html: These are public posts tagged with <strong>#%{hashtag}</strong>. You can interact with them if you have an account anywhere in the fediverse.
-    about_mastodon_html: 'The social network of the future: No ads, no corporate surveillance, ethical design, and decentralization! Own your data with Mastodon!'
+    about_mastodon_html: "Truth Social is America's 'Big Tent' social media platform that encourages an open, free, and honest global conversation without discriminating against political ideology."
     about_this: About
     active_count_after: active
     active_footnote: Monthly Active Users (MAU)
     administered_by: 'Administered by:'
     api: API
     apps: Mobile apps
-    apps_platforms: Use Mastodon from iOS, Android and other platforms
+    apps_platforms: Use Truth from iOS, Android and other platforms
     browse_directory: Browse a profile directory and filter by interests
     browse_local_posts: Browse a live stream of public posts from this server
-    browse_public_posts: Browse a live stream of public posts on Mastodon
+    browse_public_posts: Browse a live stream of public posts on Truth
     contact: Contact
     contact_missing: Not set
     contact_unavailable: N/A
     discover_users: Discover users
     documentation: Documentation
-    federation_hint_html: With an account on %{instance} you'll be able to follow people on any Mastodon server and beyond.
+    federation_hint_html: With an account on %{instance} you'll be able to follow people on any Truth server and beyond.
+    register_headline: Create Account
+    login_headline: Login to your Account
     get_apps: Try a mobile app
-    hosted_on: Mastodon hosted on %{domain}
+    hosted_on: Truth hosted on %{domain}
     instance_actor_flash: |
       This account is a virtual actor used to represent the server itself and not any individual user.
       It is used for federation purposes and should not be blocked unless you want to block the whole instance, in which case you should use a domain block.
     learn_more: Learn more
     privacy_policy: Privacy policy
     rules: Server rules
-    rules_html: 'Below is a summary of rules you need to follow if you want to have an account on this server of Mastodon:'
+    rules_html: 'Below is a summary of rules you need to follow if you want to have an account on this server of Truth:'
     see_whats_happening: See what's happening
     server_stats: 'Server stats:'
     source_code: Source code
@@ -36,7 +38,7 @@ en:
       other: posts
     status_count_before: Who published
     tagline: Follow friends and discover new ones
-    terms: Terms of service
+    terms: Terms of Service
     unavailable_content: Moderated servers
     unavailable_content_description:
       domain: Server
@@ -47,12 +49,12 @@ en:
       silenced_title: Silenced servers
       suspended: 'No data from these servers will be processed, stored or exchanged, making any interaction or communication with users from these servers impossible:'
       suspended_title: Suspended servers
-    unavailable_content_html: Mastodon generally allows you to view content from and interact with users from any other server in the fediverse. These are the exceptions that have been made on this particular server.
+    unavailable_content_html: Truth generally allows you to view content from and interact with users from any other server in the fediverse. These are the exceptions that have been made on this particular server.
     user_count_after:
       one: user
       other: users
     user_count_before: Home to
-    what_is_mastodon: What is Mastodon?
+    what_is_mastodon: What is Truth?
   accounts:
     choices_html: "%{name}'s choices:"
     endorsements_hint: You can endorse people you follow from the web interface, and they will show up here.
@@ -76,10 +78,10 @@ en:
     pin_errors:
       following: You must be already following the person you want to endorse
     posts:
-      one: Post
-      other: Posts
-    posts_tab_heading: Posts
-    posts_with_replies: Posts and replies
+      one: Truth
+      other: Truths
+    posts_tab_heading: Truths
+    posts_with_replies: ReTruths and Replies
     roles:
       admin: Admin
       bot: Bot
@@ -104,6 +106,8 @@ en:
       are_you_sure: Are you sure?
       avatar: Avatar
       by_domain: Domain
+      bot: Mark user as bot
+      unbot: Mark user as not a bot
       change_email:
         changed_msg: Account email successfully changed!
         current_email: Current email
@@ -122,6 +126,8 @@ en:
       disable_two_factor_authentication: Disable 2FA
       disabled: Frozen
       display_name: Display name
+      location: Location
+      website: Website
       domain: Domain
       edit: Edit
       email: Email
@@ -199,7 +205,7 @@ en:
         targeted_reports: Reported by others
       silence: Limit
       silenced: Limited
-      statuses: Posts
+      statuses: Truths
       subscribe: Subscribe
       suspended: Suspended
       suspension_irreversible: The data of this account has been irreversibly deleted. You can unsuspend the account to make it usable but it will not recover any data it previously had.
@@ -213,6 +219,9 @@ en:
       unsilenced_msg: Successfully unlimited %{username}'s account
       unsubscribe: Unsubscribe
       unsuspended_msg: Successfully unsuspended %{username}'s account
+      unverified_msg: Account %{username} has been unverified
+      bot_msg: Account %{username} has been marked as a bot
+      unbot_msg: Account %{username} has been marked as not a bot
       username: Username
       view_domain: View summary for domain
       warn: Warn
@@ -238,7 +247,7 @@ en:
         destroy_domain_block: Delete Domain Block
         destroy_email_domain_block: Delete e-mail domain block
         destroy_ip_block: Delete IP rule
-        destroy_status: Delete Post
+        destroy_status: Delete Truth
         destroy_unavailable_domain: Delete Unavailable Domain
         disable_2fa_user: Disable 2FA
         disable_custom_emoji: Disable Custom Emoji
@@ -261,7 +270,7 @@ en:
         update_announcement: Update Announcement
         update_custom_emoji: Update Custom Emoji
         update_domain_block: Update Domain Block
-        update_status: Update Post
+        update_status: Update Truth
       actions:
         assigned_to_self_report_html: "%{name} assigned report %{target} to themselves"
         change_email_user_html: "%{name} changed the e-mail address of user %{target}"
@@ -454,6 +463,12 @@ en:
       suppressed: Suppressed
       title: Follow recommendations
       unsuppress: Restore follow recommendation
+    trending_truths:
+      description_html: "<strong>Follow recommendations help new users quickly find interesting content</strong>. When a user has not interacted with others enough to form personalized follow recommendations, these accounts are recommended instead. They are re-calculated on a daily basis from a mix of accounts with the highest recent engagements and highest local follower counts for a given language."
+      status: Status
+      trending: Trending
+      all: All
+      title: Trending truths
     instances:
       back_to_all: All
       back_to_limited: Limited
@@ -644,13 +659,13 @@ en:
         desc_html: Show a staff badge on a user page
         title: Show staff badge
       site_description:
-        desc_html: Introductory paragraph on the API. Describe what makes this Mastodon server special and anything else important. You can use HTML tags, in particular <code>&lt;a&gt;</code> and <code>&lt;em&gt;</code>.
+        desc_html: Introductory paragraph on the API. Describe what makes this Truth server special and anything else important. You can use HTML tags, in particular <code>&lt;a&gt;</code> and <code>&lt;em&gt;</code>.
         title: Server description
       site_description_extended:
         desc_html: A good place for your code of conduct, rules, guidelines and other things that set your server apart. You can use HTML tags
         title: Custom extended information
       site_short_description:
-        desc_html: Displayed in sidebar and meta tags. Describe what Mastodon is and what makes this server special in a single paragraph.
+        desc_html: Displayed in sidebar and meta tags. Describe what Truth is and what makes this server special in a single paragraph.
         title: Short server description
       site_terms:
         desc_html: You can write your own privacy policy, terms of service or other legalese. You can use HTML tags
@@ -717,6 +732,9 @@ en:
       empty: You haven't defined any warning presets yet.
       title: Manage warning presets
   admin_mailer:
+    account_invitation:
+      salutation: Hi!
+      subject: You have been invited to join Truth Social!
     new_pending_account:
       body: The details of the new account are below. You can approve or reject this application.
       subject: New account up for review on %{instance} (%{username})
@@ -745,7 +763,7 @@ en:
       guide_link: https://crowdin.com/project/mastodon
       guide_link_text: Everyone can contribute.
     sensitive_content: Sensitive content
-    toot_layout: Post layout
+    toot_layout: Truth layout
   application_mailer:
     notification_preferences: Change e-mail preferences
     salutation: "%{name},"
@@ -764,14 +782,14 @@ en:
   auth:
     apply_for_account: Request an invite
     change_password: Password
-    checkbox_agreement_html: I agree to the <a href="%{rules_path}" target="_blank">server rules</a> and <a href="%{terms_path}" target="_blank">terms of service</a>
-    checkbox_agreement_without_rules_html: I agree to the <a href="%{terms_path}" target="_blank">terms of service</a>
+    checkbox_agreement_html: I agree to the <a href="%{terms_path}" target="_blank">Terms of Service</a>
+    checkbox_agreement_without_rules_html: I agree to the <a href="%{terms_path}" target="_blank">Terms of Service</a>
     delete_account: Delete account
     delete_account_html: If you wish to delete your account, you can <a href="%{path}">proceed here</a>. You will be asked for confirmation.
     description:
-      prefix_invited_by_user: "@%{name} invites you to join this server of Mastodon!"
-      prefix_sign_up: Sign up on Mastodon today!
-      suffix: With an account, you will be able to follow people, post updates and exchange messages with users from any Mastodon server and more!
+      prefix_invited_by_user: "@%{name} invites you to join this server of Truth!"
+      prefix_sign_up: Sign up on Truth today!
+      suffix: With an account, you will be able to follow people, post updates and exchange messages with users from any Truth server and more!
     didnt_get_confirmation: Didn't receive confirmation instructions?
     dont_have_your_security_key: Don't have your security key?
     forgot_password: Forgot your password?
@@ -881,7 +899,7 @@ en:
       content: We're sorry, but something went wrong on our end.
       title: This page is not correct
     '503': The page could not be served due to a temporary server failure.
-    noscript_html: To use the Mastodon web application, please enable JavaScript. Alternatively, try one of the <a href="%{apps_path}">native apps</a> for Mastodon for your platform.
+    noscript_html: To use the Truth web application, please enable JavaScript. Alternatively, try one of the <a href="%{apps_path}">native apps</a> for Truth for your platform.
   existing_username_validator:
     not_found: could not find a local user with that username
     not_found_multiple: could not find %{usernames}
@@ -955,7 +973,7 @@ en:
     i_am_html: I am %{username} on %{service}.
     identity: Identity
     inactive: Inactive
-    publicize_checkbox: 'And toot this:'
+    publicize_checkbox: 'And truth this:'
     publicize_toot: 'It is proven! I am %{username} on %{service}: %{url}'
     remove: Remove proof from account
     removed: Successfully removed proof from account
@@ -1000,6 +1018,10 @@ en:
     table:
       expires_at: Expires
       uses: Uses
+      username: User
+      status: Status
+      invite_pending: Invite pending
+      invite_redemed: Invite accepted
     title: Invite people
   lists:
     errors:
@@ -1059,9 +1081,9 @@ en:
         other: "%{count} new notifications since your last visit \U0001F418"
       title: In your absence...
     favourite:
-      body: 'Your post was favourited by %{name}:'
-      subject: "%{name} favourited your post"
-      title: New favourite
+      body: 'Your post was liked by %{name}:'
+      subject: "%{name} liked your post"
+      title: New favorite
     follow:
       body: "%{name} is now following you!"
       subject: "%{name} is now following you"
@@ -1079,11 +1101,31 @@ en:
     poll:
       subject: A poll by %{name} has ended
     reblog:
-      body: 'Your post was boosted by %{name}:'
-      subject: "%{name} boosted your post"
-      title: New boost
+      body: 'Your post was ReTruthed by %{name}:'
+      subject: "%{name} ReTruthed your post"
+      title: New ReTruth
     status:
       subject: "%{name} just posted"
+    user_approved:
+      edit_profile_action: Go to profile
+      edit_profile_step: Lastly, make sure to customize your profile by uploading an avatar, header, changing your display name and more. If you’d like to review new followers before they’re allowed to follow you, you can lock your account.
+      explanation: We are very excited to welcome you to our Truth Seeking community. We believe in free expression and encourage all viewpoints as we do not discriminate against political ideology.
+      extra_step: Also, a friendly reminder, we are a new platform, and we are still fixing many bugs in our technology. We promise we are working as hard as we can to make things better as fast as possible! Thanks!
+      final_action: Start posting
+      final_step: 'Start posting! Even without followers your public posts may be seen by others, for example on the local timeline and in hashtags. You may want to introduce yourself on the #introductions hashtag.'
+      full_handle: Your full handle
+      full_handle_hint: This is what you would tell your friends so they can message or follow you from another server.
+      review_preferences_action: Change preferences
+      review_preferences_step: Make sure to set your preferences, such as which emails you'd like to receive, or what privacy level you’d like your posts to default to. If you don’t have motion sickness, you could choose to enable GIF autoplay.
+      subject: "Your wait is over! Tap here to start using Truth Social."
+      web:
+        subject: "Welcome to Truth"
+      tip_federated_timeline: The federated timeline is a firehose view of the Truth network. But it only includes people your neighbours are subscribed to, so it's not complete.
+      tip_following: You follow your server's admin(s) by default. To find more interesting people, check the local and federated timelines.
+      tip_local_timeline: The local timeline is a firehose view of people on %{instance}. These are your immediate neighbours!
+      tip_mobile_webapp: If your mobile browser offers you to add Truth to your homescreen, you can receive push notifications. It acts like a native app in many ways!
+      tips: Tips
+      title: Welcome to Truth Social, %{name}!
   notifications:
     email_events: Events for e-mail notifications
     email_events_hint: 'Select events that you want to receive notifications for:'
@@ -1106,7 +1148,7 @@ en:
     instructions_html: "<strong>Scan this QR code into Google Authenticator or a similar TOTP app on your phone</strong>. From now on, that app will generate tokens that you will have to enter when logging in."
     manual_instructions: 'If you can''t scan the QR code and need to enter it manually, here is the plain-text secret:'
     setup: Set up
-    wrong_code: The entered code was invalid! Are server time and device time correct?
+    wrong_code: The entered code was invalid!
   pagination:
     newer: Newer
     next: Next
@@ -1158,11 +1200,11 @@ en:
     reason_html: "<strong>Why is this step necessary?</strong> <code>%{instance}</code> might not be the server where you are registered, so we need to redirect you to your home server first."
   remote_interaction:
     favourite:
-      proceed: Proceed to favourite
-      prompt: 'You want to favourite this post:'
+      proceed: Proceed to favorite
+      prompt: 'You want to favorite this post:'
     reblog:
-      proceed: Proceed to boost
-      prompt: 'You want to boost this post:'
+      proceed: Proceed to ReTruth
+      prompt: 'You want to ReTruth this post:'
     reply:
       proceed: Proceed to reply
       prompt: 'You want to reply to this post:'
@@ -1193,7 +1235,7 @@ en:
       weibo: Weibo
     current_session: Current session
     description: "%{browser} on %{platform}"
-    explanation: These are the web browsers currently logged in to your Mastodon account.
+    explanation: These are the web browsers currently logged in to your Truth account.
     ip: IP
     platforms:
       adobe_air: Adobe Air
@@ -1213,14 +1255,14 @@ en:
     title: Sessions
   settings:
     account: Account
-    account_settings: Account settings
+    account_settings: Account Settings
     aliases: Account aliases
     appearance: Appearance
     authorized_apps: Authorized apps
-    back: Back to Mastodon
+    back: Back to Truth
     delete: Account deletion
     development: Development
-    edit_profile: Edit profile
+    edit_profile: Edit Profile
     export: Data export
     featured_tags: Featured hashtags
     identity_proofs: Identity proofs
@@ -1245,7 +1287,7 @@ en:
       video:
         one: "%{count} video"
         other: "%{count} videos"
-    boosted_from_html: Boosted from %{acct_link}
+    boosted_from_html: ReTruth from %{acct_link}
     content_warning: 'Content warning: %{warning}'
     disallowed_hashtags:
       one: 'contained a disallowed hashtag: %{tags}'
@@ -1259,7 +1301,7 @@ en:
       limit: You have already pinned the maximum number of posts
       ownership: Someone else's post cannot be pinned
       private: Non-public posts cannot be pinned
-      reblog: A boost cannot be pinned
+      reblog: A ReTruth cannot be pinned
     poll:
       total_people:
         one: "%{count} person"
@@ -1284,7 +1326,7 @@ en:
       unlisted_long: Everyone can see, but not listed on public timelines
   stream_entries:
     pinned: Pinned post
-    reblogged: boosted
+    reblogged: ReTruthed
     sensitive_content: Sensitive content
   tags:
     does_not_match_previous_name: does not match the previous name
@@ -1296,7 +1338,7 @@ en:
       <ul>
         <li><em>Basic account information</em>: If you register on this server, you may be asked to enter a username, an e-mail address and a password. You may also enter additional profile information such as a display name and biography, and upload a profile picture and header image. The username, display name, biography, profile picture and header image are always listed publicly.</li>
         <li><em>Posts, following and other public information</em>: The list of people you follow is listed publicly, the same is true for your followers. When you submit a message, the date and time is stored as well as the application you submitted the message from. Messages may contain media attachments, such as pictures and videos. Public and unlisted posts are available publicly. When you feature a post on your profile, that is also publicly available information. Your posts are delivered to your followers, in some cases it means they are delivered to different servers and copies are stored there. When you delete posts, this is likewise delivered to your followers. The action of reblogging or favouriting another post is always public.</li>
-        <li><em>Direct and followers-only posts</em>: All posts are stored and processed on the server. Followers-only posts are delivered to your followers and users who are mentioned in them, and direct posts are delivered only to users mentioned in them. In some cases it means they are delivered to different servers and copies are stored there. We make a good faith effort to limit the access to those posts only to authorized persons, but other servers may fail to do so. Therefore it's important to review servers your followers belong to. You may toggle an option to approve and reject new followers manually in the settings. <em>Please keep in mind that the operators of the server and any receiving server may view such messages</em>, and that recipients may screenshot, copy or otherwise re-share them. <em>Do not share any dangerous information over Mastodon.</em></li>
+        <li><em>Direct and followers-only posts</em>: All posts are stored and processed on the server. Followers-only posts are delivered to your followers and users who are mentioned in them, and direct posts are delivered only to users mentioned in them. In some cases it means they are delivered to different servers and copies are stored there. We make a good faith effort to limit the access to those posts only to authorized persons, but other servers may fail to do so. Therefore it's important to review servers your followers belong to. You may toggle an option to approve and reject new followers manually in the settings. <em>Please keep in mind that the operators of the server and any receiving server may view such messages</em>, and that recipients may screenshot, copy or otherwise re-share them. <em>Do not share any dangerous information over Truth.</em></li>
         <li><em>IPs and other metadata</em>: When you log in, we record the IP address you log in from, as well as the name of your browser application. All the logged in sessions are available for your review and revocation in the settings. The latest IP address used is stored for up to 12 months. We also may retain server logs which include the IP address of every request to our server.</li>
       </ul>
 
@@ -1307,7 +1349,7 @@ en:
       <p>Any of the information we collect from you may be used in the following ways:</p>
 
       <ul>
-        <li>To provide the core functionality of Mastodon. You can only interact with other people's content and post your own content when you are logged in. For example, you may follow other people to view their combined posts in your own personalized home timeline.</li>
+        <li>To provide the core functionality of Truth. You can only interact with other people's content and post your own content when you are logged in. For example, you may follow other people to view their combined posts in your own personalized home timeline.</li>
         <li>To aid moderation of the community, for example comparing your IP address with other known ones to determine ban evasion or other violations.</li>
         <li>The email address you provide may be used to send you information, notifications about other people interacting with your content or sending you messages, and to respond to inquiries, and/or other requests or questions.</li>
       </ul>
@@ -1349,7 +1391,7 @@ en:
 
       <p>Your public content may be downloaded by other servers in the network. Your public and followers-only posts are delivered to the servers where your followers reside, and direct messages are delivered to the servers of the recipients, in so far as those followers or recipients reside on a different server than this.</p>
 
-      <p>When you authorize an application to use your account, depending on the scope of permissions you approve, it may access your public profile information, your following list, your followers, your lists, all your posts, and your favourites. Applications can never access your e-mail address or password.</p>
+      <p>When you authorize an application to use your account, depending on the scope of permissions you approve, it may access your public profile information, your following list, your followers, your lists, all your posts, and your favorites. Applications can never access your e-mail address or password.</p>
 
       <hr class="spacer" />
 
@@ -1372,9 +1414,9 @@ en:
       <p>Originally adapted from the <a href="https://github.com/discourse/discourse">Discourse privacy policy</a>.</p>
     title: "%{instance} Terms of Service and Privacy Policy"
   themes:
-    contrast: Mastodon (High contrast)
-    default: Mastodon (Dark)
-    mastodon-light: Mastodon (Light)
+    contrast: Truth (High contrast)
+    default: Truth (Dark)
+    mastodon-light: Truth (Light)
   time:
     formats:
       default: "%b %d, %Y, %H:%M"
@@ -1396,7 +1438,7 @@ en:
     webauthn: Security keys
   user_mailer:
     backup_ready:
-      explanation: You requested a full backup of your Mastodon account. It's now ready for download!
+      explanation: You requested a full backup of your Truth Social account. It's now ready for download!
       subject: Your archive is ready for download
       title: Archive takeout
     sign_in_token:
@@ -1405,44 +1447,44 @@ en:
       further_actions: 'If this wasn''t you, please change your password and enable two-factor authentication on your account. You can do so here:'
       subject: Please confirm attempted sign in
       title: Sign in attempt
+    status_removed:
+      explanation: You have a status that has been removed for violating Truth social community guidelines.
+      title: Your status has been removed
+      subject: Your status has been removed
     warning:
       explanation:
-        disable: You can no longer login to your account or use it in any other way, but your profile and other data remains intact.
-        sensitive: Your uploaded media files and linked media will be treated as sensitive.
-        silence: You can still use your account but only people who are already following you will see your posts on this server, and you may be excluded from various public listings. However, others may still manually follow you.
-        suspend: You can no longer use your account, and your profile and other data are no longer accessible. You can still login to request a backup of your data until the data is fully removed, but we will retain some data to prevent you from evading the suspension.
-      get_in_touch: You can reply to this e-mail to get in touch with the staff of %{instance}.
-      review_server_policies: Review server policies
+        ban_html: After careful review we have decided to delete your account permanently due to Truth social community guidelines violations. If you feel we have made an error, you can file an appeal with %{email}.
+        disable_html: You can no longer login to your account or use it in any other way, but your profile and other data remains intact.
+        sensitive_html: Your uploaded media files and linked media will be treated as sensitive.
+        silence_html: You can still use your account but only people who are already following you will see your posts on this server, and you may be excluded from various public listings. However, others may still manually follow you.
+        suspend_html: Your account is suspended and will be inaccessible for %{suspension_duration}.
+        verify_html: You're a certified member of the commumity
+        unverify_html: You're no longer a certified member of the community
+      get_in_touch: You can reply to this e-mail to get in touch with Truth Social.
+      review_server_policies: Review community guidelines
       statuses: 'Specifically, for:'
       subject:
+        ban: Your account %{acct} has been banned
         disable: Your account %{acct} has been frozen
         none: Warning for %{acct}
         sensitive: Your account %{acct} posting media has been marked as sensitive
         silence: Your account %{acct} has been limited
         suspend: Your account %{acct} has been suspended
+        verify: Your account %{acct} has been verified
+        unverify: Your account %{acct} verification was removed
       title:
+        ban: Account Banned
         disable: Account frozen
         none: Warning
         sensitive: Your media has been marked as sensitive
         silence: Account limited
         suspend: Account suspended
-    welcome:
-      edit_profile_action: Setup profile
-      edit_profile_step: You can customize your profile by uploading an avatar, header, changing your display name and more. If you’d like to review new followers before they’re allowed to follow you, you can lock your account.
-      explanation: Here are some tips to get you started
-      final_action: Start posting
-      final_step: 'Start posting! Even without followers your public posts may be seen by others, for example on the local timeline and in hashtags. You may want to introduce yourself on the #introductions hashtag.'
-      full_handle: Your full handle
-      full_handle_hint: This is what you would tell your friends so they can message or follow you from another server.
-      review_preferences_action: Change preferences
-      review_preferences_step: Make sure to set your preferences, such as which emails you'd like to receive, or what privacy level you’d like your posts to default to. If you don’t have motion sickness, you could choose to enable GIF autoplay.
-      subject: Welcome to Mastodon
-      tip_federated_timeline: The federated timeline is a firehose view of the Mastodon network. But it only includes people your neighbours are subscribed to, so it's not complete.
-      tip_following: You follow your server's admin(s) by default. To find more interesting people, check the local and federated timelines.
-      tip_local_timeline: The local timeline is a firehose view of people on %{instance}. These are your immediate neighbours!
-      tip_mobile_webapp: If your mobile browser offers you to add Mastodon to your homescreen, you can receive push notifications. It acts like a native app in many ways!
-      tips: Tips
-      title: Welcome aboard, %{name}!
+        verify: Account verified
+        unverify: Account verification removed
+    waitlisted:
+      title: "Your account has been created successfully!"
+      explanation: "Thanks for joining! Due to high demand, we have placed you on our waitlist. We love you, and you are not just another number to us! But your waitlist number is above 🙂"
+      extra_explanation: "We will email you when your account is ready. If you enable push notifications in the Truth Social mobile app, we'll also notify you via a push notification."
   users:
     follow_limit_reached: You cannot follow more than %{limit} people
     generic_access_help_html: Trouble accessing your account? You may get in touch with %{email} for assistance
@@ -1453,7 +1495,7 @@ en:
     signed_in_as: 'Signed in as:'
     suspicious_sign_in_confirmation: You appear to not have logged in from this device before, and you haven't logged in for a while, so we're sending a security code to your e-mail address to confirm that it's you.
   verification:
-    explanation_html: 'You can <strong>verify yourself as the owner of the links in your profile metadata</strong>. For that, the linked website must contain a link back to your Mastodon profile. The link back <strong>must</strong> have a <code>rel="me"</code> attribute. The text content of the link does not matter. Here is an example:'
+    explanation_html: 'You can <strong>verify yourself as the owner of the links in your profile metadata</strong>. For that, the linked website must contain a link back to your Truth profile. The link back <strong>must</strong> have a <code>rel="me"</code> attribute. The text content of the link does not matter. Here is an example:'
     verification: Verification
   webauthn_credentials:
     add: Add new security key

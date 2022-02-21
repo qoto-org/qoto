@@ -130,6 +130,8 @@ da:
         data: Data
         discoverable: Foreslå konto til andre
         display_name: Visningsnavn
+        location: Beliggenhed
+        website: internet side
         email: E-mailadresse
         expires_in: Udløb efter
         fields: Profilmetadata

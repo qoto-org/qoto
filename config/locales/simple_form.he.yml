@@ -20,6 +20,8 @@ he:
         current_password: סיסמא נוכחית
         data: מידע
         display_name: שם להצגה
+        location: מקום
+        website: אתר אינטרנט
         email: כתובת דוא"ל
         expires_in: תפוגה לאחר
         header: ראשה

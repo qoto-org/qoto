@@ -116,6 +116,8 @@ id:
       disable_two_factor_authentication: Nonaktifkan 2FA
       disabled: Dinonaktifkan
       display_name: Nama
+      location: lokasi
+      website: situs web
       domain: Domain
       edit: Ubah
       email: Email
@@ -1389,6 +1391,8 @@ id:
         sensitive: Berkas media dan media tertaut yang Anda unggah akan dianggap sebagai sensitif.
         silence: Saat akun Anda dibatasi, hanya akun yang Anda ikuti yang dapat melihat toot Anda di server ini. Akun Anda mungkin akan dikecualikan dari daftar publik. Akun lain dapat mengikuti akun Anda secara manual.
         suspend: Akun Anda telah ditangguhkan. Semua toot dan media yang Anda unggah dihapus secara permanen dari server ini, dan server tempat Anda memiliki pengikut.
+        verify: Anda adalah anggota komunitas yang tersertifikasi
+        unverify: Anda bukan lagi anggota komunitas yang tesertifikasi.
       get_in_touch: Anda dapat membalas email ini untuk menghubungi pengurus %{instance}.
       review_server_policies: Tinjau kebijakan server
       statuses: 'Khususnya untuk:'
@@ -1398,12 +1402,16 @@ id:
         sensitive: Postingan media akun Anda %{acct} telah ditandai sebagai sensitif
         silence: Akun Anda %{acct} telah dibatasi
         suspend: Akun Anda %{acct} telah ditangguhkan
+        verify: Akun Anda %{acct} telah diverifikasi
+        unverify: Verifikasi %{acct} akun Anda telah dihapus
       title:
         disable: Akun dibekukan
         none: Peringatan
         sensitive: Media Anda telah ditandai sebagai sensitif
         silence: Akun dibatasi
         suspend: Akun ditangguhkan
+        verify: Akun terverifikasi
+        unverify: Verifikasi akun dihapus
     welcome:
       edit_profile_action: Siapkan profil
       edit_profile_step: Anda dapat menyesuaikan profil Anda dengan mengunggah avatar, kepala, mengubah tampilan nama dan lainnya. Jika Anda ingin meninjau pengikut baru sebelum Anda terima sebagai pengikut, Anda dapat mengunci akun Anda.

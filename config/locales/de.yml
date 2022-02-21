@@ -122,6 +122,8 @@ de:
       disable_two_factor_authentication: 2FA abschalten
       disabled: Ausgeschaltet
       display_name: Anzeigename
+      location: Lage
+      website: Webseite
       domain: Domain
       edit: Bearbeiten
       email: E-Mail
@@ -1412,6 +1414,8 @@ de:
         sensitive: Deine hochgeladenen Mediendateien und verknüpften Medien werden als NSFW markiert.
         silence: Solange dein Konto limitiert ist, können nur die Leute, die dir bereits folgen, deine Beiträge auf dem Server sehen und es könnte sein, dass du von verschiedenen öffentlichen Listungen ausgeschlossen wirst. Andererseits können andere dir manuell folgen.
         suspend: Dein Konto wurde gesperrt und alle deine Beiträge und hochgeladenen Medien wurden unwiderruflich vom Server und anderen Servern, bei denen du Folgende hattest, gelöscht.
+        verify: Du bist ein verifiziertes Mitglied der Community
+        unverify: Sie sind kein zertifiziertes Mitglied der Community mehr.
       get_in_touch: Du kannst auf diese E-Mail antworten, um mit dem Personal von %{instance} in Kontakt zu treten.
       review_server_policies: Serverrichtlinien ansehen
       statuses: 'Besonders für:'
@@ -1421,12 +1425,16 @@ de:
         sensitive: Die Medien deines Konto %{acct} wurden als NSFW markiert
         silence: Dein Konto %{acct} wurde limitiert
         suspend: Dein Konto %{acct} wurde gesperrt
+        verify: Ihr Konto %{acct} wurde bestätigt
+        unverify: Die Bestätigung Ihres Kontos %{acct} wurde entfernt
       title:
         disable: Konto eingefroren
         none: Warnung
         sensitive: Deine Medien wurden als NSFW markiert
         silence: Konto limitiert
         suspend: Konto gesperrt
+        verify: Konto verifiziert
+        unverify: Kontobestätigung entfernt
     welcome:
       edit_profile_action: Profil einstellen
       edit_profile_step: Du kannst dein Profil anpassen, indem du einen Avatar oder ein Titelbild hochlädst oder deinen Anzeigenamen änderst und mehr. Wenn du deine Folgenden vorher überprüfen möchtest, bevor sie dir folgen können, dann kannst du dein Profil sperren.

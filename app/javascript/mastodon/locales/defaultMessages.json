@@ -470,7 +470,7 @@
         "id": "status.report"
       },
       {
-        "defaultMessage": "Mute conversation",
+        "defaultMessage": "Mute Conversation",
         "id": "status.mute_conversation"
       },
       {
@@ -771,7 +771,7 @@
         "id": "account.unblock"
       },
       {
-        "defaultMessage": "Edit profile",
+        "defaultMessage": "Edit Profile",
         "id": "account.edit_profile"
       },
       {
@@ -847,7 +847,7 @@
         "id": "navigation_bar.preferences"
       },
       {
-        "defaultMessage": "Follow requests",
+        "defaultMessage": "Follow Requests",
         "id": "navigation_bar.follow_requests"
       },
       {
@@ -859,15 +859,15 @@
         "id": "navigation_bar.lists"
       },
       {
-        "defaultMessage": "Blocked users",
+        "defaultMessage": "Blocked Users",
         "id": "navigation_bar.blocks"
       },
       {
-        "defaultMessage": "Blocked domains",
+        "defaultMessage": "Blocked Domains",
         "id": "navigation_bar.domain_blocks"
       },
       {
-        "defaultMessage": "Muted users",
+        "defaultMessage": "Mute Users",
         "id": "navigation_bar.mutes"
       },
       {
@@ -945,7 +945,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Blocked users",
+        "defaultMessage": "Blocked Users",
         "id": "column.blocks"
       },
       {
@@ -993,7 +993,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Edit profile",
+        "defaultMessage": "Edit Profile",
         "id": "account.edit_profile"
       },
       {
@@ -1005,7 +1005,7 @@
         "id": "navigation_bar.preferences"
       },
       {
-        "defaultMessage": "Follow requests",
+        "defaultMessage": "Follow Requests",
         "id": "navigation_bar.follow_requests"
       },
       {
@@ -1017,7 +1017,7 @@
         "id": "navigation_bar.lists"
       },
       {
-        "defaultMessage": "Blocked users",
+        "defaultMessage": "Blocked Users",
         "id": "navigation_bar.blocks"
       },
       {
@@ -1025,11 +1025,11 @@
         "id": "navigation_bar.domain_blocks"
       },
       {
-        "defaultMessage": "Muted users",
+        "defaultMessage": "Mute Users",
         "id": "navigation_bar.mutes"
       },
       {
-        "defaultMessage": "Muted words",
+        "defaultMessage": "Muted Words",
         "id": "navigation_bar.filters"
       },
       {
@@ -1128,7 +1128,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Edit profile",
+        "defaultMessage": "Edit Profile",
         "id": "navigation_bar.edit_profile"
       }
     ],
@@ -1455,7 +1455,7 @@
         "id": "status.more"
       },
       {
-        "defaultMessage": "View conversation",
+        "defaultMessage": "View Conversation",
         "id": "conversation.open"
       },
       {
@@ -1463,15 +1463,15 @@
         "id": "status.reply"
       },
       {
-        "defaultMessage": "Mark as read",
+        "defaultMessage": "Mark As Read",
         "id": "conversation.mark_as_read"
       },
       {
-        "defaultMessage": "Delete conversation",
+        "defaultMessage": "Delete Conversation",
         "id": "conversation.delete"
       },
       {
-        "defaultMessage": "Mute conversation",
+        "defaultMessage": "Mute Conversation",
         "id": "status.mute_conversation"
       },
       {
@@ -1501,7 +1501,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Direct messages",
+        "defaultMessage": "Direct Messages",
         "id": "column.direct"
       },
       {
@@ -1588,7 +1588,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Blocked domains",
+        "defaultMessage": "Blocked Domains",
         "id": "column.domain_blocks"
       },
       {
@@ -1678,7 +1678,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Follow requests",
+        "defaultMessage": "Follow Requests",
         "id": "column.follow_requests"
       },
       {
@@ -1779,7 +1779,7 @@
         "id": "navigation_bar.community_timeline"
       },
       {
-        "defaultMessage": "Direct messages",
+        "defaultMessage": "Direct Messages",
         "id": "navigation_bar.direct"
       },
       {
@@ -1791,7 +1791,7 @@
         "id": "navigation_bar.preferences"
       },
       {
-        "defaultMessage": "Follow requests",
+        "defaultMessage": "Follow Requests",
         "id": "navigation_bar.follow_requests"
       },
       {
@@ -1799,7 +1799,7 @@
         "id": "navigation_bar.favourites"
       },
       {
-        "defaultMessage": "Blocked users",
+        "defaultMessage": "Blocked Users",
         "id": "navigation_bar.blocks"
       },
       {
@@ -1807,7 +1807,7 @@
         "id": "navigation_bar.domain_blocks"
       },
       {
-        "defaultMessage": "Muted users",
+        "defaultMessage": "Mute Users",
         "id": "navigation_bar.mutes"
       },
       {
@@ -2196,7 +2196,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Muted users",
+        "defaultMessage": "Mute Users",
         "id": "column.mutes"
       },
       {
@@ -2588,7 +2588,7 @@
         "id": "status.mute"
       },
       {
-        "defaultMessage": "Mute conversation",
+        "defaultMessage": "Mute Conversation",
         "id": "status.mute_conversation"
       },
       {
@@ -2949,7 +2949,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "Follow requests",
+        "defaultMessage": "Follow Requests",
         "id": "navigation_bar.follow_requests"
       }
     ],
@@ -2986,7 +2986,7 @@
         "id": "navigation_bar.apps"
       },
       {
-        "defaultMessage": "Terms of service",
+        "defaultMessage": "Terms of Service",
         "id": "getting_started.terms"
       },
       {
@@ -3089,7 +3089,7 @@
         "id": "tabs_bar.federated_timeline"
       },
       {
-        "defaultMessage": "Direct messages",
+        "defaultMessage": "Direct Messages",
         "id": "navigation_bar.direct"
       },
       {

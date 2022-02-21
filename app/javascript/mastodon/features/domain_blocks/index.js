@@ -13,7 +13,7 @@ import { fetchDomainBlocks, expandDomainBlocks } from '../../actions/domain_bloc
 import ScrollableList from '../../components/scrollable_list';
 
 const messages = defineMessages({
-  heading: { id: 'column.domain_blocks', defaultMessage: 'Blocked domains' },
+  heading: { id: 'column.domain_blocks', defaultMessage: 'Blocked Domains' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unblock domain {domain}' },
 });
 

@@ -100,6 +100,8 @@ fi:
       disable_two_factor_authentication: Poista 2FA käytöstä
       disabled: Poistettu käytöstä
       display_name: Nimimerkki
+      location: sijainti
+      website: verkkosivusto
       domain: Verkkotunnus
       edit: Muokkaa
       email: Sähköposti

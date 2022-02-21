@@ -2,6 +2,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { autoPlayGif } from 'mastodon/initial_state';
+import IconSvg from 'mastodon/components/icon_svg';
 
 export default class DisplayName extends React.PureComponent {
 
@@ -40,7 +41,7 @@ export default class DisplayName extends React.PureComponent {
   render () {
     const { others, localDomain } = this.props;
 
-    let displayName, suffix, account;
+    let displayName, suffix, account, verifiedIcon;
 
     if (others && others.size > 1) {
       displayName = others.take(2).map(a => <bdi key={a.get('id')}><strong className='display-name__html' dangerouslySetInnerHTML={{ __html: a.get('display_name_html') }} /></bdi>).reduce((prev, cur) => [prev, ', ', cur]);
@@ -58,17 +59,18 @@ export default class DisplayName extends React.PureComponent {
       let acct = account.get('acct');
 
       if (acct.indexOf('@') === -1 && localDomain) {
-        acct = `${acct}@${localDomain}`;
+        acct = `${acct}`;
       }
 
+      verifiedIcon = account.get('verified') ? <span class="verified-account-status" ><IconSvg svg="verified" /></span> : null;
       displayName = <bdi><strong className='display-name__html' dangerouslySetInnerHTML={{ __html: account.get('display_name_html') }} /></bdi>;
       suffix      = <span className='display-name__account'>@{acct}</span>;
     }
 
     return (
-      <span className='display-name' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-        {displayName} {suffix}
-      </span>
+      <div className='display-name' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <span className="mr-2">{displayName}</span> {verifiedIcon} {suffix}
+      </div>
     );
   }
 

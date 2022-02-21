@@ -31,6 +31,8 @@ kk:
         data: Дата
         discoverable: Бұл аккаунтты каталогта көрсету
         display_name: Атын көрсет
+        location: орналасуы
+        website: веб -сайт
         email: Эл. пошта мекен жайы
         expires_in: Аяқталу мерзімі
         fields: Профиль метадатасы

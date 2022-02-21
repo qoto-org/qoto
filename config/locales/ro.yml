@@ -111,6 +111,8 @@ ro:
       disable_two_factor_authentication: Dezactivează 2FA
       disabled: Dezactivat
       display_name: Nume afișat
+      location: Locație
+      website: site-ul web
       domain: Domeniu
       edit: Editează
       email: E-mail
@@ -662,6 +664,8 @@ ro:
         disable: În timp ce contul tău este înghețat, datele contului tău rămân intacte, dar nu poți efectua nicio acțiune până când acesta este deblocat.
         silence: În timp ce contul tău este limitat, doar persoanele care deja te urmăresc îți vor vedea postările pe acest server, și puteți fi exclus de la diverse liste publice. Cu toate acestea, este posibil ca alte persoane să vă urmărească manual.
         suspend: Contul tău a fost suspendat și toate postările tale și fișierele media încărcate au fost șterse ireversibil de pe acest server, și servere unde ai avut urmăritori.
+        verify: Ești membru certificat al comunității
+        unverify: Nu mai sunteți membru certificat al comunității.
       get_in_touch: Puteți răspunde la acest e-mail pentru a lua legătura cu personalul din %{instance}.
       review_server_policies: Revizuiește politicile serverului
       statuses: 'Mai precis, pentru:'
@@ -670,11 +674,15 @@ ro:
         none: Avertizare pentru %{acct}
         silence: Contul tău %{acct} a fost limitat
         suspend: Contul tău %{acct} a fost suspendat
+        verify: Contul dvs.% {acct} a fost verificat
+        unverify: Verificarea% {acct} a contului dvs. a fost eliminată
       title:
         disable: Cont înghețat
         none: Avertizare
         silence: Cont limitat
         suspend: Cont suspendat
+        verify: Cont verificat
+        unverify: Verificarea contului a fost eliminată
     welcome:
       edit_profile_action: Configurare profil
       edit_profile_step: Vă puteți personaliza profilul încărcând un avatar, un antet, schimbându-vă numele afișat și multe altele. Dacă dorești să revizuiești noi urmăritori înainte de a primi permisiunea de a te urmări, îți poți bloca contul.

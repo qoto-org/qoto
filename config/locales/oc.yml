@@ -112,6 +112,8 @@ oc:
       disable_two_factor_authentication: Desactivar 2FA
       disabled: Desactivat
       display_name: Escais-nom
+      location: ubicació
+      website: lloc web
       domain: Domeni
       edit: Modificar
       email: Corrièl
@@ -1204,6 +1206,8 @@ oc:
         disable: Quand vòstre compte es gelat, las donadas d’aqueste demòran senceras, mas podètz pas realizar cap d’accion fins que siá desblocat.
         silence: Del temps que vòstre compte es limitat, solament lo monde que vos sègon veiràn vòstres tuts sus aqueste servidor, e poiriatz èsser tirat de mantuna lista publica. Pasmens, d’autres vos pòdon sègre manualament.
         suspend: Vòstre compte es suspendut e totes vòstres tuts e fichièrs enviats son estats suprimits sens retorn possible d’aqueste servidor e los de vòstres seguidors.
+        verify: Ets membre certificat de la comunitat
+        unverify: Ja no sou membre certificat de la comunitat.
       get_in_touch: Podètz respondre a aqueste corrièl per contactar la còla de %{instance}.
       review_server_policies: Repassar las politicas del servidor
       statuses: 'Especificament per :'
@@ -1212,11 +1216,15 @@ oc:
         none: Avertiment per %{acct}
         silence: Vòstre compte %{acct} es limitat
         suspend: Vòstre compte %{acct} es suspendut
+        verify: El vostre compte% {acct} s'ha verificat
+        unverify: S'ha eliminat la verificació del vostre compte% {acct}
       title:
         disable: Compte gelat
         none: Avertiment
         silence: Compte limitat
         suspend: Compte suspendut
+        verify: Compte verificat
+        unverify: S'ha eliminat la verificació del compte
     welcome:
       edit_profile_action: Configuracion del perfil
       edit_profile_step: Podètz personalizar lo perfil en mandar un avatard, cambiar l’escais-nom e mai. Se volètz repassar las demandas d’abonaments abans que los nòus seguidors pòscan veire vòstre perfil, podètz clavar vòstre compte.

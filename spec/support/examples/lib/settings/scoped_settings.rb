@@ -25,28 +25,26 @@ shared_examples 'ScopedSettings' do
 
       records = settings.all_as_records
 
-      expect(records['boost_modal'].value).to eq true
+      expect(records['boost_modal'].value).to eq false
       expect(records['delete_modal'].value).to eq true
     end
   end
 
   describe 'missing methods' do
-    # expecting [] and []= works.
-
     it 'reads settings' do
       expect(Setting.boost_modal).to eq false
       settings = create!
       expect(settings.boost_modal).to eq false
     end
 
-    it 'updates settings' do
+    it 'updates settings, boost_modal cannot be updated' do
       settings = fabricate
       settings.boost_modal = true
-      expect(settings['boost_modal']).to eq true
+      expect(settings['boost_modal']).to eq false
     end
   end
 
-  it 'can update settings with [] and can read with []=' do
+  it 'can update settings with [] and can read with []= boost_modal cannot be user configured' do
     settings = fabricate
 
     settings['boost_modal'] = true
@@ -54,12 +52,12 @@ shared_examples 'ScopedSettings' do
 
     Setting.save!
 
-    expect(settings['boost_modal']).to eq true
+    expect(settings['boost_modal']).to eq false
     expect(settings['interactions']['must_be_follower']).to eq true
 
     Rails.cache.clear
 
-    expect(settings['boost_modal']).to eq true
+    expect(settings['boost_modal']).to eq false
     expect(settings['interactions']['must_be_follower']).to eq true
   end
 

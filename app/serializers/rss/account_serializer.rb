@@ -13,6 +13,8 @@ class RSS::AccountSerializer < RSS::Serializer
            .link(tag.present? ? short_account_tag_url(account, tag) : short_account_url(account))
            .logo(full_pack_url('media/images/logo.svg'))
            .accent_color('2b90d9')
+           .location(account.location)
+           .website(account.website)
 
     builder.image(full_asset_url(account.avatar.url(:original))) if account.avatar?
     builder.cover(full_asset_url(account.header.url(:original))) if account.header?

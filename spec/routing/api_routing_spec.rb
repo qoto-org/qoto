@@ -90,10 +90,10 @@ describe 'API routes' do
         to route_to('api/v1/timelines/home#show')
     end
 
-    it 'routes to public timeline' do
-      expect(get('/api/v1/timelines/public')).
-        to route_to('api/v1/timelines/public#show')
-    end
+    # it 'routes to public timeline' do
+    #   expect(get('/api/v1/timelines/public')).
+    #     to route_to('api/v1/timelines/public#show')
+    # end
 
     it 'routes to tag timeline' do
       expect(get('/api/v1/timelines/tag/test')).

@@ -122,6 +122,8 @@ tr:
       disable_two_factor_authentication: 2AD kapat
       disabled: Kapalı
       display_name: Görünen isim
+      location: yer
+      website: İnternet sitesi
       domain: Alan adı
       edit: Düzenle
       email: E-posta
@@ -1410,6 +1412,8 @@ tr:
         sensitive: Yüklediğiniz medya dosyalarınız ve bağlantılı medyanız hassas olarak değerlendirilecektir.
         silence: Hesabınız sınırlı iken, yalnızca sizi takip eden kişiler bu sunucuda tootlarınızı görecek ve çeşitli halka açık listelerin dışında tutulabilirsiniz. Ancak, diğerleri hala sizi manuel olarak takip edebilir.
         suspend: Hesabınız askıya alındı ve tüm tootlarınız ve yüklediğiniz medya dosyalarınız bu sunucudan ve takipçilerinizin bulunduğu sunuculardan geri alınamaz şekilde kaldırıldı.
+        verify: Topluluğun sertifikalı bir üyesisiniz
+        verify: Artık topluluğun sertifikalı bir üyesi değilsiniz.
       get_in_touch: "%{instance} çalışanlarıyla iletişim kurmak için bu e-postayı yanıtlayabilirsiniz."
       review_server_policies: Sunucu politikalarını inceleyin
       statuses: 'Özellikle, şunun için:'
@@ -1419,12 +1423,16 @@ tr:
         sensitive: Hesabınızdan yayınlanan %{acct} medyanız hassas olarak işaretlendi
         silence: "%{acct} hesabınız sınırlandırıldı"
         suspend: "%{acct} hesabınız askıya alındı"
+        verify: "%{acct} hesabınız doğrulandı"
+        verify: "%{acct} hesabınızın doğrulaması kaldırıldı"
       title:
         disable: Hesap donduruldu
         none: Uyarı
         sensitive: Medyanız hassas olarak işaretlendi
         silence: Hesap sınırlandırıldı
         suspend: Hesap askıya alındı
+        verify: Hesap doğrulandı
+        verify: Hesap doğrulaması kaldırıldı
     welcome:
       edit_profile_action: Profil kurulumu
       edit_profile_step: Bir avatar veya başlık yükleyerek, ekran adınızı değiştirerek ve daha fazlasını yaparak profilinizi kişiselleştirebilirsiniz. Yeni takipçileri sizi takip etmelerine izin verilmeden önce incelemek isterseniz, hesabınızı kilitleyebilirsiniz.

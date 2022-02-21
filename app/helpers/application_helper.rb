@@ -40,7 +40,7 @@ module ApplicationHelper
 
   def available_sign_up_path
     if closed_registrations?
-      'https://joinmastodon.org/#getting-started'
+      '/'
     else
       new_user_registration_path
     end
@@ -153,10 +153,10 @@ module ApplicationHelper
 
   def quote_wrap(text, line_width: 80, break_sequence: "\n")
     text = word_wrap(text, line_width: line_width - 2, break_sequence: break_sequence)
-    text.split("\n").map { |line| '> ' + line }.join("\n")
+    text.split("\n").map { |line| "> #{line}" }.join("\n")
   end
 
-  def render_initial_state
+  def render_initial_state(json_output = false)
     state_params = {
       settings: {
         known_fediverse: Setting.show_known_fediverse_at_about_page,
@@ -179,6 +179,9 @@ module ApplicationHelper
     end
 
     json = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(state_params), serializer: InitialStateSerializer).to_json
+
+    return json if json_output
+
     # rubocop:disable Rails/OutputSafety
     content_tag(:script, json_escape(json).html_safe, id: 'initial-state', type: 'application/json')
     # rubocop:enable Rails/OutputSafety

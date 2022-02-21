@@ -111,6 +111,8 @@ bg:
       disable_two_factor_authentication: Изключване на 2FA
       disabled: Замразено
       display_name: Показвано име
+      location: местоположение
+      website: уебсайт
       domain: Домейн
       edit: Редакция
       email: Имейл

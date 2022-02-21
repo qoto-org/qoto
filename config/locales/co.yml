@@ -122,6 +122,8 @@ co:
       disable_two_factor_authentication: Disattivà l’identificazione à 2 fattori
       disabled: Disattivatu
       display_name: Nome pubblicu
+      location: locu
+      website: situ web
       domain: Duminiu
       edit: Mudificà
       email: E-mail
@@ -1402,6 +1404,8 @@ co:
         sensitive: I vostri media caricati è in ligami saranu trattati cum'è sensibili.
         silence: Quandu u vostru contu hè limitatu, solu quelli chì sò digià abbunati à u vostru contu viderenu i vostri statuti nant'à quessu servore, è puderete esse esclusu·a di parechje liste pubbliche. Però, altri conti puderenu sempre seguitavi.
         suspend: U vostru contu hè statu suspesu, è tutti i vo statuti è fugliali media caricati sò stati sguassati di manera irreversibile di stu servore, è di i servori induve aviate abbunati.
+        verify: Sei un membru verificatu di a cumunità
+        unverify: Ùn site più un membru certificatu di a cumunità.
       get_in_touch: Pudete risponde à quest'e-mail per cuntattà a squadra di muderazione di %{instance}.
       review_server_policies: Leghje e pulitiche di u servore
       statuses: 'Più pricisamente, per:'
@@ -1411,12 +1415,15 @@ co:
         sensitive: I media di u vostru contu %{acct} sò stati marcati cum'è sensibili
         silence: U vostru contu %{acct} hè statu limitatu
         suspend: U vostru contu %{acct} hè statu suspesu
+        verify: u vostru contu %{acct} hè statu verificatu
+        unverify: U vostru contu% {acct} verificazione hè statu cacciatu
       title:
         disable: Contu ghjacciatu
         none: Avertimentu
         sensitive: U vostru media hè statu marcatu cum'è sensibile
         silence: Contu limitatu
         suspend: Contu suspesu
+        unverify: Verificazione di u contu eliminata
     welcome:
       edit_profile_action: Cunfigurazione di u prufile
       edit_profile_step: Pudete persunalizà u vostru prufile cù un ritrattu di prufile o di cuprendula, un nome pubblicu persunalizatu, etc. Pudete ancu rende u contu privatu per duvè cunfirmà ogni dumanda d’abbunamentu.

@@ -33,25 +33,7 @@ RSpec.describe AccountsHelper, type: :helper do
 
       acct = helper.acct(account)
 
-      expect(acct).to eq '@user@local_domain'
-    end
-
-    it 'is fully qualified for embedded foreign accounts' do
-      set_embedded_view
-      account = Account.new(domain: 'foreign_server.com', username: 'user')
-
-      acct = helper.acct(account)
-
-      expect(acct).to eq '@user@foreign_server.com'
-    end
-
-    it 'is fully qualified for non embedded foreign accounts' do
-      set_not_embedded_view
-      account = Account.new(domain: 'foreign_server.com', username: 'user')
-
-      acct = helper.acct(account)
-
-      expect(acct).to eq '@user@foreign_server.com'
+      expect(acct).to eq '@user'
     end
 
     it 'is fully qualified for non embedded local accounts' do
@@ -61,7 +43,7 @@ RSpec.describe AccountsHelper, type: :helper do
 
       acct = helper.acct(account)
 
-      expect(acct).to eq '@user@local_domain'
+      expect(acct).to eq '@user'
     end
   end
 end

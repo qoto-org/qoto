@@ -116,6 +116,8 @@ zh-CN:
       disable_two_factor_authentication: 停用双重认证
       disabled: 已冻结
       display_name: 昵称
+      location: 地点
+      website: 网站
       domain: 域名
       edit: 编辑
       email: 电子邮件地址
@@ -1389,6 +1391,8 @@ zh-CN:
         sensitive: 你上传的媒体文件和媒体链接将被视作敏感内容。
         silence: 当你的帐户被隐藏时，只有已经关注你的人才会这台服务器上看到你的嘟文，并且你会被排除在各种公共列表之外。但是，其他人仍然可以手动关注你。
         suspend: 你的帐户已被封禁，所有的嘟文和你上传的媒体文件都已经从该服务器和你的关注者的服务器上删除并且不可恢复。
+        verify: 您是社区的认证成员
+        unverify: 您不再是社区的认证成员。
       get_in_touch: 你可回复该邮件以联系 %{instance} 的工作人员。
       review_server_policies: 查看服务器政策
       statuses: 具体来说，适用于：
@@ -1398,12 +1402,16 @@ zh-CN:
         sensitive: 你的帐号 %{acct} 所发布的媒体已被标记为敏感内容
         silence: 你的帐户 %{acct} 已被隐藏
         suspend: 你的帐户 %{acct} 已被封禁。
+        verify: 您的帐户 %{acct} 已通过验证
+        unverify: 您的帐户 %{acct} 验证已被删除
       title:
         disable: 账号已冻结
         none: 警示
         sensitive: 你的媒体被标记为敏感内容
         silence: 帐户被隐藏
         suspend: 账号被封禁
+        verify: 帐户已验证
+        unverify: 帐号验证已移除
     welcome:
       edit_profile_action: 设置个人资料
       edit_profile_step: 你可以自定义你的个人资料，包括上传头像、横幅图片、更改昵称等等。如果你想在新的关注者关注你之前对他们进行审核，你也可以选择为你的帐户开启保护。

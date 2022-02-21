@@ -122,6 +122,8 @@ sc:
       disable_two_factor_authentication: Disativa 2FA
       disabled: Disativadu
       display_name: Nòmine visìbile
+      location: localización
+      website: páxina web
       domain: Domìniu
       edit: Modìfica
       email: Posta eletrònica

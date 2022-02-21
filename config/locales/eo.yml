@@ -112,6 +112,8 @@ eo:
       disable_two_factor_authentication: Malebligi 2FA
       disabled: Malebligita
       display_name: Montrata nomo
+      location: loko
+      website: retejo
       domain: Domajno
       edit: Redakti
       email: Retadreso
@@ -1209,6 +1211,8 @@ eo:
         disable: Dum via konto estas frostigita, via kontaj datumoj restas intaktaj, sed vi ne povas plenumi iujn agojn ĝis ĝi estas malhaltigita.
         silence: Dum via konto estas limigita, nur tiuj, kiuj jam sekvas vin, vidos viajn mesaĝojn en ĉi tiu servilo, kaj vi povus esti ekskludita de diversaj publikaj listoj. Tamen, aliaj ankoraŭ povas mane sekvi vin.
         suspend: Via konto estis haltigita, kaj ĉiuj el viaj mesaĝoj kaj alŝutitaj aŭdovidaj dosieroj estis nemalfareble forigitaj de ĉi tiu servilo, kaj de la serviloj, kie vi havis sekvantojn.
+        verify: Vi estas konfirmita membro de la komunumo
+        unverify: Vi ne plu estas atestita membro de la komunumo
       review_server_policies: Superrigardi servilajn politikojn
       statuses: 'Specife, per:'
       subject:
@@ -1216,11 +1220,14 @@ eo:
         none: Averto por %{acct}
         silence: Via konto %{acct} estas limigita
         suspend: Via konto %{acct} estas haltigita
+        verify: Via konto% {acct} estas kontrolita
+        unverify: Via konto% {acct} konfirmo estis forigita
       title:
         disable: Konto frostigita
         none: Averto
         silence: Konto limigita
         suspend: Konto haltigita
+        verify: Konta konfirmo forigita
     welcome:
       edit_profile_action: Agordi profilon
       edit_profile_step: Vi povas proprigi vian profilon per alŝuto de profilbildo, fonbildo, ŝanĝo de via afiŝita nomo kaj pli. Se vi ŝatus kontroli novajn sekvantojn antaŭ ol ili rajtas sekvi vin, vi povas ŝlosi vian konton.

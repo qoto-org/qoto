@@ -19,13 +19,11 @@ class Scheduler::FollowRecommendationsScheduler
     fallback_recommendations = FollowRecommendation.limit(SET_SIZE).index_by(&:account_id)
 
     I18n.available_locales.each do |locale|
-      recommendations = begin
-        if AccountSummary.safe.filtered.localized(locale).exists? # We can skip the work if no accounts with that language exist
-          FollowRecommendation.localized(locale).limit(SET_SIZE).index_by(&:account_id)
-        else
-          {}
-        end
-      end
+      recommendations = if AccountSummary.safe.filtered.localized(locale).exists? # We can skip the work if no accounts with that language exist
+                          FollowRecommendation.localized(locale).limit(SET_SIZE).index_by(&:account_id)
+                        else
+                          {}
+                        end
 
       # Use language-agnostic results if there are not enough language-specific ones
       missing = SET_SIZE - recommendations.keys.size

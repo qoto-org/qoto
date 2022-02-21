@@ -1,5 +1,5 @@
-@import 'mastodon/variables';
-@import 'fonts/roboto';
+@import "mastodon/variables";
+@import "fonts/roboto";
 
 table,
 td,
@@ -95,7 +95,7 @@ td {
 .email-body,
 html,
 body {
-  background-color: lighten($ui-base-color, 4%);
+  background-color: $offwhite;
 }
 
 .email-container,
@@ -119,6 +119,10 @@ body {
   width: 100%;
   min-width: 100%;
   min-width: 0 !important;
+
+  &.extra-space {
+    padding: 30px 10px 10px 10px;
+  }
 }
 
 .column-cell {
@@ -188,7 +192,7 @@ p {
 p {
   font-size: 15px;
   line-height: 23px;
-  color: $ui-primary-color;
+  color: lighten($black, 10%);
   mso-line-height-rule: exactly;
   text-rendering: optimizelegibility;
 }
@@ -214,11 +218,11 @@ h3,
 h4,
 h5,
 h6 {
-  color: $ui-secondary-color;
+  color: $color-5;
   margin-left: 0;
   margin-right: 0;
   margin-top: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   padding: 0;
   font-weight: 500;
 }
@@ -253,7 +257,7 @@ h5 {
 
 .input {
   td {
-    background: darken($ui-base-color, 8%);
+    background: $color-6;
     border-radius: 4px;
     padding: 16px;
     line-height: 20px;
@@ -275,15 +279,15 @@ h5 {
 }
 
 .content-cell {
-  background-color: darken($ui-base-color, 4%);
+  background-color: $white;
 
   &.darker {
-    background-color: darken($ui-base-color, 8%);
+    background-color: $white;
   }
 }
 
 .hero {
-  background-color: $ui-base-color;
+  background-color: $white;
   padding-top: 20px;
 }
 
@@ -301,17 +305,21 @@ h5 {
 
 .header {
   border-radius: 5px 5px 0 0;
-  background-color: darken($ui-base-color, 8%);
+  border-bottom: 1px solid #ddd;
 
   .column-cell {
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 8px;
+    padding: 20px 0;
   }
 }
 
 .content-start {
-  padding-top: 32px;
+  padding-top: 10px;
+}
+
+.content-around {
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .content-end {
@@ -332,6 +340,10 @@ h5 {
     &.small {
       margin-bottom: 0;
     }
+
+    &.center {
+      text-align: center;
+    }
   }
 
   a {
@@ -347,6 +359,13 @@ h5 {
 .logo {
   position: relative;
   left: -4px;
+}
+
+.big-button {
+  padding: 10px 20px;
+  background-color: $classic-highlight-color;
+  color: $white;
+  border-radius: 8px;
 }
 
 .button {
@@ -398,7 +417,7 @@ h5 {
 }
 
 .button-primary {
-  background-color: darken($ui-highlight-color, 3%);
+  background-color: $color-4;
 }
 
 .text-center {
@@ -423,26 +442,34 @@ h5 {
 }
 
 .hero-icon {
-  width: 64px;
+  width: 80px;
 
   td {
     text-align: center;
     vertical-align: middle;
     line-height: 100%;
     mso-line-height-rule: exactly;
-    padding: 16px;
-    border-radius: 80px;
-    background: $success-green;
+    padding: 20px;
+    border-radius: 100px;
+    background: $color-6;
   }
 
   &.alert-icon td {
-    background: $error-red;
+    background: $color-2;
+  }
+
+  &.success-icon td {
+    background: $color-7;
+  }
+
+  &.warn-icon td {
+    background: $color-9;
   }
 
   img {
-    max-width: 32px;
-    width: 32px;
-    height: 32px;
+    max-width: 60px;
+    width: 60px;
+    height: 60px;
     display: block;
     line-height: 100%;
   }
@@ -464,14 +491,10 @@ h5 {
 }
 
 .status {
-  padding-bottom: 32px;
-
-  &--highlighted {
-    border: 1px solid lighten($ui-base-color, 8%);
-    border-radius: 4px;
-    padding-bottom: 16px;
-    margin-bottom: 16px;
-  }
+  border: 1px solid $color-6-dark;
+  border-radius: 10px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
 
   .status-header {
     td {
@@ -480,7 +503,7 @@ h5 {
     }
 
     bdi {
-      color: $white;
+      color: lighten($black, 10%);
       font-size: 16px;
       display: block;
       font-weight: 500;
@@ -514,7 +537,7 @@ h5 {
 }
 
 .border-top {
-  border-top: 1px solid lighten($ui-base-color, 8%);
+  border-top: 1px solid #ddd;
 }
 
 ul {

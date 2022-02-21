@@ -7,6 +7,28 @@ module Settings
       noindex
     ).freeze
 
+    DEFAULTING_TO_TRUE = %w(
+      use_pending_items
+      crop_images
+      delete_modal
+      use_blurhash
+    ).freeze
+
+    DEFAULTING_TO_FALSE = %w(
+      noindex
+      reduce_motion
+      disable_swiping
+      system_font_ui
+      trends
+      unfollow_modal
+      boost_modal
+      expand_spoilers
+      hide_network
+      aggregate_reblogs
+      show_application
+      default_sensitive
+    ).freeze
+
     def initialize(object)
       @object = object
     end
@@ -31,9 +53,10 @@ module Settings
     def all_as_records
       vars = thing_scoped
       records = vars.index_by(&:var)
+      overridden_defaults = DEFAULTING_TO_TRUE + DEFAULTING_TO_FALSE
 
       Setting.default_settings.each do |key, default_value|
-        next if records.key?(key) || default_value.is_a?(Hash)
+        next if (records.key?(key) || default_value.is_a?(Hash)) && overridden_defaults.exclude?(key)
         records[key] = Setting.new(var: key, value: default_value)
       end
 
@@ -49,6 +72,11 @@ module Settings
     end
 
     def [](key)
+      # remove this if we add back the ability
+      # for a user to customize this setting.
+      return true if DEFAULTING_TO_TRUE.include?(key)
+      return false if DEFAULTING_TO_FALSE.include?(key)
+
       Rails.cache.fetch(Setting.cache_key(key, @object)) do
         db_val = thing_scoped.find_by(var: key.to_s)
         if db_val

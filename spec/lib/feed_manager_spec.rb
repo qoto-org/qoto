@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe FeedManager do
   before do |example|
+    acct = Fabricate(:account, username: "ModerationAI")
+    Fabricate(:user, admin: true, account: acct)
+    stub_request(:post, ENV["MODERATION_TASK_API_URL"]).to_return(status: 200, body: request_fixture('moderation-response-0.txt'))
     unless example.metadata[:skip_stub]
       stub_const 'FeedManager::MAX_ITEMS', 10
       stub_const 'FeedManager::REBLOG_FALLOFF', 4
@@ -116,7 +119,7 @@ RSpec.describe FeedManager do
       it 'returns true for status by followee mentioning blocked account' do
         bob.block!(jeff)
         bob.follow!(alice)
-        status = PostStatusService.new.call(alice, text: 'Hey @jeff')
+        status = PostStatusService.new.call(alice, text: 'Hey @jeff', mentions: ['jeff'])
         expect(FeedManager.instance.filter?(:home, status, bob)).to be true
       end
 
@@ -164,7 +167,7 @@ RSpec.describe FeedManager do
     context 'for mentions feed' do
       it 'returns true for status that mentions blocked account' do
         bob.block!(jeff)
-        status = PostStatusService.new.call(alice, text: 'Hey @jeff')
+        status = PostStatusService.new.call(alice, text: 'Hey @jeff', mentions: ['jeff'])
         expect(FeedManager.instance.filter?(:mentions, status, bob)).to be true
       end
 

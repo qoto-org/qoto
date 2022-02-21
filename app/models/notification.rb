@@ -19,15 +19,18 @@ class Notification < ApplicationRecord
   include Paginable
 
   LEGACY_TYPE_CLASS_MAP = {
+    'Invite'        => :invite,
     'Mention'       => :mention,
     'Status'        => :reblog,
     'Follow'        => :follow,
     'FollowRequest' => :follow_request,
     'Favourite'     => :favourite,
     'Poll'          => :poll,
+    'User'          => :user_approved,
   }.freeze
 
   TYPES = %i(
+    invite
     mention
     status
     reblog
@@ -35,14 +38,17 @@ class Notification < ApplicationRecord
     follow_request
     favourite
     poll
+    user_approved
   ).freeze
 
   TARGET_STATUS_INCLUDES_BY_TYPE = {
     status: :status,
+    invite: [invite: :users],
     reblog: [status: :reblog],
     mention: [mention: :status],
     favourite: [favourite: :status],
     poll: [poll: :status],
+    user_approved: :user,
   }.freeze
 
   belongs_to :account, optional: true
@@ -51,10 +57,12 @@ class Notification < ApplicationRecord
 
   belongs_to :mention,        foreign_key: 'activity_id', optional: true
   belongs_to :status,         foreign_key: 'activity_id', optional: true
+  belongs_to :invite,         foreign_key: 'activity_id', optional: true
   belongs_to :follow,         foreign_key: 'activity_id', optional: true
   belongs_to :follow_request, foreign_key: 'activity_id', optional: true
   belongs_to :favourite,      foreign_key: 'activity_id', optional: true
   belongs_to :poll,           foreign_key: 'activity_id', optional: true
+  belongs_to :user,           foreign_key: 'activity_id', optional: true
 
   validates :type, inclusion: { in: TYPES }
 
@@ -140,6 +148,10 @@ class Notification < ApplicationRecord
       self.from_account_id = activity&.account_id
     when 'Mention'
       self.from_account_id = activity&.status&.account_id
+    when 'Invite'
+      self.from_account_id = activity&.users&.first&.account_id
+    when 'User'
+      self.from_account_id = activity&.account_id
     end
   end
 end

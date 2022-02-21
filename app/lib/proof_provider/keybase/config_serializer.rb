@@ -24,7 +24,7 @@ class ProofProvider::Keybase::ConfigSerializer < ActiveModel::Serializer
   def logo
     {
       svg_black: full_asset_url(asset_pack_path('media/images/logo_transparent_black.svg')),
-      svg_white: full_asset_url(asset_pack_path('media/images/logo_transparent_white.svg')),
+      svg_white: full_asset_url(asset_pack_path('media/images/logo_full_white.svg')),
       svg_full: full_asset_url(asset_pack_path('media/images/logo.svg')),
       svg_full_darkmode: full_asset_url(asset_pack_path('media/images/logo.svg')),
     }

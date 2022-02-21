@@ -130,6 +130,8 @@ ru:
         data: Данные
         discoverable: Показывать эту учётную запись в каталоге
         display_name: Отображаемое имя
+        location: место нахождения
+        website: Веб-сайт
         email: Адрес e-mail
         expires_in: Истекает через
         fields: Таблица деталей

@@ -119,6 +119,8 @@ sk:
       disable_two_factor_authentication: Vypni dvoj-faktorové overovanie
       disabled: Blokovaný
       display_name: Ukáž meno
+      location: umiestnenie
+      website: webové stránky
       domain: Doména
       edit: Uprav
       email_status: Stav emailu
@@ -1125,6 +1127,8 @@ sk:
         disable: Pokiaľ je tvoj účet zamrazený, tvoje dáta zostávajú nedoknuté, ale nemôžeš v rámci neho nič robiť, až kým nebude odomknutý.
         silence: Kým máš účet obmedzený, tvoje príspevky na tomto serveri uvidia iba tí ľudia, ktorí ťa už následujú, a môžeš byť vylúčený/á z rôznych verejných záznamov. Ostatní ťa však stále budú môcť následovať manuálne.
         suspend: Tvoj účet bol vylúčený, a všetky tvoje príspevky a nahraté médiálné súbory boli nenávratne zmazané z tohto serveru, a zo serverov na ktorých si mal následovateľov.
+        verify: Ste certifikovaným členom komunity
+        unverify: Už nie ste certifikovaným členom komunity.
       get_in_touch: Môžeš na tento email odpovedať, pre skontaktovanie sa s tímom %{instance}.
       review_server_policies: Prehodnoť pravidlá servera
       statuses: 'Konkrétne kvôli:'
@@ -1133,11 +1137,15 @@ sk:
         none: Varovanie pre %{acct}
         silence: Tvoj účet %{acct} bol obmedzený
         suspend: Tvoj účet %{acct} bol vylúčený
+        verify: Váš účet %{acct} bol overený
+        unverify: Vaše overenie účtu %{acct} bolo odstránené
       title:
         disable: Účet bol zamrazený
         none: Varovanie
         silence: Účet bol obmedzený
         suspend: Tvoj účet bol vylúčený
+        verify: Účet overený
+        unverify: Overenie účtu bolo odstránené
     welcome:
       edit_profile_action: Nastav profil
       edit_profile_step: Profil si môžeš prispôsobiť nahratím portrétu a záhlavia, môžeš upraviť svoje meno a viac. Pokiaľ chceš preverovať nových následovateľov predtým než ťa budú môcť sledovať, môžeš uzamknúť svoj účet.

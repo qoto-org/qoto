@@ -118,6 +118,8 @@ zh-HK:
       disable_two_factor_authentication: 關閉雙重認證
       disabled: 已凍結
       display_name: 顯示名稱
+      location: 地点
+      website: 网站
       domain: 域名
       edit: 編輯
       email: 電郵地址
@@ -1303,6 +1305,8 @@ zh-HK:
         sensitive: 你上載的媒體檔案和連結媒體將被標記為敏感項目。
         silence: 你仍然可以使用你的帳號，但只有你現時的追隨者會看見你在此伺服器的嘟文。你或從公開名冊中被剔除。但是其他人仍然可以主動關注你。
         suspend: 你將不能使用您的帳號，你的個人資料頁面及其他資料將不能再被取得。你仍可在資料被完全刪除前請求下載你的數據，但我們仍會保留一部份資料，以防止有人規避停權處罰。
+        verify: 您是社区的认证成员
+        unverify: 您不再是社区的认证成员。
       get_in_touch: 你可以回覆此電郵來跟我們(%{instance})聯絡
       review_server_policies: 審視伺服器政策
       statuses: 特別是：
@@ -1312,12 +1316,16 @@ zh-HK:
         sensitive: 你的帳號 %{acct} 的媒體已被標記為敏感內容
         silence: 你的帳號 %{acct} 已經被限制
         suspend: 你的帳號 %{acct} 已經被停權
+        verify: 您的帐户 %{acct} 已通过验证
+        unverify: 您的帐户 %{acct} 验证已被删除
       title:
         disable: 帳號涷結
         none: 警告
         sensitive: 你的媒體已被標記為敏感內容
         silence: 賬戶已被限制
         suspend: 帳號已停用
+        verify: 帐户已验证
+        unverify: 帐号验证已移除
     welcome:
       edit_profile_action: 設定個人資料
       edit_profile_step: 你可以設定你的個人資料，包括上傳頭像、橫幅圖片、更改顯示名稱等等。如果你想在新的關注者關注你之前對他們進行審核，你也可以選擇為你的帳戶設為「私人」。

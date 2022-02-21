@@ -115,6 +115,8 @@ nn:
         data: Data
         discoverable: Før denne kontoen opp i mappa
         display_name: Synleg namn
+        location: plassering
+        website: nettsted
         email: E-post-adresse
         expires_in: Vert ugyldig etter
         fields: Profilmetadata

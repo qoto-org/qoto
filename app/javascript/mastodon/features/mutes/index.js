@@ -13,7 +13,7 @@ import { fetchMutes, expandMutes } from '../../actions/mutes';
 import ScrollableList from '../../components/scrollable_list';
 
 const messages = defineMessages({
-  heading: { id: 'column.mutes', defaultMessage: 'Muted users' },
+  heading: { id: 'column.mutes', defaultMessage: 'Mute Users' },
 });
 
 const mapStateToProps = state => ({

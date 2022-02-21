@@ -124,6 +124,8 @@ co:
         data: Dati
         discoverable: Arregistrà stu contu indè l'annuariu
         display_name: Nome pubblicu
+        location: locu
+        website: situ web
         email: Indirizzu e-mail
         expires_in: Spira dopu à
         fields: Metadata di u prufile

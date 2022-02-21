@@ -106,6 +106,8 @@ sl:
       disable_two_factor_authentication: Onemogoči 2FA
       disabled: Onemogočeno
       display_name: Prikazno ime
+      location: lokacijo
+      website: Spletna stran
       domain: Domena
       edit: Uredi
       email: E-pošta
@@ -946,17 +948,23 @@ sl:
         disable: Medtem ko je vaš račun zamrznjen, podatki vašega računa ostanejo nedotaknjeni, vendar ne morete izvajati nobenih dejanj, dokler ga ne odklenete.
         silence: Medtem ko je vaš račun omejen, bodo na tem strežniku videli vaše tute samo osebe, ki vam že sledijo in morda boste izključeni iz različnih javnih seznamov. Vendar vam lahko še vedno ročno sledijo drugi.
         suspend: Vaš račun je bil začasno ukinjen, vsi vaši tuti in naložene predstavnostne datoteke so bili nepovratno odstranjeni s tega strežnika in strežnikov, kjer ste imeli sledilce.
+        verify: Ste certificirani član skupnosti
+        unverify: Niste več certificiran član skupnosti.
       review_server_policies: Preglejte pravilnike strežnika
       subject:
         disable: Vaš račun %{acct} je zamrznjen
         none: Opozorila za %{acct}
         silence: Vaš račun %{acct} je omejen
         suspend: Vaš račun %{acct} je suspendiran
+        verify: Vaš račun %{acct} je preverjen
+        unverify: Preverjanje vašega računa %{acct} je bilo odstranjeno
       title:
         disable: Račun je zamrznjen
         none: Opozorilo
         silence: Račun je omejen
         suspend: Račun je suspendiran
+        verify: Račun je preverjen
+        unverify: Preverjanje računa je odstranjeno
     welcome:
       edit_profile_action: Nastavitve profila
       edit_profile_step: Profil lahko prilagodite tako, da naložite podobo, glavo, spremenite prikazno ime in drugo. Če želite pregledati nove sledilce, preden jim dovolite sledenje, lahko zaklenete svoj račun.

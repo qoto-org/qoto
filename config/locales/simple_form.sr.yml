@@ -68,6 +68,8 @@ sr:
         data: Подаци
         discoverable: Наведите овај налог у фасцикли
         display_name: Име за приказ
+        location: локација
+        website: веб сајт
         email: Адреса е-поште
         expires_in: Истиче након
         fields: Профилирај метаподатке

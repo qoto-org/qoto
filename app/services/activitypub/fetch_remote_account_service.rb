@@ -12,13 +12,11 @@ class ActivityPub::FetchRemoteAccountService < BaseService
     return if domain_not_allowed?(uri)
     return ActivityPub::TagManager.instance.uri_to_resource(uri, Account) if ActivityPub::TagManager.instance.local_uri?(uri)
 
-    @json = begin
-      if prefetched_body.nil?
-        fetch_resource(uri, id)
-      else
-        body_to_json(prefetched_body, compare_id: id ? uri : nil)
-      end
-    end
+    @json = if prefetched_body.nil?
+              fetch_resource(uri, id)
+            else
+              body_to_json(prefetched_body, compare_id: id ? uri : nil)
+            end
 
     return if !supported_context? || !expected_type? || (break_on_redirect && @json['movedTo'].present?)
 

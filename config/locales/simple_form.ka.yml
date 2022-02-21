@@ -41,6 +41,8 @@ ka:
         current_password: მიმდინარე პაროლი
         data: მონაცემები
         display_name: დისპლეის სახელი
+        location: მდებარეობა
+        website: ვებგვერდი
         email: ელ-ფოსტის მისამართი
         expires_in: ვადის გასვლის დრო
         fields: პროფილის მეტა-მონაცემი

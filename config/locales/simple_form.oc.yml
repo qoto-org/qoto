@@ -122,6 +122,8 @@ oc:
         data: Donadas
         discoverable: Far aparéisser aqueste compte a l’annuari
         display_name: Escais
+        location: ubicació
+        website: lloc web
         email: Corrièl
         expires_in: Expira aprèp
         fields: Metadonada del perfil

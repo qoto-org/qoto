@@ -52,6 +52,18 @@ function main() {
     };
   };
 
+  function markTrending(element) {
+    let parentElement = element.parentElement;
+    element.classList.remove("show");
+    parentElement.getElementsByClassName('markNotTrending')[0].classList.add("show");
+  }
+
+  function markNotTrending(element) {
+    let parentElement = element.parentElement;
+    element.classList.remove("show");
+    parentElement.getElementsByClassName('markTrending')[0].classList.add("show");
+  }
+
   ready(() => {
     const locale = document.documentElement.lang;
 
@@ -61,6 +73,21 @@ function main() {
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
+    });
+
+    window.addEventListener("load", () => {
+      const links = document.querySelectorAll(
+        "a[data-status-id]"
+      );
+      links.forEach((element) => {
+        element.addEventListener("click", (event) => {
+          if (element.classList.contains('markTrending')) {
+            markTrending(element);
+          } else {
+            markNotTrending(element);
+          }
+        });
+      });
     });
 
     [].forEach.call(document.querySelectorAll('.emojify'), (content) => {

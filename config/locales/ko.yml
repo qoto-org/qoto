@@ -118,6 +118,8 @@ ko:
       disable_two_factor_authentication: 2단계 인증을 비활성화
       disabled: 비활성화된
       display_name: 이름
+      location: 위치
+      website: 웹사이트
       domain: 도메인
       edit: 편집
       email: 이메일
@@ -1393,6 +1395,8 @@ ko:
         sensitive: 당신의 업로드 한 미디어 파일들과 링크된 미디어들은 민감함으로 취급됩니다.
         silence: 당신의 계정이 제한 된 동안엔 당신의 팔로워 이외엔 게시물을 받아 볼 수 없고 공개 리스팅에서 제외 됩니다. 하지만 다른 사람들은 여전히 당신을 팔로우 가능합니다.
         suspend: 당신의 계정은 정지 되었으며, 모든 툿과 업로드 한 미디어가 서버에서 삭제 되어 되돌릴 수 없습니다.
+        verify: 커뮤니티의 인증된 회원입니다.
+        unverify: 귀하는 더 이상 커뮤니티의 인증된 회원이 아닙니다.
       get_in_touch: 이 메일에 대해 답장해서 %{instance}의 스태프와 연락 할 수 있습니다.
       review_server_policies: 서버 정책 검토하기
       statuses: '구체적으로:'
@@ -1402,12 +1406,16 @@ ko:
         sensitive: 당신의 계정 %{acct}에서 포스팅 하는 미디어는 민감함으로 설정되었습니다
         silence: 당신의 계정 %{acct}가 제한 되었습니다
         suspend: 당신의 계정 %{acct}가 정지 되었습니다
+        verify: 귀하의 계정 %{acct}이(가) 확인되었습니다
+        unverify: 귀하의 계정 %{acct} 인증이 삭제되었습니다
       title:
         disable: 계정 동결 됨
         none: 경고
         sensitive: 당신의 미디어는 민감함으로 표시되었습니다
         silence: 계정 제한 됨
         suspend: 계정 정지 됨
+        verify: 계정 확인됨
+        unverify: 계정 확인 삭제됨
     welcome:
       edit_profile_action: 프로필 설정
       edit_profile_step: 아바타, 헤더를 업로드하고, 사람들에게 표시 될 이름을 바꾸는 것으로 당신의 프로필을 커스텀 할 수 있습니다. 사람들이 당신을 팔로우 하기 전에 리뷰를 거치게 하고 싶다면 계정을 잠그면 됩니다.

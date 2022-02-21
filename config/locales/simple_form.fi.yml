@@ -63,6 +63,8 @@ fi:
         data: Tiedot
         discoverable: Listaa tämä tili hakemistoon
         display_name: Nimimerkki
+        location: sijainti
+        website: verkkosivusto
         email: Sähköpostiosoite
         expires_in: Vanhenee
         fields: Profiilin metadata

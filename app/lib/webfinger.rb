@@ -2,7 +2,9 @@
 
 class Webfinger
   class Error < StandardError; end
+
   class GoneError < Error; end
+
   class RedirectError < StandardError; end
 
   class Response
@@ -88,7 +90,7 @@ class Webfinger
   end
 
   def standard_url
-    if @domain.end_with? ".onion"
+    if @domain.end_with? '.onion'
       "http://#{@domain}/.well-known/webfinger?resource=#{@uri}"
     else
       "https://#{@domain}/.well-known/webfinger?resource=#{@uri}"
@@ -96,7 +98,7 @@ class Webfinger
   end
 
   def host_meta_url
-    if @domain.end_with? ".onion"
+    if @domain.end_with? '.onion'
       "http://#{@domain}/.well-known/host-meta"
     else
       "https://#{@domain}/.well-known/host-meta"

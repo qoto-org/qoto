@@ -130,6 +130,8 @@ gd:
       disable_two_factor_authentication: Cuir an dearbhadh dà-cheumnach à comas
       disabled: Reòthte
       display_name: Ainm-taisbeanaidh
+      location: àite
+      website: làrach-lìn
       domain: Àrainn
       edit: Deasaich
       email: Post-d
@@ -1370,6 +1372,8 @@ gd:
         sensitive: Thèid dèiligeadh ris na faidhlichean meadhain is na meadhanan ceangailte agad mar fheadhainn fhrionasach.
         silence: "’S urrainn dhut an cunntas agad a chleachdadh fhathast ach chan fhaic ach na daoine a tha a’ leantainn ort mu thràth na postaichean agad air an fhrithealaiche seo agus dh’fhaoidte gun dèid d’ às-dhùnadh o iomadh liosta phoblach. Gidheadh, faodaidh càch leantainn ort a làimh fhathast."
         suspend: Chan urrainn dhut an cunntas agad a chleachdadh tuilleadh agus chan fhaigh thu grèim air a’ phròifil no air an dàta eile agad. ’S urrainn dhut clàradh a-steach fhathast airson lethbhreac-glèidhidh dhen dàta agad iarraidh mur dèid an dàta a thoirt air falbh gu slàn ach cumaidh sinn cuid dhen dàta ach nach seachain thu an cur à rèim.
+        verify: Tha thu nad bhall dearbhte den choimhearsnachd
+        unverify: Chan eil thu tuilleadh nad bhall dearbhte den choimhearsnachd.
       get_in_touch: "’S urrainn dhut freagairt dhan phost-d seo no conaltradh ris an sgioba aig %{instance}."
       review_server_policies: Thoir sùil air riaghailtean an fhrithealaiche
       statuses: 'Gu sònraichte, dha:'
@@ -1379,12 +1383,16 @@ gd:
         sensitive: Chaidh comharra a chur ri meadhanan a’ chunntais %{acct} agad gu bheil iad frionasach
         silence: Chaidh an cunntas %{acct} agad a chuingeachadh
         suspend: Chaidh an cunntas %{acct} agad a chur à rèim
+        verify: Chaidh do chunntas% {acct} a dhearbhadh
+        unverify: Chaidh dearbhadh a ’chunntais agad% {acct} a thoirt air falbh
       title:
         disable: Cunntas reòite
         none: Rabhadh
         sensitive: Chaidh comharra a chur ris na meadhanan agad gu bheil iad frionasach
         silence: Cunntas cuingichte
         suspend: Cunntas à rèim
+        verify: Cunntas air a dhearbhadh
+        unverify: Chaidh dearbhadh cunntais a thoirt air falbh
     welcome:
       edit_profile_action: Suidhich a’ phròifil agad
       edit_profile_step: "’S urrainn dhut a’ phròifil agad a ghnàthachadh is tu a’ luchdadh suas avatar no bann-cinn, ag atharrachadh d’ ainm-taisbeanaidh is a bharrachd. Nam bu mhiann leat lèirmheas a dhèanamh air daoine mus fhaod iad leantainn ort, ’s urrainn dhut an cunntas agad a ghlasadh."

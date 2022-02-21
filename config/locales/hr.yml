@@ -58,6 +58,8 @@ hr:
       delete: Izbriši podatke
       deleted: Izbrisano
       display_name: Prikazano ime
+      location: mjesto
+      website: web stranica
       domain: Domena
       edit: Uredi
       email: E-pošta
@@ -265,6 +267,7 @@ hr:
         none: Upozorenje
         silence: Račun je ograničen
         suspend: Račun je suspendiran
+        verify: Račun potvrđen
     welcome:
       edit_profile_action: Postavi profil
       review_preferences_action: Promijeni postavke

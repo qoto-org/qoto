@@ -122,6 +122,8 @@ it:
       disable_two_factor_authentication: Disabilita l'autenticazione a due fattori
       disabled: Disabilitato
       display_name: Nome visualizzato
+      location: Posizione
+      website: sito web
       domain: Dominio
       edit: Modifica
       email: Email
@@ -1415,6 +1417,8 @@ it:
         sensitive: I tuoi file multimediali caricati e multimedia collegati saranno trattati come sensibili.
         silence: Mentre il tuo account è limitato, solo le persone che già ti seguono possono vedere i tuoi toot su questo server, e potresti essere escluso da vari elenchi pubblici. Comunque, altri possono manualmente seguirti.
         suspend: Il tuo account è stato sospeso, e tutti i tuoi toot ed i tuoi file media caricati sono stati irreversibilmente rimossi da questo server, e dai server dove avevi dei seguaci.
+        verify: Sei un membro certificato della community
+        unverify: Non sei più un membro certificato della community.
       get_in_touch: Puoi rispondere a questa email per entrare in contatto con lo staff di %{instance}.
       review_server_policies: Rivedi regole del server
       statuses: 'Nello specifico, per:'
@@ -1424,12 +1428,16 @@ it:
         sensitive: Il multimedia in pubblicazione del tuo profilo %{acct} è stato contrassegnato come sensibile
         silence: Il tuo account %{acct} è stato limitato
         suspend: Il tuo account %{acct} è stato sospeso
+        verify: Il tuo account %{acct} è stato verificato
+        unverify: La verifica del tuo account %{acct} è stata rimossa
       title:
         disable: Account congelato
         none: Avviso
         sensitive: Il tuo multimedia è stato contrassegnato come sensibile
         silence: Account limitato
         suspend: Account sospeso
+        verify: Account verificato
+        unverify: Verifica dell'account rimossa
     welcome:
       edit_profile_action: Imposta profilo
       edit_profile_step: Puoi personalizzare il tuo profilo caricando un avatar, un'intestazione, modificando il tuo nome visualizzato e così via. Se vuoi controllare i tuoi nuovi seguaci prima di autorizzarli a seguirti, puoi bloccare il tuo account.

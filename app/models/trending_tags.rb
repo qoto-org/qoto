@@ -41,13 +41,11 @@ class TrendingTags
         max_score = tag.max_score
         max_score = 0 if max_time.nil? || max_time < (at_time - MAX_SCORE_COOLDOWN)
 
-        score = begin
-          if expected > observed || observed < THRESHOLD
-            0
-          else
-            ((observed - expected)**2) / expected
-          end
-        end
+        score = if expected > observed || observed < THRESHOLD
+                  0
+                else
+                  ((observed - expected)**2) / expected
+                end
 
         if score > max_score
           max_score = score

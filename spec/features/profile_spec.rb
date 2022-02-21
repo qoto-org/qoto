@@ -5,8 +5,6 @@ require 'rails_helper'
 feature 'Profile' do
   include ProfileStories
 
-  given(:local_domain) { ENV['LOCAL_DOMAIN'] }
-
   background do
     as_a_logged_in_user
     with_alice_as_local_user
@@ -17,10 +15,10 @@ feature 'Profile' do
   scenario 'I can view Annes public account' do
     visit account_path('alice')
 
-    is_expected.to have_title("alice (@alice@#{local_domain})")
+    is_expected.to have_title("alice (@alice")
 
     within('.public-account-header h1') do
-      is_expected.to have_content("alice @alice@#{local_domain}")
+      is_expected.to have_content("alice @alice")
     end
 
     bio_elem = first('.public-account-bio')
@@ -38,16 +36,14 @@ feature 'Profile' do
   scenario 'I can change my account' do
     visit settings_profile_path
     fill_in 'Display name', with: 'Bob'
-    fill_in 'Bio', with: 'Bob is silent'
     first('.btn[type=submit]').click
     is_expected.to have_content 'Changes successfully saved!'
 
     # View my own public profile and see the changes
-    click_link "Bob @bob@#{local_domain}"
+    click_link "Bob @bob"
 
     within('.public-account-header h1') do
-      is_expected.to have_content("Bob @bob@#{local_domain}")
+      is_expected.to have_content("Bob @bob")
     end
-    expect(first('.public-account-bio')).to have_content('Bob is silent')
   end
 end

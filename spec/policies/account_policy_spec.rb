@@ -55,6 +55,24 @@ RSpec.describe AccountPolicy do
     end
   end
 
+  permissions :unverify? do
+    before do
+      alice.verify!
+    end
+
+    context 'staff' do
+      it 'permits' do
+        expect(subject).to permit(admin, alice)
+      end
+    end
+
+    context 'not staff' do
+      it 'denies' do
+        expect(subject).to_not permit(john, alice)
+      end
+    end
+  end
+
   permissions :redownload?, :subscribe?, :unsubscribe? do
     context 'admin' do
       it 'permits' do

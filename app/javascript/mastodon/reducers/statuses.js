@@ -1,8 +1,11 @@
 import {
   REBLOG_REQUEST,
   REBLOG_FAIL,
+  REBLOG_SUCCESS,
+  UNREBLOG_SUCCESS,
   FAVOURITE_REQUEST,
   FAVOURITE_FAIL,
+  FAVOURITE_SUCCESS,
   UNFAVOURITE_SUCCESS,
   BOOKMARK_REQUEST,
   BOOKMARK_FAIL,
@@ -41,6 +44,8 @@ export default function statuses(state = initialState, action) {
     return importStatuses(state, action.statuses);
   case FAVOURITE_REQUEST:
     return state.setIn([action.status.get('id'), 'favourited'], true);
+  case FAVOURITE_SUCCESS:
+    return state.updateIn([action.status.get('id'), 'favourites_count'], x => (x + 1));
   case UNFAVOURITE_SUCCESS:
     return state.updateIn([action.status.get('id'), 'favourites_count'], x => Math.max(0, x - 1));
   case FAVOURITE_FAIL:
@@ -51,8 +56,12 @@ export default function statuses(state = initialState, action) {
     return state.get(action.status.get('id')) === undefined ? state : state.setIn([action.status.get('id'), 'bookmarked'], false);
   case REBLOG_REQUEST:
     return state.setIn([action.status.get('id'), 'reblogged'], true);
+  case REBLOG_SUCCESS:
+    return state.updateIn([action.status.get('id'), 'reblogs_count'], x => (x + 1));
   case REBLOG_FAIL:
     return state.get(action.status.get('id')) === undefined ? state : state.setIn([action.status.get('id'), 'reblogged'], false);
+  case UNREBLOG_SUCCESS:
+    return state.updateIn([action.status.get('id'), 'reblogs_count'], x => Math.max(0, x - 1));
   case STATUS_MUTE_SUCCESS:
     return state.setIn([action.id, 'muted'], true);
   case STATUS_UNMUTE_SUCCESS:

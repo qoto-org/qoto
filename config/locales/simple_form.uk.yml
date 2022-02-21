@@ -130,6 +130,8 @@ uk:
         data: Дані
         discoverable: Оприлюднити обліковий запис у каталозі
         display_name: Ім'я
+        location: Розташування
+        website: веб -сайт
         email: Email адреса
         expires_in: Закінчується після
         fields: Метадані профіля

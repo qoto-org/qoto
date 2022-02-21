@@ -43,6 +43,7 @@ class Admin::ActionLogFilter
     unassigned_report: { target_type: 'Report', action: 'unassigned' }.freeze,
     unsensitive_account: { target_type: 'Account', action: 'unsensitive' }.freeze,
     unsilence_account: { target_type: 'Account', action: 'unsilence' }.freeze,
+    unverify_account: { target_type: 'Account', action: 'unverify' }.freeze,
     unsuspend_account: { target_type: 'Account', action: 'unsuspend' }.freeze,
     update_announcement: { target_type: 'Announcement', action: 'update' }.freeze,
     update_custom_emoji: { target_type: 'CustomEmoji', action: 'update' }.freeze,

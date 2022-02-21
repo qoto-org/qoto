@@ -18,6 +18,8 @@ io:
         current_password: Nuna pasvorto
         data: Datumi
         display_name: Publika nomo
+        location: loko
+        website: retejo
         email: Retpost-adreso
         header: Kapimajo
         locale: Linguo

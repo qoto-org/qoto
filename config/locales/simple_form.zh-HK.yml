@@ -130,6 +130,8 @@ zh-HK:
         data: 資料
         discoverable: 在目錄列出此帳號
         display_name: 顯示名稱
+        location: 地点
+        website: 网站
         email: 電郵地址
         expires_in: 失效時間
         fields: 資料

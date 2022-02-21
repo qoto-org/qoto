@@ -122,6 +122,8 @@ da:
       disable_two_factor_authentication: Deaktivér 2FA
       disabled: Frosset
       display_name: Visningsnavn
+      location: Beliggenhed
+      website: internet side
       domain: Domæne
       edit: Redigere
       email: E-mail
@@ -1330,6 +1332,8 @@ da:
         sensitive: Dine uploadede mediefiler og linkede medier vil blive behandlet som sensitive.
         silence: Du kan stadig bruge din konto, men kun personer, som allerede følger dig, vil se dine indlæg på denne server, og du kan blive udelukket fra forskellige offentlige lister. Personer vil stadig manuelt kunne følge dig.
         suspend: Du kan ikke længere bruge din konto, og din profil samt øvrige data kan ikke længere tilgås. Du kan stadig logge ind for at anmode om en sikkerhedskopi af dine data, indtil dataene helt er fjernet. men visse data bevares mhp. at forhindre dig i at omgå udelukkelsen.
+        verify: Du er et verificeret medlem af fællesskabet
+        unverify: Du er ikke længere et certificeret medlem af fællesskabet.
       get_in_touch: Du kan besvare denne e-mail for at komme i kontakt med personalet på %{instance}.
       review_server_policies: Gennemgå serverpolitikker
       statuses: 'Specifikt til:'
@@ -1339,12 +1343,16 @@ da:
         sensitive: Din konto %{acct} opslagsmedie er blevet markeret som sensitivt
         silence: Din konto %{acct} er blevet begrænset
         suspend: Din konto %{acct} er blevet suspenderet
+        verify: din konto %{acct} er blevet bekræftet
+        unverify: Din konto %{acct} -bekræftelse blev fjernet
       title:
         disable: Konto frosset
         none: Advarsel
         sensitive: Dit medie er blevet markeret som sensitivt
         silence: Konto begrænset
         suspend: Konto suspenderet
+        verify: Konto bekræftet
+        unverify: Kontobekræftelse fjernet
     welcome:
       edit_profile_action: Opsæt profil
       edit_profile_step: Du kan tilpasse din profil ved at uploade et profilbillede, overskrift, ændre dit visningsnavn mm. Ønsker du at vurdere nye følgere, før de må følge dig, kan du låse din konto.

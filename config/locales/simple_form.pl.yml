@@ -130,6 +130,8 @@ pl:
         data: Dane
         discoverable: Wyświetlaj ten profil w katalogu
         display_name: Widoczna nazwa
+        location: Lokalizacja
+        website: Strona internetowa
         email: Adres e-mail
         expires_in: Wygaśnie po
         fields: Metadane profilu

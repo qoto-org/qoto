@@ -109,7 +109,7 @@ RSpec.describe ResolveAccountService, type: :service do
       account = subject.call('Foo@redirected.example.com')
 
       expect(account.activitypub?).to eq true
-      expect(account.acct).to eq 'foo@ap.example.com'
+      expect(account.acct).to eq 'foo'
       expect(account.inbox_url).to eq 'https://ap.example.com/users/foo/inbox'
     end
   end
@@ -124,7 +124,7 @@ RSpec.describe ResolveAccountService, type: :service do
       account = subject.call('Foo@redirected.example.com')
 
       expect(account.activitypub?).to eq true
-      expect(account.acct).to eq 'foo@ap.example.com'
+      expect(account.acct).to eq 'foo'
       expect(account.inbox_url).to eq 'https://ap.example.com/users/foo/inbox'
     end
   end

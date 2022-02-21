@@ -122,6 +122,8 @@ is:
       disable_two_factor_authentication: Gera tveggja-þátta auðkenningu óvirka
       disabled: Óvirkt
       display_name: Birtingarnafn
+      location: staðsetning
+      website: vefsíðu
       domain: Lén
       edit: Breyta
       email: Tölvupóstfang
@@ -1410,6 +1412,8 @@ is:
         sensitive: Innsent myndefni sem þú sendir inn og tengt myndefni verður farið með sem viðkvæmt efni.
         silence: Á meðan aðgangurinn þinn er takmarkaður, mun aðeins fólk sem þegar fylgist með þér sjá tístin þín á þessum vefþjóni, auk þess sem lokað gæti verið á þig á ýmsum opinberum listum. Aftur á móti geta aðrir gerst fylgjendur þínir handvirkt.
         suspend: Aðgangurinn þinn hefur verið settur í biðstöðu, öll þín tíst og innsent myndefni hafa verið óafturkræft fjarlægð af þessum vefþjóni, sem og af þeim vefþjónum þar sem þú áttir þér fylgjendur.
+        verify: Þú ert löggiltur meðlimur samfélagsins
+        unverify: Þú ert ekki lengur löggiltur meðlimur samfélagsins.
       get_in_touch: Þú getur svarað þessum tölvupósti til að setja þig í samband við umsjónarmenn %{instance}.
       review_server_policies: Yfirfara reglur vefþjónsins
       statuses: 'Sérstaklega fyrir:'
@@ -1419,12 +1423,16 @@ is:
         sensitive: Myndefni sent frá %{acct} aðgangnum þínum hefur verið merkt sem viðkvæmt
         silence: Notandaaðgangurinn þinn %{acct} hefur verið takmarkaður
         suspend: Notandaaðgangurinn þinn %{acct} hefur verið settur í bið
+        verify: Reikningurinn þinn %{acct} hefur verið staðfestur
+        unverify: Staðfesting reiknings þíns %{acct} var fjarlægð
       title:
         disable: Notandaaðgangur frystur
         none: Aðvörun
         sensitive: Myndefnið þitt hefur verið merkt sem viðkvæmt
         silence: Notandaaðgangur takmarkaður
         suspend: Notandaaðgangur í bið
+        verify: Reikningur staðfestur
+        unverify: Staðfesting reiknings fjarlægð
     welcome:
       edit_profile_action: Setja upp notandasnið
       edit_profile_step: Þú getur sérsniðið notandasniðið þitt með því að senda inn auðkennismynd, síðuhaus, breytt birtingarnafninu þínu og ýmislegt fleira. Ef þú vilt yfirfara nýja fylgjendur áður en þeim er leyft að fylgjast með þér geturðu læst aðgangnum þínum.

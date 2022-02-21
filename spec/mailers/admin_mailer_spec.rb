@@ -16,7 +16,7 @@ RSpec.describe AdminMailer, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to eq("Mike,\r\n\r\nJohn has reported Mike\r\n\r\nView: https://cb6e6126.ngrok.io/admin/reports/#{report.id}\r\n")
+      expect(mail.body.encoded).to include("Mike,\r\n\r\nJohn has reported Mike\r\n\r\nView: https://cb6e6126.ngrok.io/admin/reports/#{report.id}\r\n")
     end
   end
 end

@@ -13,7 +13,7 @@ import { fetchBlocks, expandBlocks } from '../../actions/blocks';
 import ScrollableList from '../../components/scrollable_list';
 
 const messages = defineMessages({
-  heading: { id: 'column.blocks', defaultMessage: 'Blocked users' },
+  heading: { id: 'column.blocks', defaultMessage: 'Blocked Users' },
 });
 
 const mapStateToProps = state => ({

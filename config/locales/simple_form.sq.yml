@@ -130,6 +130,8 @@ sq:
         data: Të dhëna
         discoverable: Sugjerojuni llogari të tjerëve
         display_name: Emër në ekran
+        location: vendndodhjen
+        website: faqe interneti
         email: Adresë email
         expires_in: Skadon pas
         fields: Tejtëdhëna profili

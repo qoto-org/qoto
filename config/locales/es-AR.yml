@@ -122,6 +122,8 @@ es-AR:
       disable_two_factor_authentication: Deshabilitar 2FA
       disabled: Congelada
       display_name: Nombre para mostrar
+      location: Lugar de Residencia
+      website: Sitio Web
       domain: Dominio
       edit: Editar
       email: Correo electrónico
@@ -213,6 +215,7 @@ es-AR:
       unsilenced_msg: Se quitó exitosamente el límite de la cuenta de %{username}
       unsubscribe: Desuscribirse
       unsuspended_msg: Se quitó exitosamente la suspensión de la cuenta de %{username}
+      unverified_msg: La cuenta de %{username} ya no está verificada
       username: Nombre de usuario
       view_domain: Ver resumen del dominio
       warn: Advertir
@@ -1410,6 +1413,8 @@ es-AR:
         sensitive: Tus archivos de medios subidos y enlaces de medios serán tratados como sensibles.
         silence: Todavía podés usar tu cuenta, pero sólo las cuentas que ya te estén siguiendo verán tus mensajes en este servidor, y puede que se te excluya de varios listados públicos. Sin embargo, otras cuentas pueden seguirte manualmente.
         suspend: Ya no podés usar tu cuenta; tu perfil y otros datos ya no son accesibles. Todavía podés iniciar sesión para solicitar un resguardo de tus datos hasta que los mismos sean totalmente quitados, pero retendremos ciertos datos para prevenirte de evadir la suspensión.
+        verify: Eres un miembro certificado de la comunidad
+        unverify: Ya no eres un miembro certificado de la comunidad
       get_in_touch: Podés responder a esta dirección de correo electrónico para ponerte en contacto con la administración de %{instance}.
       review_server_policies: Revisar las políticas del servidor
       statuses: 'Específicamente, para:'
@@ -1419,12 +1424,16 @@ es-AR:
         sensitive: Los mensajes con medios de tu cuenta %{acct} fueron marcados como sensibles
         silence: Tu cuenta %{acct} fue limitada
         suspend: Tu cuenta %{acct} fue suspendida
+        verify: Tu cuenta %{acct} fue verificada
+        unverify: La verificación de su cuenta ha sido removida
       title:
         disable: Cuenta congelada
         none: Advertencia
         sensitive: Tus medios fueron marcados como sensibles
         silence: Cuenta limitada
         suspend: Cuenta suspendida
+        verify: Cuenta verificada
+        unverify: Verificación de cuenta removida
     welcome:
       edit_profile_action: Configurar perfil
       edit_profile_step: Podés personalizar tu perfil subiendo un avatar, una cabecera, cambiando tu nombre para mostrar y más cosas. Si querés revisar a tus nuevos seguidores antes de que se les permita seguirte, podés hacer tu cuenta privada.

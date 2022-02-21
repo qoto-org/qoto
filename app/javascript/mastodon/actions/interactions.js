@@ -48,7 +48,11 @@ export function reblog(status, visibility) {
     api(getState).post(`/api/v1/statuses/${status.get('id')}/reblog`, { visibility }).then(function (response) {
       // The reblog API method returns a new status wrapped around the original. In this case we are only
       // interested in how the original is modified, hence passing it skipping the wrapper
-      dispatch(importFetchedStatus(response.data.reblog));
+      let modifiedResponse = response.data.reblog;
+      modifiedResponse.reblogs_count = status.get('reblogs_count');
+      modifiedResponse.favourites_count = status.get('favourites_count');
+
+      dispatch(importFetchedStatus(modifiedResponse));
       dispatch(reblogSuccess(status));
     }).catch(function (error) {
       dispatch(reblogFail(status, error));
@@ -61,7 +65,11 @@ export function unreblog(status) {
     dispatch(unreblogRequest(status));
 
     api(getState).post(`/api/v1/statuses/${status.get('id')}/unreblog`).then(response => {
-      dispatch(importFetchedStatus(response.data));
+      let modifiedResponse = response.data;
+      modifiedResponse.reblogs_count = status.get('reblogs_count');
+      modifiedResponse.favourites_count = status.get('favourites_count');
+
+      dispatch(importFetchedStatus(modifiedResponse));
       dispatch(unreblogSuccess(status));
     }).catch(error => {
       dispatch(unreblogFail(status, error));
@@ -124,7 +132,11 @@ export function favourite(status) {
     dispatch(favouriteRequest(status));
 
     api(getState).post(`/api/v1/statuses/${status.get('id')}/favourite`).then(function (response) {
-      dispatch(importFetchedStatus(response.data));
+      let modifiedResponse = response.data;
+      modifiedResponse.favourites_count = status.get('favourites_count');
+      modifiedResponse.reblogs_count = status.get('reblogs_count');
+
+      dispatch(importFetchedStatus(modifiedResponse));
       dispatch(favouriteSuccess(status));
     }).catch(function (error) {
       dispatch(favouriteFail(status, error));
@@ -137,7 +149,11 @@ export function unfavourite(status) {
     dispatch(unfavouriteRequest(status));
 
     api(getState).post(`/api/v1/statuses/${status.get('id')}/unfavourite`).then(response => {
-      dispatch(importFetchedStatus(response.data));
+      let modifiedResponse = response.data;
+      modifiedResponse.favourites_count = status.get('favourites_count');
+      modifiedResponse.reblogs_count = status.get('reblogs_count');
+
+      dispatch(importFetchedStatus(modifiedResponse));
       dispatch(unfavouriteSuccess(status));
     }).catch(error => {
       dispatch(unfavouriteFail(status, error));

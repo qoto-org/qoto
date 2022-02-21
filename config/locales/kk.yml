@@ -111,6 +111,8 @@ kk:
       disable_two_factor_authentication: Ажырату 2FA
       disabled: Ажыратылды
       display_name: Атын көрсет
+      location: орналасуы
+      website: веб -сайт
       domain: Домен
       edit: Түзету
       email: Пошта
@@ -1114,6 +1116,8 @@ kk:
         disable: Аккаунтыңыз қатып қалса, сіздің деректеріңіз өзгеріссіз қалады, бірақ ол құлыптан босатылғанша ешқандай әрекетті орындай алмайсыз.
         silence: While your account is limited, only people who are already following you will see your toots on this server, and you may be excluded from various public listings. However, others may still manually follоw you.
         suspend: Сіздің аккаунтыңыз уақытша тоқтатылды және сіздің барлық файлдарыңыз бен жүктеп салынған медиа файлдарыңыз осы серверлерден және оқырманы болған серверлерден қайтарылмайды.
+        verify: Сіз қауымдастықтың сертификатталған мүшесісіз
+        unverify: Сіз енді қауымдастықтың сертификатталған мүшесі емессіз.
       get_in_touch: Сіз бұл электронды поштаға %{instance} қызметкерлерімен байланысу үшін жауап бере аласыз.
       review_server_policies: Сервер саясатын қарап шығыңыз
       statuses: 'Арнайы:'
@@ -1122,11 +1126,15 @@ kk:
         none: "%{acct} ескертуі"
         silence: "%{acct} аккаунтыңыз шектеулі"
         suspend: "%{acct} аккаунт тоқтатылды"
+        verify: "%{acct} есептік жазбаңыз расталды"
+        unverify: "%{acct} есептік жазбаңыздың растауы жойылды"
       title:
         disable: Аккаунт қатырылды
         none: Ескерту
         silence: Аккаунт шектеулі
         suspend: Аккаунт тоқтатылды
+        verify: Есептік жазба расталды
+        unverify: Есептік жазбаны растау жойылды
     welcome:
       edit_profile_action: Профиль өңдеу
       edit_profile_step: Профиліңізге аватар, мұқаба сурет жүктей аласыз, аты-жөніңізді көрсете аласыз. Оқырмандарыңызға сізбен танысуға рұқсат бермес бұрын аккаунтыңызды уақытша құлыптап қоюға болады.

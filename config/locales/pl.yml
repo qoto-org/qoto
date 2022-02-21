@@ -130,6 +130,8 @@ pl:
       disable_two_factor_authentication: Wyłącz uwierzytelnianie dwuetapowe
       disabled: Dezaktywowano
       display_name: Wyświetlana nazwa
+      location: Lokalizacja
+      website: Strona internetowa
       domain: Domena
       edit: Edytuj
       email: Adres e-mail
@@ -1448,6 +1450,8 @@ pl:
         sensitive: Wysyłane przez Ciebie pliki multimedialne i media z odnośników będą traktowane jako wrażliwe.
         silence: Kiedy Twoje konto jest ograniczone, tylko osoby które je śledzą będą widzieć Twoje wpisy. Może ono też przestać być widoczne na publicznych listach. Inni wciąż mogą zacząć Cię śledzić.
         suspend: Twoje konto zostało zawieszone i wszystkie Twoje wpisy wraz z zawartością multimedialną zostały nieodwracalnie usunięte z tego serwera i serwerów, których użytkownicy śledzili Cię.
+        verify: Jesteś certyfikowanym członkiem społeczności
+        unverify: Nie jesteś już certyfikowanym członkiem społeczności.
       get_in_touch: Możesz odpowiedzieć na ten e-mail aby pozostać w kontakcie z prowadzącymi %{instance}.
       review_server_policies: Przejrzyj zasady serwera
       statuses: 'Szczególnie dla:'
@@ -1457,12 +1461,16 @@ pl:
         sensitive: Zawartość multimedialna publikowana przez Twoje konto %{acct} została oznaczona jako wrażliwa
         silence: Twoje konto %{acct} zostało ograniczone
         suspend: Twoje konto %{acct} zostało zawieszone
+        verify: Twoje konto %{acct} zostało zweryfikowane
+        unverify: Weryfikacja Twojego konta %{acct} została usunięta
       title:
         disable: Konto wyłączone
         none: Ostrzeżenie
         sensitive: Twoja zawartość multimedialna została oznaczona jako wrażliwa
         silence: Konto ograniczone
         suspend: Konto zawieszone
+        verify: Konto zweryfikowane
+        unverify: Usunięto weryfikację konta
     welcome:
       edit_profile_action: Skonfiguruj profil
       edit_profile_step: Możesz dostosować profil wysyłając awatar, obraz nagłówka, zmieniając wyświetlaną nazwę i wiele więcej. Jeżeli chcesz, możesz zablokować konto, aby kontrolować, kto może Cię śledzić.

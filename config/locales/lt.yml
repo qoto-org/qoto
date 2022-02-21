@@ -68,6 +68,8 @@ lt:
       disable_two_factor_authentication: Išjungti 2 faktorių autentifikaciją
       disabled: Išjungta
       display_name: Matomas vardas
+      location: vietą
+      website: Interneto svetainė
       domain: Domenas
       edit: Keisti
       email: El paštas
@@ -762,17 +764,23 @@ lt:
         disable: Kol Jūsų paskyra užšaldyta, Jūsų duomenys tebėra matomi, tačiau jūs negalite atlikti jokių veiksmu, tol, kol užšaldymas panaikintas.
         silence: Kol Jūsų paskyra limituota, tik žmonės, kurie jus jau sekė matus Jūsų toot'us serveryje, Jūs taip pat būsite išimtas iš viešųjų sąrašų. Tačiau, kiti gali jus rasti, savo rankomis.
         suspend: Jūsų paskyra buvo užrakinta, ir visi Jūsų toot'ai, medijos failai, buvo panaikinti iš šio serverio, ir visų kitų serverių, kur turėjote sekėjų.
+        verify: Esate sertifikuotas bendruomenės narys
+        unverify: Jūs nebesate sertifikuotas bendruomenės narys.
       review_server_policies: Apžvelgti serverio politiką
       subject:
         disable: Jūsų paskyra %{acct} buvo užšaldyta
         none: Įspėjmas vartotojui %{acct}
         silence: Jūsų paskyra %{acct} buvo limituota
         suspend: Jūsų paskyra %{acct} buvo užrakinta
+        verify: Jūsų paskyra %{acct} patvirtinta
+        unverify: Jūsų paskyros %{acct} patvirtinimas buvo pašalintas
       title:
         disable: Paskyra užšaldyta
         none: Įspėjimas
         silence: Paskyra limituota
         suspend: Paskyra užrakinta
+        verify: Paskyra patvirtinta
+        unverify: Paskyros patvirtinimas pašalintas
     welcome:
       edit_profile_action: Nustatyti profilį
       edit_profile_step: Jūs galite keisti savo profilį įkeldami profilio nuotrauką, antraštę, pakeičiant savo rodomą vardą ir dar daugiau. Jeigu norėtumete peržiurėti naujus sekėjus prieš leidžiant jiems jus sekti, galite užrakinti savo paskyrą.

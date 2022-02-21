@@ -17,7 +17,7 @@ describe InvitesController do
     subject { get :index }
 
     let(:user) { Fabricate(:user, moderator: false, admin: false) }
-    let!(:invite) { Fabricate(:invite, user: user) }
+    let!(:invite) { Fabricate(:invite, user: user, email: "test@email.com") }
 
     context 'when user is a staff' do
       it 'renders index page' do
@@ -37,7 +37,7 @@ describe InvitesController do
   end
 
   describe 'POST #create' do
-    subject { post :create, params: { invite: { max_uses: '10', expires_in: 1800 } } }
+    subject { post :create, params: { invite: { max_uses: '10', expires_in: 1800, email: "test@email.com" } } }
 
     context 'when user is an admin' do
       let(:user) { Fabricate(:user, moderator: false, admin: true) }
@@ -45,11 +45,11 @@ describe InvitesController do
       it 'succeeds to create a invite' do
         expect { subject }.to change { Invite.count }.by(1)
         expect(subject).to redirect_to invites_path
-        expect(Invite.last).to have_attributes(user_id: user.id, max_uses: 10)
+        expect(Invite.last).to have_attributes(user_id: user.id, max_uses: 10, email: "test@email.com")
       end
     end
 
-    context 'when user is not an admin' do
+    context 'when user is not an admin'  do
       let(:user) { Fabricate(:user, moderator: true, admin: false) }
 
       it 'returns 403' do
@@ -58,13 +58,13 @@ describe InvitesController do
     end
   end
 
-  describe 'DELETE #create' do
+  describe 'DELETE #create'  do
     subject { delete :destroy, params: { id: invite.id } }
 
-    let!(:invite) { Fabricate(:invite, user: user, expires_at: nil) }
+    let!(:invite) { Fabricate(:invite, user: user, email: "test@email.com", expires_at: nil) }
     let(:user) { Fabricate(:user, moderator: false, admin: true) }
 
-    it 'expires invite' do
+    it 'expires invite'  do
       expect(subject).to redirect_to invites_path
       expect(invite.reload).to be_expired
     end

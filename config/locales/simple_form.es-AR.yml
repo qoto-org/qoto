@@ -20,6 +20,7 @@ es-AR:
           sensitive: Forzar a que todos los adjuntos de medios de este usuario sean marcados como sensibles.
           silence: Evitar que el usuario pueda publicar mensajes, ocultando sus publicaciones y notificaciones a cuentas que no lo siguen.
           suspend: Evitar cualquier interacción desde o hacia esta cuenta, y eliminar su contenido. Reversible en un plazo de 30 días.
+          verify: Verifica el perfil del usuario
         warning_preset_id: Opcional. Todavía podés agregar texto personalizado al final del preajuste
       announcement:
         all_day: Cuando esté seleccionado, sólo se mostrarán las fechas del rango de tiempo
@@ -111,6 +112,7 @@ es-AR:
           sensitive: Sensible
           silence: Limitar
           suspend: Suspender
+          verify: Verificar
         warning_preset_id: Usar una advertencia preestablecida
       announcement:
         all_day: Evento de todo el día
@@ -130,6 +132,8 @@ es-AR:
         data: Datos
         discoverable: Sugerir cuenta a otros
         display_name: Nombre para mostrar
+        location: Lugar de residencia
+        website: Sitio Web
         email: Dirección de correo electrónico
         expires_in: Vence después de
         fields: Metadatos de perfil

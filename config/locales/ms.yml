@@ -73,6 +73,8 @@ ms:
       disable_two_factor_authentication: Lumpuhkan 2FA
       disabled: Dilumpuhkan
       display_name: Nama paparan
+      location: lokasi
+      website: laman web
       domain: Domain
       edit: Tukar
       email: Emel

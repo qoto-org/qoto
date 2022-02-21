@@ -8,22 +8,22 @@ describe 'Localization' do
   end
 
   it 'uses a specific region when provided' do
-    headers = { 'Accept-Language' => 'zh-HK' }
+    headers = { 'Accept-Language' => 'en' }
 
     get "/about", headers: headers
 
     expect(response.body).to include(
-      I18n.t('about.tagline', locale: 'zh-HK')
+      I18n.t('about.register_headline', locale: 'en')
     )
   end
 
   it 'falls back to a locale when region missing' do
-    headers = { 'Accept-Language' => 'es-FAKE' }
+    headers = { 'Accept-Language' => 'en-FAKE' }
 
     get "/about", headers: headers
 
     expect(response.body).to include(
-      I18n.t('about.tagline', locale: 'es')
+      I18n.t('about.register_headline', locale: 'en')
     )
   end
 
@@ -33,7 +33,7 @@ describe 'Localization' do
     get "/about", headers: headers
 
     expect(response.body).to include(
-      I18n.t('about.tagline', locale: 'en')
+      I18n.t('about.register_headline', locale: 'en')
     )
   end
 end

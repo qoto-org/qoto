@@ -130,6 +130,8 @@ tr:
         data: Veri
         discoverable: Bu hesabı dizinde listele
         display_name: Görünen isim
+        location: yer
+        website: İnternet sitesi
         email: E-posta adresi
         expires_in: Bitiş tarihi
         fields: Profil meta verisi

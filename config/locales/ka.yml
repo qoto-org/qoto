@@ -63,6 +63,8 @@ ka:
       disable_two_factor_authentication: გამორთე 2FA
       disabled: გამორთულია
       display_name: დისპლეი სახელი
+      location: მდებარეობა
+      website: ვებგვერდი
       domain: დომენი
       edit: შეცვლა
       email: ელ-ფოსტა

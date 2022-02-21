@@ -4,4 +4,5 @@ Fabricator(:user) do
   password     "123456789"
   confirmed_at { Time.zone.now }
   agreement    true
+  invite_id    { nil }
 end

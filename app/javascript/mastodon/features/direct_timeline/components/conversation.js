@@ -16,11 +16,11 @@ import classNames from 'classnames';
 
 const messages = defineMessages({
   more: { id: 'status.more', defaultMessage: 'More' },
-  open: { id: 'conversation.open', defaultMessage: 'View conversation' },
+  open: { id: 'conversation.open', defaultMessage: 'View Conversation' },
   reply: { id: 'status.reply', defaultMessage: 'Reply' },
-  markAsRead: { id: 'conversation.mark_as_read', defaultMessage: 'Mark as read' },
-  delete: { id: 'conversation.delete', defaultMessage: 'Delete conversation' },
-  muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
+  markAsRead: { id: 'conversation.mark_as_read', defaultMessage: 'Mark As Read' },
+  delete: { id: 'conversation.delete', defaultMessage: 'Delete Conversation' },
+  muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute Conversation' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
 });
 

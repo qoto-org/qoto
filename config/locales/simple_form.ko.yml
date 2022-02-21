@@ -130,6 +130,8 @@ ko:
         data: 데이터
         discoverable: 계정을 다른 사람들에게 추천하기
         display_name: 표시되는 이름
+        location: 위치
+        website: 웹사이트
         email: 이메일 주소
         expires_in: 만료시각
         fields: 프로필 메타데이터

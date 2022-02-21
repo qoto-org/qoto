@@ -115,6 +115,8 @@
         data: Data
         discoverable: Før opp denne kontoen i mappen
         display_name: Visningsnavn
+        location: plassering
+        website: nettsted
         email: E-postadresse
         expires_in: Utløper etter
         fields: Profilmetadata

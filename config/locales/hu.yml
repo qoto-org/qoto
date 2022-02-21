@@ -124,6 +124,8 @@ hu:
       disable_two_factor_authentication: Kétlépcsős hitelesítés kikapcsolása
       disabled: Kikapcsolva
       display_name: Megjelenített név
+      location: elhelyezkedés
+      website: weboldal
       domain: Domain
       edit: Szerkesztés
       email: E-mail
@@ -1412,6 +1414,8 @@ hu:
         sensitive: A feltöltött és hivatkozott médiatartalmaidat kényesként kezeljük.
         silence: A fiókodat így is használhatod, de csak a követőid láthatják a bejegyzéseidet ezen a szerveren, valamint kimaradhatsz a nyilvános idővonalakról is. Ugyanakkor ettől még mások manuálisan bekövethetnek.
         suspend: Többé nem használhatod a fiókodat, a profilod és más adataid többé nem elérhetőek. Még be tudsz jelentkezni, hogy lementsd az adataidat addig, amíg azokat teljesen le nem töröljük, bár néhány adatot megtartunk, hogy a jövőben ne tudd elkerülni a felfüggesztést.
+        verify: Ön a közösség minősített tagja
+        unverify: Már nem vagy a közösség minősített tagja.
       get_in_touch: Válaszolhatsz erre az emailre, hogy kapcsolatba lépj a %{instance} csapatával.
       review_server_policies: Szerver szabályzat átnézése
       statuses: 'Különösen hozzá:'
@@ -1421,12 +1425,16 @@ hu:
         sensitive: A %{acct} fiókod médiatartalmait kényesnek jelölték
         silence: A fiókodat %{acct} korlátozták
         suspend: A fiókodat %{acct} felfüggesztették
+        verify: Fiókját %{acct} ellenőriztük
+        unverify: Fiókja %{acct} ellenőrzése eltávolítva
       title:
         disable: Befagyasztott fiók
         none: Figyelem
         sensitive: Médiatartalmadat kényesnek jelölték
         silence: Lekorlátozott fiók
         suspend: Felfüggesztett fiók
+        verify: Fiók ellenőrizve
+        unverify: A fiókellenőrzés eltávolítva
     welcome:
       edit_profile_action: Készítsd el profilod
       edit_profile_step: 'Itt tudod egyedivé tenni a profilod: feltölthetsz profil- és borítóképet, megváltoztathatod a megjelenített neved és így tovább. Ha jóvá szeretnéd hagyni követőidet, mielőtt követhetnek, itt tudod a fiókodat zárttá tenni.'

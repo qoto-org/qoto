@@ -17,7 +17,7 @@ $content-width: 840px;
     &__inner {
       display: flex;
       justify-content: flex-end;
-      background: $ui-base-color;
+      background: $color-6;
       height: 100%;
     }
   }
@@ -68,9 +68,8 @@ $content-width: 840px;
 
     .logo {
       display: block;
-      margin: 40px auto;
-      width: 100px;
-      height: 100px;
+      margin: 30px auto;
+      width: 130px;
     }
 
     @media screen and (max-width: $no-columns-breakpoint) {
@@ -106,20 +105,27 @@ $content-width: 840px;
         }
 
         &:hover {
-          color: $primary-text-color;
-          background-color: darken($ui-base-color, 5%);
+          color: $color-6-light;
+          background-color: $color-5;
           transition: all 100ms linear;
           transition-property: color, background-color;
         }
 
         &.selected {
-          background: darken($ui-base-color, 2%);
+          background: $color-6-light;
           border-radius: 4px 0 0;
+
+          &:hover {
+            color: $color-6-light;
+            background-color: $color-5;
+            transition: all 100ms linear;
+            transition-property: color, background-color;
+          }
         }
       }
 
       ul {
-        background: darken($ui-base-color, 4%);
+        background: $color-6-light;
         border-radius: 0 0 0 4px;
         margin: 0;
 
@@ -131,12 +137,15 @@ $content-width: 840px;
 
       .simple-navigation-active-leaf a {
         color: $primary-text-color;
-        background-color: $ui-highlight-color;
+        background-color: $color-5;
         border-bottom: 0;
         border-radius: 0;
 
         &:hover {
-          background-color: lighten($ui-highlight-color, 5%);
+          color: $color-6-light;
+          background-color: $color-5;
+          transition: all 100ms linear;
+          transition-property: color, background-color;
         }
       }
     }
@@ -916,3 +925,41 @@ a.name-tag,
 .dashboard__counters.admin-account-counters {
   margin-top: 10px;
 }
+
+.admin__trending-status {
+  position: relative;
+  border-bottom-width: 1px;
+
+  .trending-container {
+    margin-bottom: 1rem;
+    text-align: center;
+
+    @media screen and (min-width: $no-gap-breakpoint) {
+      position: absolute;
+      right: .5rem;
+      top: 2rem;
+    }
+
+    a {
+      display: none;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: .25rem .5rem;
+      text-decoration: none;
+
+      &.markTrending {
+        background-color: $color-5-dark;
+        border: 1px solid darken($color-5-dark, 1);
+      }
+      &.markNotTrending {
+        background-color: $color-1-dark;
+        border: 1px solid darken($color-1-dark, 1);
+      }
+      &.show {
+        display: block;
+      }
+    }
+  }
+}
+

@@ -130,6 +130,8 @@ cs:
         data: Data
         discoverable: Navrhovat účet ostatním
         display_name: Zobrazované jméno
+        location: umístění
+        website: webová stránka
         email: E-mailová adresa
         expires_in: Vypršet za
         fields: Metadata profilu

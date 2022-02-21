@@ -107,10 +107,20 @@ class RSSBuilder
     self
   end
 
-  def item
-    @channel << ItemBuilder.new.tap do |item|
-      yield item
-    end.to_element
+  def location(str)
+    @channel << (Ox::Element.new('location') << str)
+
+    self
+  end
+
+  def website(str)
+    @channel << (Ox::Element.new('website') << str)
+
+    self
+  end
+
+  def item(&block)
+    @channel << ItemBuilder.new.tap(&block).to_element
 
     self
   end

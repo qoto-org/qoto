@@ -107,6 +107,8 @@ zh-TW:
         data: 資料
         discoverable: 在目錄列出此帳戶
         display_name: 顯示名稱
+        location: 地點
+        website: 網站
         email: 電子信箱地址
         expires_in: 失效時間
         fields: 個人資料中繼資料

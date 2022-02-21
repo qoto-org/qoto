@@ -10,7 +10,7 @@ import { connectDirectStream } from '../../actions/streaming';
 import ConversationsListContainer from './containers/conversations_list_container';
 
 const messages = defineMessages({
-  title: { id: 'column.direct', defaultMessage: 'Direct messages' },
+  title: { id: 'column.direct', defaultMessage: 'Direct Messages' },
 });
 
 export default @connect()

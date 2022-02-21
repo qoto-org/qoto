@@ -118,6 +118,8 @@ th:
         data: ข้อมูล
         discoverable: แนะนำบัญชีให้ผู้อื่น
         display_name: ชื่อที่แสดง
+        location: ที่ตั้ง
+        website: เว็บไซต์
         email: ที่อยู่อีเมล
         expires_in: หมดอายุหลังจาก
         fields: ข้อมูลเมตาโปรไฟล์

@@ -130,6 +130,8 @@ pt-PT:
         data: Dados
         discoverable: Permitir sugerir esta conta a outros
         display_name: Nome Público
+        location: localização
+        website: local na rede Internet
         email: Endereço de e-mail
         expires_in: Expira em
         fields: Metadados de perfil

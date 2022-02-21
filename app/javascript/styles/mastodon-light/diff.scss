@@ -33,7 +33,6 @@ html {
 .regeneration-indicator {
   background: $white;
   border: 1px solid lighten($ui-base-color, 8%);
-  border-top: 0;
 }
 
 .directory__card__img {
@@ -468,12 +467,8 @@ html {
   border: 1px solid lighten($ui-base-color, 8%);
   border-bottom: 0;
 
-  @media screen and (max-width: $no-gap-breakpoint) {
-    border-top: 0;
-  }
-
   &__link {
-    padding-bottom: 14px;
+    padding-bottom: 10px;
     border-bottom-width: 1px;
     border-bottom-color: lighten($ui-base-color, 8%);
 

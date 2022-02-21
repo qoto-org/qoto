@@ -1,19 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { debounce } from 'lodash';
 import { isUserTouching } from '../../../is_mobile';
-import Icon from 'mastodon/components/icon';
 import NotificationsCounterIcon from './notifications_counter_icon';
+import IconSvg from 'mastodon/components/icon_svg';
+import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List as ImmutableList } from 'immutable';
+
+const mapStateToProps = state => {
+  const me = state.getIn(['meta', 'me']);
+
+  return {
+    account: state.getIn(['accounts', me]),
+  }
+}
 
 export const links = [
-  <NavLink className='tabs-bar__link' to='/timelines/home' data-preview-title-id='column.home' data-preview-icon='home' ><Icon id='home' fixedWidth /><FormattedMessage id='tabs_bar.home' defaultMessage='Home' /></NavLink>,
-  <NavLink className='tabs-bar__link' to='/notifications' data-preview-title-id='column.notifications' data-preview-icon='bell' ><NotificationsCounterIcon /><FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' /></NavLink>,
-  <NavLink className='tabs-bar__link' to='/timelines/public/local' data-preview-title-id='column.community' data-preview-icon='users' ><Icon id='users' fixedWidth /><FormattedMessage id='tabs_bar.local_timeline' defaultMessage='Local' /></NavLink>,
-  <NavLink className='tabs-bar__link' exact to='/timelines/public' data-preview-title-id='column.public' data-preview-icon='globe' ><Icon id='globe' fixedWidth /><FormattedMessage id='tabs_bar.federated_timeline' defaultMessage='Federated' /></NavLink>,
-  <NavLink className='tabs-bar__link optional' to='/search' data-preview-title-id='tabs_bar.search' data-preview-icon='bell' ><Icon id='search' fixedWidth /><FormattedMessage id='tabs_bar.search' defaultMessage='Search' /></NavLink>,
-  <NavLink className='tabs-bar__link' style={{ flexGrow: '0', flexBasis: '30px' }} to='/getting-started' data-preview-title-id='getting_started.heading' data-preview-icon='bars' ><Icon id='bars' fixedWidth /></NavLink>,
+  <NavLink className='tabs-bar__link' to='/timelines/home' data-preview-title-id='column.home' data-preview-icon='home' ><IconSvg id='home' /></NavLink>,
+  <NavLink className='tabs-bar__link' to='/notifications' data-preview-title-id='column.notifications' data-preview-icon='bell' ><NotificationsCounterIcon id='notification' /></NavLink>,
+  <NavLink className='tabs-bar__link optional' to='/search' data-preview-title-id='tabs_bar.search' data-preview-icon='bell' ><IconSvg id='search' /></NavLink>,
 ];
 
 export function getIndex (path) {
@@ -24,13 +32,17 @@ export function getLink (index) {
   return links[index].props.to;
 }
 
-export default @injectIntl
-@withRouter
+export default @withRouter @injectIntl @connect(mapStateToProps)
 class TabsBar extends React.PureComponent {
-
+  
   static propTypes = {
+    account: ImmutablePropTypes.map.isRequired,
     intl: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
+  }
+
+  componentDidMount() {
+      this.links = ImmutableList(links).push(<NavLink className='tabs-bar__link' to={`/accounts/${this.props.account.get('id')}`} data-preview-title-id='getting_started.heading' data-preview-icon='bars' ><IconSvg id='profile'  /></NavLink>);
   }
 
   setRef = ref => {
@@ -48,8 +60,10 @@ class TabsBar extends React.PureComponent {
         const tabs = Array(...this.node.querySelectorAll('.tabs-bar__link'));
         const currentTab = tabs.find(tab => tab.classList.contains('active'));
         const nextTab = tabs.find(tab => tab.contains(e.target));
-        const { props: { to } } = links[Array(...this.node.childNodes).indexOf(nextTab)];
-
+        const nodeChildren = Array(...this.node.childNodes)
+        const nextTabIndex = nodeChildren.indexOf(nextTab)
+        const nextTabComponent = this.links.get(nextTabIndex)
+        const { props: { to } } = nextTabComponent;
 
         if (currentTab !== nextTab) {
           if (currentTab) {
@@ -71,16 +85,21 @@ class TabsBar extends React.PureComponent {
 
   render () {
     const { intl: { formatMessage } } = this.props;
-
+    const currentPathname = this.props.location.pathname;
+    if (!this.links) return null;
     return (
       <div className='tabs-bar__wrapper'>
         <nav className='tabs-bar' ref={this.setRef}>
-          {links.map(link => React.cloneElement(link, { key: link.props.to, onClick: this.handleClick, 'aria-label': formatMessage({ id: link.props['data-preview-title-id'] }) }))}
-        </nav>
+          {this.links.map(link => React.cloneElement(
+            link,
+            { key: link.props.to, onClick: this.handleClick, 'aria-label': formatMessage({ id: link.props['data-preview-title-id'] }) },
+            [React.cloneElement(link.props.children, {key: link.props.to, svg: link.props.children.props.id + (currentPathname == link.props.to ? '-active' : '')})]
+          ))}
 
-        <div id='tabs-bar__portal' />
+        </nav>
       </div>
     );
   }
 
 }
+// svg={this.props.svg + (this.props.active ? "-active" : "")}

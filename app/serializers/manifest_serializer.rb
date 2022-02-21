@@ -7,7 +7,7 @@ class ManifestSerializer < ActiveModel::Serializer
   attributes :name, :short_name, :description,
              :icons, :theme_color, :background_color,
              :display, :start_url, :scope,
-             :share_target, :shortcuts
+             :share_target
 
   def name
     object.site_title
@@ -28,6 +28,46 @@ class ManifestSerializer < ActiveModel::Serializer
         sizes: '192x192',
         type: 'image/png',
       },
+      {
+        src: '/icons/icon-57x57.png',
+        sizes: '57x57',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-64x64.png',
+        sizes: '64x64',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-72x72.png',
+        sizes: '72x72',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-114x114.png',
+        sizes: '114x114',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-120x120.png',
+        sizes: '120x120',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-180x180.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
     ]
   end
 
@@ -44,7 +84,7 @@ class ManifestSerializer < ActiveModel::Serializer
   end
 
   def start_url
-    '/web/timelines/home'
+    '/'
   end
 
   def scope
@@ -63,43 +103,5 @@ class ManifestSerializer < ActiveModel::Serializer
         url: 'url',
       },
     }
-  end
-
-  def shortcuts
-    [
-      {
-        name: 'New toot',
-        url: '/web/statuses/new',
-        icons: [
-          {
-            src: '/shortcuts/new-status.png',
-            type: 'image/png',
-            sizes: '192x192',
-          },
-        ],
-      },
-      {
-        name: 'Notifications',
-        url: '/web/notifications',
-        icons: [
-          {
-            src: '/shortcuts/notifications.png',
-            type: 'image/png',
-            sizes: '192x192',
-          },
-        ],
-      },
-      {
-        name: 'Direct messages',
-        url: '/web/timelines/direct',
-        icons: [
-          {
-            src: '/shortcuts/direct.png',
-            type: 'image/png',
-            sizes: '192x192',
-          },
-        ],
-      },
-    ]
   end
 end

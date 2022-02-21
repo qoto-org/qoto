@@ -74,13 +74,18 @@ RSpec.describe Auth::RegistrationsController, type: :controller do
         get :new
         expect(response).to have_http_status(200)
       end
+      it 'redirects to login' do
+        Setting.registrations_mode = 'closed'
+        get :new, params: { 'invite_code': 'not_a_real_invite_code' }
+        expect(response).to redirect_to web_path
+      end
     end
 
     include_examples 'checks for enabled registrations', :new
   end
 
   describe 'POST #create' do
-    let(:accept_language) { Rails.application.config.i18n.available_locales.sample.to_s }
+    let(:accept_language) { 'en' } # TODO: i18n: Rails.application.config.i18n.available_locales.sample.to_s
 
     before do
       session[:registration_form_time] = 5.seconds.ago
@@ -163,35 +168,6 @@ RSpec.describe Auth::RegistrationsController, type: :controller do
         user = User.find_by(email: 'test@example.com')
         expect(user).to_not be_nil
         expect(user.locale).to eq(accept_language)
-        expect(user.approved).to eq(false)
-      end
-    end
-
-    context 'approval-based registrations with expired invite' do
-      around do |example|
-        registrations_mode = Setting.registrations_mode
-        example.run
-        Setting.registrations_mode = registrations_mode
-      end
-
-      subject do
-        Setting.registrations_mode = 'approved'
-        request.headers["Accept-Language"] = accept_language
-        invite = Fabricate(:invite, max_uses: nil, expires_at: 1.hour.ago)
-        post :create, params: { user: { account_attributes: { username: 'test' }, email: 'test@example.com', password: '12345678', password_confirmation: '12345678', 'invite_code': invite.code, agreement: 'true' } }
-      end
-
-      it 'redirects to setup' do
-        subject
-        expect(response).to redirect_to auth_setup_path
-      end
-
-      it 'creates user' do
-        subject
-        user = User.find_by(email: 'test@example.com')
-        expect(user).to_not be_nil
-        expect(user.locale).to eq(accept_language)
-        expect(user.approved).to eq(false)
       end
     end
 
@@ -209,8 +185,8 @@ RSpec.describe Auth::RegistrationsController, type: :controller do
         Setting.registrations_mode = 'approved'
         Setting.require_invite_text = true
         request.headers["Accept-Language"] = accept_language
-        invite = Fabricate(:invite, user: inviter, max_uses: nil, expires_at: 1.hour.from_now)
-        post :create, params: { user: { account_attributes: { username: 'test' }, email: 'test@example.com', password: '12345678', password_confirmation: '12345678', 'invite_code': invite.code, agreement: 'true' } }
+        invite = Fabricate(:invite, user: inviter, max_uses: nil, expires_at: 1.hour.from_now, email:  'test1@example.com', users: [])
+        post :create, params: { user: { account_attributes: { username: 'test' }, password: '12345678', password_confirmation: '12345678', 'invite_code': invite.code, agreement: 'true' } }
       end
 
       it 'redirects to setup' do
@@ -220,10 +196,22 @@ RSpec.describe Auth::RegistrationsController, type: :controller do
 
       it 'creates user' do
         subject
-        user = User.find_by(email: 'test@example.com')
+        user = User.find_by(email: 'test1@example.com')
         expect(user).to_not be_nil
         expect(user.locale).to eq(accept_language)
         expect(user.approved).to eq(true)
+      end
+
+      it 'creates invite registration user' do
+        subject
+        notification = Notification.all.first
+        user = User.find_by(email: 'test1@example.com')
+        inviter = Invite.find_by(email: 'test1@example.com').user
+        expect(user).to_not be_nil
+        expect(notification).to_not be_nil
+        expect(notification.from_account_id).to eq(user.account_id)
+        expect(notification.account_id).to eq(inviter.account_id)
+        expect(notification.type).to eq :invite
       end
     end
 

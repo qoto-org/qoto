@@ -30,8 +30,8 @@ class Request
     @verb        = verb
     @url         = Addressable::URI.parse(url).normalize
     @http_client = options.delete(:http_client)
-    @options     = options.merge(socket_class: use_proxy? ? ProxySocket : Socket)
-    @options     = @options.merge(Rails.configuration.x.http_client_proxy) if use_proxy?
+    @options     = options.merge(socket_class: use_proxy?(url) ? ProxySocket : Socket)
+    @options     = @options.merge(Rails.configuration.x.http_client_proxy) if use_proxy?(url)
     @headers     = {}
 
     raise Mastodon::HostValidationError, 'Instance does not support hidden service connections' if block_hidden_service?
@@ -140,8 +140,32 @@ class Request
     @http_client ||= Request.http_client
   end
 
-  def use_proxy?
+  def use_proxy?(url)
+    parsed = URI.parse(url)
+    return false if private_address?(parsed.host)
     Rails.configuration.x.http_client_proxy.present?
+  end
+
+  def private_address?(hostname)
+    return false if [
+      '.test',
+      '.example',
+      '.invalid',
+      '.localhost',
+      'test.host',
+      'example.com',
+      'example.org',
+      'example.net',
+    ].any? { |exclude| hostname.end_with?(exclude) }
+
+    address = Resolv.getaddress(hostname)
+    [
+      IPAddr.new('10.0.0.0/8'),
+      IPAddr.new('172.16.0.0/12'),
+      IPAddr.new('192.168.0.0/16'),
+    ].any? do |net|
+        net.include?(address)
+    end
   end
 
   def block_hidden_service?
@@ -195,26 +219,24 @@ class Request
         addr_by_socket = {}
 
         addresses.each do |address|
-          begin
-            check_private_address(address)
+          check_private_address(address)
 
-            sock     = ::Socket.new(address.is_a?(Resolv::IPv6) ? ::Socket::AF_INET6 : ::Socket::AF_INET, ::Socket::SOCK_STREAM, 0)
-            sockaddr = ::Socket.pack_sockaddr_in(port, address.to_s)
+          sock     = ::Socket.new(address.is_a?(Resolv::IPv6) ? ::Socket::AF_INET6 : ::Socket::AF_INET, ::Socket::SOCK_STREAM, 0)
+          sockaddr = ::Socket.pack_sockaddr_in(port, address.to_s)
 
-            sock.setsockopt(::Socket::IPPROTO_TCP, ::Socket::TCP_NODELAY, 1)
+          sock.setsockopt(::Socket::IPPROTO_TCP, ::Socket::TCP_NODELAY, 1)
 
-            sock.connect_nonblock(sockaddr)
+          sock.connect_nonblock(sockaddr)
 
-            # If that hasn't raised an exception, we somehow managed to connect
-            # immediately, close pending sockets and return immediately
-            socks.each(&:close)
-            return sock
-          rescue IO::WaitWritable
-            socks << sock
-            addr_by_socket[sock] = sockaddr
-          rescue => e
-            outer_e = e
-          end
+          # If that hasn't raised an exception, we somehow managed to connect
+          # immediately, close pending sockets and return immediately
+          socks.each(&:close)
+          return sock
+        rescue IO::WaitWritable
+          socks << sock
+          addr_by_socket[sock] = sockaddr
+        rescue => e
+          outer_e = e
         end
 
         until socks.empty?
@@ -259,9 +281,8 @@ class Request
       end
 
       def private_address_exceptions
-        @private_address_exceptions = begin
-          (ENV['ALLOWED_PRIVATE_ADDRESSES'] || '').split(',').map { |addr| IPAddr.new(addr) }
-        end
+        allowed_private_address = ENV['MOBILE_NOTIFICATION_ENDPOINT'] ? URI.parse(ENV['MOBILE_NOTIFICATION_ENDPOINT']).host : ''
+        @private_address_exceptions = allowed_private_address.present? ? [IPAddr.new(allowed_private_address)] : []
       end
     end
   end

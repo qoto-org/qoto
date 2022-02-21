@@ -34,7 +34,7 @@ en_GB:
       other: statuses
     status_count_before: Who authored
     tagline: Follow friends and discover new ones
-    terms: Terms of service
+    terms: Terms of Service
     user_count_after:
       one: user
       other: users
@@ -99,6 +99,8 @@ en_GB:
       disable_two_factor_authentication: Disable 2FA
       disabled: Disabled
       display_name: Display name
+      location: Location
+      website: Website
       domain: Domain
       edit: Edit
       email: Email
@@ -836,7 +838,7 @@ en_GB:
     back: Back to Mastodon
     delete: Account deletion
     development: Development
-    edit_profile: Edit profile
+    edit_profile: Edit Profile
     export: Data export
     featured_tags: Featured hashtags
     identity_proofs: Identity proofs
@@ -1004,17 +1006,23 @@ en_GB:
         disable: While your account is frozen, your account data remains intact, but you cannot perform any actions until it is unlocked.
         silence: While your account is limited, only people who are already following you will see your toots on this server, and you may be excluded from various public listings. However, others may still manually follow you.
         suspend: Your account has been suspended, and all of your toots and your uploaded media files have been irreversibly removed from this server, and servers where you had followers.
+        verify: You're a certified member of the commumity
+        unverify: You're no longer a certified member of the community
       review_server_policies: Review server policies
       subject:
         disable: Your account %{acct} has been frozen
         none: Warning for %{acct}
         silence: Your account %{acct} has been limited
         suspend: Your account %{acct} has been suspended
+        verify: Your account %{acct} has been verified
+        unverify: Your account %{acct} verification was removed
       title:
         disable: Account frozen
         none: Warning
         silence: Account limited
         suspend: Account suspended
+        verify: Account verified
+        unverify: Account verification removed
     welcome:
       edit_profile_action: Setup profile
       edit_profile_step: You can customize your profile by uploading an avatar, header, changing your display name and more. If you’d like to review new followers before they’re allowed to follow you, you can lock your account.

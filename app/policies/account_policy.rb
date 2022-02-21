@@ -17,6 +17,14 @@ class AccountPolicy < ApplicationPolicy
     staff? && !record.user&.staff? && !record.instance_actor?
   end
 
+  def bot?
+    staff? && !record&.bot?
+  end
+
+  def unbot?
+    staff? && record&.bot?
+  end
+
   def destroy?
     record.suspended_temporarily? && admin?
   end
@@ -31,6 +39,14 @@ class AccountPolicy < ApplicationPolicy
 
   def unsensitive?
     staff?
+  end
+
+  def verify?
+    staff? && !record&.verified?
+  end
+
+  def unverify?
+    staff? && record&.verified?
   end
 
   def silence?

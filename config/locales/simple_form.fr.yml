@@ -130,6 +130,8 @@ fr:
         data: Données
         discoverable: Inscrire ce compte dans l’annuaire
         display_name: Nom public
+        location: emplacement
+        website: site Internet
         email: Adresse courriel
         expires_in: Expire après
         fields: Métadonnées du profil

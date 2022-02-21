@@ -122,6 +122,8 @@ hy:
         data: Տուեալներ
         discoverable: Աւելացնել հաշիւը հասցէագրքում
         display_name: Ցուցադրուող անուն
+        location: գտնվելու վայրը
+        website: կայքը
         email: Էլ․ հասցէ
         expires_in: Սպառուում է
         fields: Հաշուի մետադատա

@@ -127,6 +127,8 @@ pt-BR:
         data: Dados
         discoverable: Mostrar conta no diretório de perfis
         display_name: Nome de exibição
+        location: localização
+        website: local na rede Internet
         email: Endereço de e-mail
         expires_in: Expira em
         fields: Metadados do perfil

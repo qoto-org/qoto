@@ -130,6 +130,8 @@ nl:
         data: Gegevens
         discoverable: Dit account laten aanbevelen en in de gebruikersgids tonen
         display_name: Weergavenaam
+        location: plaats
+        website: website
         email: E-mailadres
         expires_in: Vervalt na
         fields: Metadata profiel

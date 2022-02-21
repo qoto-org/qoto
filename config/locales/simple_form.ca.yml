@@ -128,6 +128,8 @@ ca:
         current_password: Contrasenya actual
         data: Informació
         discoverable: Mostra aquest compte en el directori
+        location: ubicació
+        website: lloc web
         display_name: Nom visible
         email: Adreça de correu electrònic
         expires_in: Expira després

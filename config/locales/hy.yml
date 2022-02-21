@@ -120,6 +120,8 @@ hy:
       disable_two_factor_authentication: Անջատել 2FA
       disabled: Անջատված է
       display_name: Ցուցադրվող անունը
+      location: գտնվելու վայրը
+      website: կայքը
       domain: Դոմեն
       edit: Խմբագրել
       email: Էլ. փոստ
@@ -977,6 +979,8 @@ hy:
         none: Զգուշացում
         sensitive: Մեդիաֆայլը պիտակուել է որպէս զգայուն։
         suspend: Հաշիւը արգելափակուած է
+        verify: Հաշիվը հաստատված է
+        unverify: Հաշվի հաստատումը հեռացվեց
     welcome:
       edit_profile_action: Կարգաւորել հաշիւը
       final_action: Սկսել թթել

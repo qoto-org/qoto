@@ -130,6 +130,8 @@ ja:
         data: データ
         discoverable: ディレクトリに掲載する
         display_name: 表示名
+        location: 位置
+        website: Webサイト
         email: メールアドレス
         expires_in: 有効期限
         fields: プロフィール補足情報

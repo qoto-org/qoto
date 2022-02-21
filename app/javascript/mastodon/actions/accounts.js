@@ -545,14 +545,18 @@ export function fetchRelationshipsFail(error) {
 };
 
 export function fetchFollowRequests() {
-  return (dispatch, getState) => {
+  return (dispatch, getState) => {  // eslint-disable-line no-unused-vars
     dispatch(fetchFollowRequestsRequest());
 
-    api(getState).get('/api/v1/follow_requests').then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(importFetchedAccounts(response.data));
-      dispatch(fetchFollowRequestsSuccess(response.data, next ? next.uri : null));
-    }).catch(error => dispatch(fetchFollowRequestsFail(error)));
+    // TODO: follow_requests profile feature toggle "locked"
+    // api(getState).get('/api/v1/follow_requests').then(response => {
+    //   const next = getLinks(response).refs.find(link => link.rel === 'next');
+    //   dispatch(importFetchedAccounts(response.data));
+    //   dispatch(fetchFollowRequestsSuccess(response.data, next ? next.uri : null));
+    // }).catch(error => dispatch(fetchFollowRequestsFail(error)));
+
+    dispatch(importFetchedAccounts([]));
+    dispatch(fetchFollowRequestsSuccess([], null));
   };
 };
 

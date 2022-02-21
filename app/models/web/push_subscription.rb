@@ -4,14 +4,17 @@
 # Table name: web_push_subscriptions
 #
 #  id              :bigint(8)        not null, primary key
-#  endpoint        :string           not null
-#  key_p256dh      :string           not null
-#  key_auth        :string           not null
+#  endpoint        :string
+#  key_p256dh      :string
+#  key_auth        :string
 #  data            :json
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  access_token_id :bigint(8)
 #  user_id         :bigint(8)
+#  device_token    :string
+#  platform        :integer          default(0)
+#  environment     :integer          default(0)
 #
 
 class Web::PushSubscription < ApplicationRecord
@@ -20,9 +23,8 @@ class Web::PushSubscription < ApplicationRecord
 
   has_one :session_activation, foreign_key: 'web_push_subscription_id', inverse_of: :web_push_subscription
 
-  validates :endpoint, presence: true
-  validates :key_p256dh, presence: true
-  validates :key_auth, presence: true
+  validates :platform, inclusion: { in: 0..2 }
+  validates :environment, inclusion: { in: 0..1 }
 
   delegate :locale, to: :associated_user
 
@@ -53,25 +55,21 @@ class Web::PushSubscription < ApplicationRecord
   def associated_user
     return @associated_user if defined?(@associated_user)
 
-    @associated_user = begin
-      if user_id.nil?
-        session_activation.user
-      else
-        user
-      end
-    end
+    @associated_user = if user_id.nil?
+                         session_activation.user
+                       else
+                         user
+                       end
   end
 
   def associated_access_token
     return @associated_access_token if defined?(@associated_access_token)
 
-    @associated_access_token = begin
-      if access_token_id.nil?
-        find_or_create_access_token.token
-      else
-        access_token.token
-      end
-    end
+    @associated_access_token = if access_token_id.nil?
+                                 find_or_create_access_token.token
+                               else
+                                 access_token.token
+                               end
   end
 
   class << self

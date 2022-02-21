@@ -12,8 +12,10 @@
   %table.table.table--invites
     %thead
       %tr
-        %th
-        %th= t('invites.table.uses')
+        - if @user.admin
+          %th
+        %th= t('invites.table.email')
+        %th= t('invites.table.status')
         %th= t('invites.table.expires_at')
         %th
     %tbody

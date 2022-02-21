@@ -8,6 +8,9 @@ RSpec.describe Api::V1::ConversationsController, type: :controller do
   let(:other) { Fabricate(:user, account: Fabricate(:account, username: 'bob')) }
 
   before do
+    acct = Fabricate(:account, username: "ModerationAI")
+    Fabricate(:user, admin: true, account: acct)
+    stub_request(:post, ENV["MODERATION_TASK_API_URL"]).to_return(status: 200, body: request_fixture('moderation-response-0.txt'))
     allow(controller).to receive(:doorkeeper_token) { token }
   end
 
@@ -15,7 +18,7 @@ RSpec.describe Api::V1::ConversationsController, type: :controller do
     let(:scopes) { 'read:statuses' }
 
     before do
-      PostStatusService.new.call(other.account, text: 'Hey @alice', visibility: 'direct')
+      PostStatusService.new.call(other.account, text: 'Hey @alice', visibility: 'direct', mentions: ['alice'])
     end
 
     it 'returns http success' do

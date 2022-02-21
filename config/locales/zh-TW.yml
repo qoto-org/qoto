@@ -116,6 +116,8 @@ zh-TW:
       disable_two_factor_authentication: 停用兩階段認證
       disabled: 已停用
       display_name: 暱稱
+      location: 地點
+      website: 網站
       domain: 站點
       edit: 編輯
       email: 電子信箱地址

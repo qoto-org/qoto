@@ -122,6 +122,8 @@ pt-PT:
       disable_two_factor_authentication: Desativar 2FA
       disabled: Congelada
       display_name: Nome a mostrar
+      location: localização
+      website: local na rede Internet
       domain: Domínio
       edit: Editar
       email: E-mail
@@ -1410,6 +1412,8 @@ pt-PT:
         sensitive: Os seus ficheiros de media carregados e os media ligados serão tratados como sensíveis.
         silence: Enquanto a sua conta estiver limitada, só pessoas que já estiver a seguir irão ver as suas publicações nesta instância e poderá ser excluído de várias listagens públicas. No entanto, outros ainda o poderão seguir de forma manual.
         suspend: A sua conta foi suspensa e todas as suas publicações e os seus ficheiros de media foram irreversivelmente removidos desta instância e das instâncias onde tinhas seguidores.
+        verify: Você é um membro certificado da comunidade
+        unverify: Você não é mais um membro certificado da comunidade.
       get_in_touch: Pode responder a este e-mail para entrar em contacto com a equipa de %{instance}.
       review_server_policies: Reveja a política da instância
       statuses: 'Especificamente, para:'
@@ -1419,12 +1423,16 @@ pt-PT:
         sensitive: As publicações de media da sua conta %{acct} foram marcadas como sensíveis
         silence: A tua conta %{acct} foi limitada
         suspend: A tua conta %{acct} foi suspensa
+        verify: Sua conta %{acct} foi verificada
+        unverify: A verificação% {acct} da sua conta foi removida
       title:
         disable: Conta congelada
         none: Aviso
         sensitive: A sua media foi marcada como sensível
         silence: Conta limitada
         suspend: Conta suspensa
+        verify: Conta verificada
+        unverify: Verificação de conta removida
     welcome:
       edit_profile_action: Configura o perfil
       edit_profile_step: Podes personalizar o teu perfil carregando uma imagem de perfil e de cabeçalho ou alterando o nome a exibir, entre outras opções. Se preferires rever os novos seguidores antes deles te poderem seguir, podes tornar a tua conta privada.

@@ -102,6 +102,8 @@ ta:
       disable_two_factor_authentication: இரண்டு கட்ட உளைவுச்சொல்லை நீக்குக
       disabled: முடக்கப்பட்டது
       display_name: புனைப்பெயர்
+      location: இடம்
+      website: இணையதளம்
       domain: இனையதளப் பெயர்
       edit: திருத்து
       email: மின்னஞ்சல்

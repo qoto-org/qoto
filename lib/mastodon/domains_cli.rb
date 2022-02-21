@@ -30,16 +30,14 @@ module Mastodon
     def purge(*domains)
       dry_run = options[:dry_run] ? ' (DRY RUN)' : ''
 
-      scope = begin
-        if options[:limited_federation_mode]
-          Account.remote.where.not(domain: DomainAllow.pluck(:domain))
-        elsif !domains.empty?
-          Account.remote.where(domain: domains)
-        else
-          say('No domain(s) given', :red)
-          exit(1)
-        end
-      end
+      scope = if options[:limited_federation_mode]
+                Account.remote.where.not(domain: DomainAllow.pluck(:domain))
+              elsif !domains.empty?
+                Account.remote.where(domain: domains)
+              else
+                say('No domain(s) given', :red)
+                exit(1)
+              end
 
       processed, = parallelize_with_progress(scope) do |account|
         DeleteAccountService.new.call(account, reserve_username: false, skip_side_effects: true) unless options[:dry_run]
@@ -86,7 +84,7 @@ module Mastodon
       failed          = Concurrent::AtomicFixnum.new(0)
       start_at        = Time.now.to_f
       seed            = start ? [start] : Instance.pluck(:domain)
-      blocked_domains = Regexp.new('\\.?' + DomainBlock.where(severity: 1).pluck(:domain).join('|') + '$')
+      blocked_domains = Regexp.new("\\.?#{DomainBlock.where(severity: 1).pluck(:domain).join('|')}$")
       progress        = create_progress_bar
 
       pool = Concurrent::ThreadPoolExecutor.new(min_threads: 0, max_threads: options[:concurrency], idletime: 10, auto_terminate: true, max_queue: 0)

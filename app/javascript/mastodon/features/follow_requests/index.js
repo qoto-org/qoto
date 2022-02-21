@@ -14,7 +14,7 @@ import ScrollableList from '../../components/scrollable_list';
 import { me } from '../../initial_state';
 
 const messages = defineMessages({
-  heading: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
+  heading: { id: 'column.follow_requests', defaultMessage: 'Follow Requests' },
 });
 
 const mapStateToProps = state => ({

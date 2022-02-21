@@ -89,6 +89,8 @@ sv:
         data: Data
         discoverable: Lista detta konto i katalogen
         display_name: Visningsnamn
+        location: plats
+        website: hemsida
         email: E-postadress
         expires_in: Förfaller efter
         fields: Profil-metadata

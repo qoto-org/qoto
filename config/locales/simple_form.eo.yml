@@ -98,6 +98,8 @@ eo:
         data: Datumoj
         discoverable: Montri ĉi tiun konton en la profilujo
         display_name: Publika nomo
+        location: loko
+        website: retejo
         email: Retadreso
         expires_in: Eksvalidiĝas post
         fields: Profilaj metadatumoj

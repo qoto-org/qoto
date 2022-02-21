@@ -101,6 +101,8 @@ sk:
         data: Dáta
         discoverable: Zaraď tento účet do databázy profilov
         display_name: Zobrazované meno
+        location: umiestnenie
+        website: webové stránky
         email: Emailová adresa
         expires_in: Expiruj po
         fields: Metadáta profilu

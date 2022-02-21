@@ -40,6 +40,8 @@ sr-Latn:
       disable_two_factor_authentication: Isključi 2FA
       disabled: Isključena
       display_name: Prikazano ime
+      location: lokacija
+      website: web stranica
       domain: Domen
       edit: Izmeni
       email: E-pošta

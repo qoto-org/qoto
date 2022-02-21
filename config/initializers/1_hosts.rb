@@ -20,7 +20,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: web_host, protocol: https ? 'https://' : 'http://', trailing_slash: false }
 
   config.x.streaming_api_base_url = ENV.fetch('STREAMING_API_BASE_URL') do
-    if Rails.env.production?
+    if (Rails.env.production? || ENV['STREAMING_PRODUCTION_CONF'])
       "ws#{https ? 's' : ''}://#{web_host}"
     else
       "ws://#{ENV['REMOTE_DEV'] == 'true' ? host.split(':').first : 'localhost'}:4000"

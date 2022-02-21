@@ -24,7 +24,7 @@ class RSS::Serializer
     preview = status.proper.spoiler_text.presence || status.proper.text
     if preview.length > 30 || preview[0, 30].include?("\n")
       preview = preview[0, 30]
-      preview = preview[0, preview.index("\n").presence || 30] + '…'
+      preview = "#{preview[0, preview.index("\n").presence || 30]}…"
     end
 
     preview = "#{status.proper.spoiler_text.present? ? 'CW ' : ''}“#{preview}”#{status.proper.sensitive? ? ' (sensitive)' : ''}"

@@ -107,6 +107,8 @@ th:
       disable_two_factor_authentication: ปิดใช้งาน 2FA
       disabled: อายัดอยู่
       display_name: ชื่อที่แสดง
+      location: ที่ตั้ง
+      website: เว็บไซต์
       domain: โดเมน
       edit: แก้ไข
       email: อีเมล
@@ -1142,6 +1144,8 @@ th:
         none: คำเตือน
         silence: จำกัดบัญชีอยู่
         suspend: ระงับบัญชีอยู่
+        verify: ยืนยันบัญชีแล้ว
+        unverify: การยืนยันบัญชีถูกลบ
     welcome:
       edit_profile_action: ตั้งค่าโปรไฟล์
       review_preferences_action: เปลี่ยนการกำหนดลักษณะ

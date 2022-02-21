@@ -41,13 +41,11 @@ class Sanitize
 
       current_node = env[:node]
 
-      scheme = begin
-        if current_node['href'] =~ Sanitize::REGEX_PROTOCOL
-          Regexp.last_match(1).downcase
-        else
-          :relative
-        end
-      end
+      scheme = if current_node['href'] =~ Sanitize::REGEX_PROTOCOL
+                 Regexp.last_match(1).downcase
+               else
+                 :relative
+               end
 
       current_node.replace(current_node.text) unless LINK_PROTOCOLS.include?(scheme)
     end

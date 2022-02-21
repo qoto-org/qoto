@@ -20,6 +20,7 @@ en:
           sensitive: Force all this user's media attachments to be flagged as sensitive.
           silence: Prevent the user from being able to post with public visibility, hide their posts and notifications from people not following them.
           suspend: Prevent any interaction from or to this account and delete its contents. Revertible within 30 days.
+          verify: Verifies user account
         warning_preset_id: Optional. You can still add custom text to end of the preset
       announcement:
         all_day: When checked, only the dates of the time range will be displayed
@@ -56,7 +57,7 @@ en:
         setting_show_application: The application you use to post will be displayed in the detailed view of your posts
         setting_use_blurhash: Gradients are based on the colors of the hidden visuals but obfuscate any details
         setting_use_pending_items: Hide timeline updates behind a click instead of automatically scrolling the feed
-        username: Your username will be unique on %{domain}
+        username: Your username will be unique on TRUTH Social
         whole_word: When the keyword or phrase is alphanumeric only, it will only be applied if it matches the whole word
       domain_allow:
         domain: This domain will be able to fetch data from this server and incoming data from it will be processed and stored
@@ -111,6 +112,7 @@ en:
           sensitive: Sensitive
           silence: Limit
           suspend: Suspend
+          verify: Verify
         warning_preset_id: Use a warning preset
       announcement:
         all_day: All-day event
@@ -124,12 +126,14 @@ en:
         bot: This is a bot account
         chosen_languages: Filter languages
         confirm_new_password: Confirm new password
-        confirm_password: Confirm password
+        confirm_password: Confirm Password
         context: Filter contexts
         current_password: Current password
         data: Data
         discoverable: Suggest account to others
         display_name: Display name
+        location: Location
+        website: Website
         email: E-mail address
         expires_in: Expire after
         fields: Profile metadata
@@ -140,6 +144,7 @@ en:
         locale: Interface language
         locked: Require follow requests
         max_uses: Max number of uses
+        invitee_email: Email address of user wish to invite
         new_password: New password
         note: Bio
         otp_attempt: Two-factor code
@@ -173,7 +178,7 @@ en:
         severity: Severity
         sign_in_token_attempt: Security code
         type: Import type
-        username: Username
+        username: Create a Username
         username_or_email: Username or Email
         whole_word: Whole word
       email_domain_block:

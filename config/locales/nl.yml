@@ -120,6 +120,8 @@ nl:
       disable_two_factor_authentication: 2FA uitschakelen
       disabled: Bevroren
       display_name: Weergavenaam
+      location: plaats
+      website: website
       domain: Domein
       edit: Bewerken
       email: E-mail
@@ -1408,6 +1410,8 @@ nl:
         sensitive: De mediabestanden die je upload en gekoppelde media worden als gevoelig behandeld.
         silence: Zolang jouw account wordt beperkt, kunnen alleen mensen die jou al volgen jouw toots op deze server zien. Tevens ben je niet zichtbaar in meldingen, gesprekken en op openbare tijdlijnen. Anderen kunnen je echter wel handmatig volgen.
         suspend: Jouw account is opgeschort. Jouw toots en geüploade media zijn onomkeerbaar van deze server verwijderd, en ook o.a. van de servers waar jij volgers had.
+        verify: Je bent een gecertificeerd lid van de community
+        unverify: Je bent niet langer een gecertificeerd lid van de community.
       get_in_touch: Je kunt deze e-mail beantwoorden om in contact te komen met de medewerkers van %{instance}.
       review_server_policies: Serverbeleid bekijken
       statuses: 'Met name voor:'
@@ -1417,12 +1421,16 @@ nl:
         sensitive: De door jouw account %{acct} geplaatste media is als gevoelig gemarkeerd
         silence: Jouw account %{acct} is nu beperkt
         suspend: Jouw account %{acct} is opgeschort
+        verify: Uw account %{acct} is geverifieerd
+        unverify: Uw account %{acct} verificatie is verwijderd
       title:
         disable: Account bevroren
         none: Waarschuwing
         sensitive: Jouw media is als gevoelig gemarkeerd
         silence: Account beperkt
         suspend: Account opgeschort
+        verify: Account geverifieerd
+        unverify: Accountverificatie verwijderd
     welcome:
       edit_profile_action: Profiel instellen
       edit_profile_step: Je kunt jouw profiel aanpassen door een avatar (profielfoto) en omslagfoto te uploaden, jouw weergavenaam in te stellen en iets over jezelf te vertellen. Wanneer je nieuwe volgers eerst wilt goedkeuren, kun je jouw account besloten maken.

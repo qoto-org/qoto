@@ -21,14 +21,14 @@ const messages = defineMessages({
   public_timeline: { id: 'navigation_bar.public_timeline', defaultMessage: 'Federated timeline' },
   settings_subheading: { id: 'column_subheading.settings', defaultMessage: 'Settings' },
   community_timeline: { id: 'navigation_bar.community_timeline', defaultMessage: 'Local timeline' },
-  direct: { id: 'navigation_bar.direct', defaultMessage: 'Direct messages' },
+  direct: { id: 'navigation_bar.direct', defaultMessage: 'Direct Messages' },
   bookmarks: { id: 'navigation_bar.bookmarks', defaultMessage: 'Bookmarks' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
-  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow Requests' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
-  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
+  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked Users' },
   domain_blocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Hidden domains' },
-  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
+  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Mute Users' },
   pins: { id: 'navigation_bar.pins', defaultMessage: 'Pinned toots' },
   lists: { id: 'navigation_bar.lists', defaultMessage: 'Lists' },
   discover: { id: 'navigation_bar.discover', defaultMessage: 'Discover' },
@@ -104,26 +104,13 @@ class GettingStarted extends ImmutablePureComponent {
 
       height += 34 + 48*2;
 
-      if (profile_directory) {
-        navItems.push(
-          <ColumnLink key='directory' icon='address-book' text={intl.formatMessage(messages.profile_directory)} to='/directory' />,
-        );
-
-        height += 48;
-      }
 
       navItems.push(
         <ColumnSubheading key='header-personal' text={intl.formatMessage(messages.personal)} />,
       );
 
       height += 34;
-    } else if (profile_directory) {
-      navItems.push(
-        <ColumnLink key='directory' icon='address-book' text={intl.formatMessage(messages.profile_directory)} to='/directory' />,
-      );
-
-      height += 48;
-    }
+    } 
 
     if (multiColumn && !columns.find(item => item.get('id') === 'HOME')) {
       navItems.push(
@@ -134,9 +121,6 @@ class GettingStarted extends ImmutablePureComponent {
 
     navItems.push(
       <ColumnLink key='direct' icon='envelope' text={intl.formatMessage(messages.direct)} to='/timelines/direct' />,
-      <ColumnLink key='bookmark' icon='bookmark' text={intl.formatMessage(messages.bookmarks)} to='/bookmarks' />,
-      <ColumnLink key='favourites' icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />,
-      <ColumnLink key='lists' icon='list-ul' text={intl.formatMessage(messages.lists)} to='/lists' />,
     );
 
     height += 48*4;
@@ -148,7 +132,6 @@ class GettingStarted extends ImmutablePureComponent {
 
     if (!multiColumn) {
       navItems.push(
-        <ColumnSubheading key='header-settings' text={intl.formatMessage(messages.settings_subheading)} />,
         <ColumnLink key='preferences' icon='gears' text={intl.formatMessage(messages.preferences)} href='/settings/preferences' />,
       );
 

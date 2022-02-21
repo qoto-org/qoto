@@ -59,6 +59,7 @@ en_GB:
           none: Do nothing
           silence: Silence
           suspend: Suspend and irreversibly delete account data
+          verify: Verifies user profile
         warning_preset_id: Use a warning preset
       defaults:
         autofollow: Invite to follow your account
@@ -72,6 +73,8 @@ en_GB:
         data: Data
         discoverable: List this account on the directory
         display_name: Display name
+        location: Location
+        website: Website
         email: E-mail address
         expires_in: Expire after
         fields: Profile metadata

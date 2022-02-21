@@ -46,7 +46,6 @@ class Settings::PreferencesController < Settings::BaseController
       :setting_disable_swiping,
       :setting_system_font_ui,
       :setting_noindex,
-      :setting_theme,
       :setting_hide_network,
       :setting_aggregate_reblogs,
       :setting_show_application,

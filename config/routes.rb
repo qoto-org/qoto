@@ -15,19 +15,17 @@ Rails.application.routes.draw do
     mount PgHero::Engine, at: 'pghero', as: :pghero
   end
 
+  namespace :oauth do
+    scope :mfa do
+      post :challenge, controller: 'mfa'
+    end
+  end
+
   use_doorkeeper do
     controllers authorizations: 'oauth/authorizations',
                 authorized_applications: 'oauth/authorized_applications',
                 tokens: 'oauth/tokens'
   end
-
-  get '.well-known/host-meta', to: 'well_known/host_meta#show', as: :host_meta, defaults: { format: 'xml' }
-  get '.well-known/nodeinfo', to: 'well_known/nodeinfo#index', as: :nodeinfo, defaults: { format: 'json' }
-  get '.well-known/webfinger', to: 'well_known/webfinger#show', as: :webfinger
-  get '.well-known/change-password', to: redirect('/auth/edit')
-  get '.well-known/keybase-proof-config', to: 'well_known/keybase_proof_config#show'
-
-  get '/nodeinfo/2.0', to: 'well_known/nodeinfo#show', as: :nodeinfo_schema
 
   get 'manifest', to: 'manifests#show', defaults: { format: 'json' }
   get 'intent', to: 'intents#show'
@@ -37,6 +35,8 @@ Rails.application.routes.draw do
     resource :inbox, only: [:create], module: :activitypub
     resource :outbox, only: [:show], module: :activitypub
   end
+
+  get '/unsubscribe', to: 'unsubscribe#unsubscribe'
 
   devise_scope :user do
     get '/invite/:invite_code', to: 'auth/registrations#new', as: :public_invite
@@ -57,7 +57,6 @@ Rails.application.routes.draw do
   }
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: lambda { |req| req.format.nil? || req.format.html? }
-  get '/authorize_follow', to: redirect { |_, request| "/authorize_interaction?#{request.params.to_query}" }
 
   resources :accounts, path: 'users', only: [:show], param: :username do
     get :remote_follow,  to: 'remote_follow#new'
@@ -121,6 +120,7 @@ Rails.application.routes.draw do
       resources :mutes, only: :index, controller: :muted_accounts
       resources :lists, only: :index, controller: :lists
       resources :domain_blocks, only: :index, controller: :blocked_domains
+      resources :user_invites, only: :index
       resources :bookmarks, only: :index, controller: :bookmarks
     end
 
@@ -148,7 +148,7 @@ Rails.application.routes.draw do
 
     resources :identity_proofs, only: [:index, :new, :create, :destroy]
 
-    resources :applications, except: [:edit] do
+    resources :applications, except: [:edit, :index] do
       member do
         post :regenerate
       end
@@ -173,13 +173,12 @@ Rails.application.routes.draw do
   resources :tags,   only: [:show]
   resources :emojis, only: [:show]
   resources :invites, only: [:index, :create, :destroy]
-  resources :filters, except: [:show]
-  resource :relationships, only: [:show, :update]
+  resources :filters, except: [:show, :index]
+  resource :relationships, only: [:update]
 
-  get '/public', to: 'public_timelines#show', as: :public_timeline
+  # get '/public', to: 'public_timelines#show', as: :public_timeline
   get '/media_proxy/:id/(*any)', to: 'media_proxy#show', as: :media_proxy
 
-  resource :authorize_interaction, only: [:show, :create]
   resource :share, only: [:show, :create]
 
   namespace :admin do
@@ -222,7 +221,7 @@ Rails.application.routes.draw do
         post :stop_delivery
       end
     end
-  
+
     resources :rules
 
     resources :reports, only: [:index, :show] do
@@ -235,6 +234,8 @@ Rails.application.routes.draw do
 
       resources :reported_statuses, only: [:create]
     end
+
+    resources :trending_truths, only: [:index, :update, :destroy]
 
     resources :report_notes, only: [:create, :destroy]
 
@@ -250,6 +251,9 @@ Rails.application.routes.draw do
         post :memorialize
         post :approve
         post :reject
+        post :unverify
+        post :bot
+        post :unbot
       end
 
       resource :change_email, only: [:show, :update]
@@ -310,12 +314,46 @@ Rails.application.routes.draw do
 
   get '/admin', to: redirect('/admin/dashboard', status: 302)
 
+  scope :_ma1sd do
+    scope :backend do
+      scope :api do
+        scope :v1 do
+          post '/auth/login', to: 'api/v1/ma1sd/authentication#auth'
+          post '/directory/user/search', to: 'api/v1/ma1sd/directory#search'
+          post '/identity/single', to: 'api/v1/ma1sd/identity#single'
+          post '/identity/bulk', to: 'api/v1/ma1sd/identity#bulk'
+          post '/profile/displayName', to: 'api/v1/ma1sd/profile#display_name'
+          post '/profile/threepids', to: 'api/v1/ma1sd/profile#threepids'
+          post '/profile/roles', to: 'api/v1/ma1sd/profile#roles'
+        end
+      end
+    end
+  end
+
   namespace :api do
     # OEmbed
     get '/oembed', to: 'oembed#show', as: :oembed
 
-    # Identity proofs
-    get :proofs, to: 'proofs#index'
+    # Pleroma endpoints that we are implementing in Mastodon
+    namespace :pleroma do
+      post :change_password, controller: 'user_settings'
+      post :change_email, controller: 'user_settings'
+      post :delete_account, controller: 'user_settings'
+
+      scope :accounts,  defaults: { format: 'json' } do
+        get :mfa, to: 'accounts#mfa'
+        scope :mfa do
+          scope :setup do
+            get :totp, to: 'accounts#setup_totp'
+          end
+          scope :confirm do
+            post :totp, to: 'accounts#confirm_totp'
+          end
+          get :backup_codes, to: 'accounts#backup_codes'
+          delete :totp, to: 'accounts#delete_totp'
+        end
+      end
+    end
 
     # JSON / REST API
     namespace :v1 do
@@ -346,9 +384,30 @@ Rails.application.routes.draw do
 
       namespace :timelines do
         resource :home, only: :show, controller: :home
-        resource :public, only: :show, controller: :public
+        # resource :public, only: :show, controller: :public
         resources :tag, only: :show
         resources :list, only: :show
+      end
+
+      namespace :truth do
+        namespace :trending do
+          resources :truths, only: :index
+        end
+
+        namespace :admin do
+          scope :accounts do
+            get :count, to: 'accounts#count'
+          end
+        end
+
+        scope :password_reset do
+          post :confirm, to: 'passwords#reset_confirm'
+          post :request, to: 'passwords#reset_request'
+        end
+        
+        scope :email do
+          get :confirm, to: 'emails#email_confirm'
+        end
       end
 
       resources :streaming, only: [:index]
@@ -440,12 +499,13 @@ Rails.application.routes.draw do
       namespace :accounts do
         get :verify_credentials, to: 'credentials#show'
         patch :update_credentials, to: 'credentials#update'
+        get :chat_token, to: 'credentials#chat_token'
         resource :search, only: :show, controller: :search
         resource :lookup, only: :show, controller: :lookup
         resources :relationships, only: :index
       end
 
-      resources :accounts, only: [:create, :show] do
+      resources :accounts, only: [:show] do
         resources :statuses, only: :index, controller: 'accounts/statuses'
         resources :followers, only: :index, controller: 'accounts/follower_accounts'
         resources :following, only: :index, controller: 'accounts/following_accounts'
@@ -485,8 +545,20 @@ Rails.application.routes.draw do
         resource :subscription, only: [:create, :show, :update, :destroy]
       end
 
+      get '/stats', to: 'admin#stats'
       namespace :admin do
-        resources :accounts, only: [:index, :show, :destroy] do
+        resources :statuses, only: [:index, :show] do
+          post :sensitize
+          post :desensitize
+          post :undiscard
+          post :discard
+        end
+
+        resources :accounts, only: [:index, :show, :create, :destroy] do
+          resources :follows, only: [:show], param: :target_account_id, controller: 'accounts/follows'
+          collection do
+            post :bulk_approve
+          end
           member do
             post :enable
             post :unsensitive
@@ -494,6 +566,8 @@ Rails.application.routes.draw do
             post :unsuspend
             post :approve
             post :reject
+            post :unverify
+            post :role
           end
 
           resource :action, only: [:create], controller: 'account_actions'
@@ -501,6 +575,7 @@ Rails.application.routes.draw do
 
         resources :reports, only: [:index, :show] do
           member do
+            resources :moderation_records, only: [:index]
             post :assign_to_self
             post :unassign
             post :reopen

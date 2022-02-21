@@ -12,6 +12,7 @@ class Auth::SessionsController < Devise::SessionsController
   include TwoFactorAuthenticationConcern
   include SignInTokenAuthenticationConcern
 
+  before_action :check_enabled_registrations, only: [:new]
   before_action :set_instance_presenter, only: [:new]
   before_action :set_body_classes
 
@@ -135,5 +136,9 @@ class Auth::SessionsController < Devise::SessionsController
   def clear_attempt_from_session
     session.delete(:attempt_user_id)
     session.delete(:attempt_user_updated_at)
+  end
+
+  def check_enabled_registrations
+    @enabled_registrations = Setting.registrations_mode != 'none'
   end
 end

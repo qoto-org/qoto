@@ -130,6 +130,8 @@ hu:
         data: Adatok
         discoverable: Fiók listázása a profilok adatbázisában
         display_name: Megjelenített név
+        location: elhelyezkedés
+        website: weboldal
         email: E-mail cím
         expires_in: Elévül
         fields: Profil metaadatok

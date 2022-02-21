@@ -21,21 +21,21 @@ defaults: &defaults
   unfollow_modal: false
   boost_modal: false
   delete_modal: true
-  auto_play_gif: false
+  auto_play_gif: true
   display_media: 'default'
   expand_spoilers: false
   preview_sensitive_media: false
   reduce_motion: false
   disable_swiping: false
-  show_application: true
+  show_application: false
   system_font_ui: false
   noindex: false
   theme: 'default'
-  aggregate_reblogs: true
+  aggregate_reblogs: false
   advanced_layout: false
   use_blurhash: true
-  use_pending_items: false
-  trends: true
+  use_pending_items: true
+  trends: false
   trendable_by_default: false
   crop_images: true
   notification_emails:

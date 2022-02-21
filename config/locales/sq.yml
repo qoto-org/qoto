@@ -122,6 +122,8 @@ sq:
       disable_two_factor_authentication: Çaktivizoni 2FA-në
       disabled: E çaktivizuar
       display_name: Emër në ekran
+      location: vendndodhjen
+      website: faqe interneti
       domain: Përkatësi
       edit: Përpunojeni
       email: Email
@@ -1406,6 +1408,8 @@ sq:
         sensitive: Kartelat tuaja media të ngarkuara dhe media e lidhur prej jush do të trajtohet si rezervat.
         silence: Kur llogaria juaj është e kufizuar, mesazhet tuaj në këtë shërbyes do t’i shohin vetëm personat që ju ndjekin tashmë. dhe mund të liheni jashtë nga lista të ndryshme publike. Megjithatë, të tjerët prapë mund t’ju ndjekin dorazi.
         suspend: Llogaria juaj është pezulluar, dhe krejt mesazhet tuaja dhe kartelat media të ngarkuara janë hequr në mënyrë të pakthyeshme nga ky shërbyes, dhe nga shërbyesit te të cilët kishit ndjekës.
+        verify: Ju jeni një anëtar i certifikuar i komunitetit
+        unverify: Ju nuk jeni më një anëtar i certifikuar i komunitetit.
       get_in_touch: Që të lidheni me ekipin e %{instance}, mund t’i përgjigjeni këtij email-i.
       review_server_policies: Shqyrtoni rregullat e shërbyesit
       statuses: 'Posaçërisht, për:'
@@ -1415,12 +1419,16 @@ sq:
         sensitive: Medias postuar nga llogaria juaj %{acct} i është vënë shenjë si rezervat
         silence: Llogaria juaj %{acct} është kufizuar
         suspend: Llogaria juaj %{acct} është pezulluar
+        verify: Llogaria juaj %{acct} është verifikuar
+        unverify: Verifikimi i llogarisë suaj %{acct} u hoq
       title:
         disable: Llogari e ngrirë
         none: Sinjalizim
         sensitive: Medias tuaj i është vënë shenjë si rezervat
         silence: Llogari e kufizuar
         suspend: Llogari e pezulluar
+        verify: Llogaria u verifikua
+        unverify: Verifikimi i llogarisë u hoq
     welcome:
       edit_profile_action: Ujdisje profili
       edit_profile_step: Profilin mund ta personalizoni duke ngarkuar një avatar, figurë kryesh, duke ndryshuar emrin tuaj në ekran, etj. Nëse dëshironi të shqyrtoni ndjekës të rinj, përpara se të jenë lejuar t’ju ndjekin, mund të kyçni llogarinë tuaj.

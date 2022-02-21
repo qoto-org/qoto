@@ -13,6 +13,7 @@ class InvitesController < ApplicationController
 
     @invites = invites
     @invite  = Invite.new
+    @user = current_user
   end
 
   def create
@@ -25,6 +26,7 @@ class InvitesController < ApplicationController
       redirect_to invites_path
     else
       @invites = invites
+      @user = current_user
       render :index
     end
   end
@@ -43,7 +45,7 @@ class InvitesController < ApplicationController
   end
 
   def resource_params
-    params.require(:invite).permit(:max_uses, :expires_in, :autofollow, :comment)
+    params.require(:invite).permit(:max_uses, :expires_in, :autofollow, :comment, :email)
   end
 
   def set_body_classes

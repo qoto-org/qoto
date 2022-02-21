@@ -122,6 +122,8 @@ gl:
       disable_two_factor_authentication: Desactivar 2FA
       disabled: Desactivado
       display_name: Nome a amosar
+      location: localización
+      website: páxina web
       domain: Dominio
       edit: Editar
       email: Email
@@ -1410,6 +1412,8 @@ gl:
         sensitive: Os teus ficheiros e ligazóns a multimedia serán tratados como sensibles.
         silence: Mentras a conta está limitada, só a xente que actualmente te segue verá as publicacións neste servidor, e poderías estar excluída de varias listaxes públicas. Porén, outras persoas poderíante seguir de xeito manual.
         suspend: A súa conta foi suspendida, e todos os seus toots e medios subidos foron eliminados de este servidor de xeito irreversible, e dos servidores onde tivese seguidoras.
+        verify: Es membro certificado da comunidade
+        unverify: Xa non es un membro certificado da comunidade.
       get_in_touch: Pode responder a este correo para contactar coa administración de %{instance}.
       review_server_policies: Revisar políticas do servidor
       statuses: 'En concreto, para:'
@@ -1419,12 +1423,16 @@ gl:
         sensitive: Ó publicar multimedia a túa conta %{acct} foi marcada como sensible
         silence: A súa conta %{acct} foi limitada
         suspend: A súa conta %{acct} foi suspendida
+        verify: Verificouse a túa conta% {acct}
+        unverify: Eliminouse a verificación da túa conta% {acct}
       title:
         disable: Conta conxelada
         none: Aviso
         sensitive: O teu multimedia foi marcado como sensible
         silence: Conta limitada
         suspend: Conta suspendida
+        verify: Conta verificada
+        unverify: Eliminouse a verificación da conta
     welcome:
       edit_profile_action: Configurar perfil
       edit_profile_step: Podes personalizar o teu perfil subindo un avatar, cabeceira, cambiar o nome público e aínda máis. Se restrinxes a túa conta podes revisar a conta das persoas que solicitan seguirte antes de permitirlles o acceso aos teus toots.

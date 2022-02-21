@@ -266,13 +266,14 @@ export default class Dropdown extends React.PureComponent {
   }
 
   render () {
-    const { icon, items, size, title, disabled, dropdownPlacement, openDropdownId, openedViaKeyboard } = this.props;
+    const { icon, svg, items, size, title, disabled, dropdownPlacement, openDropdownId, openedViaKeyboard } = this.props;
     const open = this.state.id === openDropdownId;
 
     return (
       <div>
         <IconButton
           icon={icon}
+          svg={svg}
           title={title}
           active={open}
           disabled={disabled}

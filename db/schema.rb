@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_26_193025) do
+ActiveRecord::Schema.define(version: 2022_02_19_181316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,8 +174,12 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.integer "avatar_storage_schema_version"
     t.integer "header_storage_schema_version"
     t.string "devices_url"
-    t.integer "suspension_origin"
     t.datetime "sensitized_at"
+    t.integer "suspension_origin"
+    t.jsonb "settings_store", default: {}
+    t.boolean "verified", default: false, null: false
+    t.text "location", default: "", null: false
+    t.text "website", default: "", null: false
     t.index "(((setweight(to_tsvector('simple'::regconfig, (display_name)::text), 'A'::\"char\") || setweight(to_tsvector('simple'::regconfig, (username)::text), 'B'::\"char\")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(domain, ''::character varying))::text), 'C'::\"char\")))", name: "search_index", using: :gin
     t.index "lower((username)::text), COALESCE(lower((domain)::text), ''::text)", name: "index_accounts_on_username_and_domain_lower", unique: true
     t.index ["moved_to_account_id"], name: "index_accounts_on_moved_to_account_id"
@@ -286,6 +290,17 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uri"], name: "index_conversations_on_uri", unique: true
+  end
+
+  create_table "csv_exports", force: :cascade do |t|
+    t.string "model", null: false
+    t.string "app_id", null: false
+    t.string "file_url", null: false
+    t.string "status", default: "PROCESSING"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_csv_exports_on_user_id"
   end
 
   create_table "custom_emoji_categories", force: :cascade do |t|
@@ -463,17 +478,18 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.datetime "updated_at", null: false
     t.boolean "autofollow", default: false, null: false
     t.text "comment"
+    t.string "email"
     t.index ["code"], name: "index_invites_on_code", unique: true
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
 
   create_table "ip_blocks", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "expires_at"
     t.inet "ip", default: "0.0.0.0", null: false
     t.integer "severity", default: 0, null: false
+    t.datetime "expires_at"
     t.text "comment", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "list_accounts", force: :cascade do |t|
@@ -492,6 +508,15 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.datetime "updated_at", null: false
     t.integer "replies_policy", default: 0, null: false
     t.index ["account_id"], name: "index_lists_on_account_id"
+  end
+
+  create_table "logs", force: :cascade do |t|
+    t.string "event", null: false
+    t.text "message", default: "", null: false
+    t.string "app_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event", "app_id"], name: "index_logs_on_event_and_app_id"
   end
 
   create_table "markers", force: :cascade do |t|
@@ -527,6 +552,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.integer "thumbnail_file_size"
     t.datetime "thumbnail_updated_at"
     t.string "thumbnail_remote_url"
+    t.string "external_video_id"
     t.index ["account_id", "status_id"], name: "index_media_attachments_on_account_id_and_status_id", order: { status_id: :desc }
     t.index ["scheduled_status_id"], name: "index_media_attachments_on_scheduled_status_id"
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true
@@ -541,6 +567,16 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.boolean "silent", default: false, null: false
     t.index ["account_id", "status_id"], name: "index_mentions_on_account_id_and_status_id", unique: true
     t.index ["status_id"], name: "index_mentions_on_status_id"
+  end
+
+  create_table "moderation_records", force: :cascade do |t|
+    t.bigint "status_id"
+    t.bigint "media_attachment_id"
+    t.jsonb "analysis"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["media_attachment_id"], name: "index_moderation_records_on_media_attachment_id"
+    t.index ["status_id"], name: "index_moderation_records_on_status_id"
   end
 
   create_table "mutes", force: :cascade do |t|
@@ -720,6 +756,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.bigint "assigned_account_id"
     t.string "uri"
     t.boolean "forwarded"
+    t.integer "rule_ids", default: [], null: false, array: true
     t.index ["account_id"], name: "index_reports_on_account_id"
     t.index ["target_account_id"], name: "index_reports_on_target_account_id"
   end
@@ -730,6 +767,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.text "text", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "rule_type", default: 0
+    t.text "subtext", default: "", null: false
   end
 
   create_table "scheduled_statuses", force: :cascade do |t|
@@ -779,8 +818,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
   create_table "status_pins", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "status_id", null: false
-    t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["account_id", "status_id"], name: "index_status_pins_on_account_id_and_status_id", unique: true
   end
 
@@ -814,6 +853,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.bigint "in_reply_to_account_id"
     t.bigint "poll_id"
     t.datetime "deleted_at"
+    t.bigint "deleted_by_id"
     t.index ["account_id", "id", "visibility", "updated_at"], name: "index_statuses_20190820", order: { id: :desc }, where: "(deleted_at IS NULL)"
     t.index ["id", "account_id"], name: "index_statuses_local_20190824", order: { id: :desc }, where: "((local OR (uri IS NULL)) AND (deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
     t.index ["id", "account_id"], name: "index_statuses_public_20200119", order: { id: :desc }, where: "((deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
@@ -859,6 +899,15 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.boolean "by_moderator"
     t.index ["account_id"], name: "index_tombstones_on_account_id"
     t.index ["uri"], name: "index_tombstones_on_uri"
+  end
+
+  create_table "trendings", force: :cascade do |t|
+    t.bigint "status_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["status_id"], name: "index_trendings_on_status_id"
+    t.index ["user_id"], name: "index_trendings_on_user_id"
   end
 
   create_table "unavailable_domains", force: :cascade do |t|
@@ -915,23 +964,31 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
     t.datetime "sign_in_token_sent_at"
     t.string "webauthn_id"
     t.inet "sign_up_ip"
+    t.string "sms"
+    t.integer "waitlist_position"
+    t.boolean "unsubscribe_from_emails", default: false
     t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["created_by_application_id"], name: "index_users_on_created_by_application_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["remember_token"], name: "index_users_on_remember_token", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["sms"], name: "index_users_on_sms"
+    t.index ["waitlist_position"], name: "index_users_on_waitlist_position"
   end
 
   create_table "web_push_subscriptions", force: :cascade do |t|
-    t.string "endpoint", null: false
-    t.string "key_p256dh", null: false
-    t.string "key_auth", null: false
+    t.string "endpoint"
+    t.string "key_p256dh"
+    t.string "key_auth"
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "access_token_id"
     t.bigint "user_id"
+    t.string "device_token"
+    t.integer "platform", default: 0
+    t.integer "environment", default: 0
     t.index ["access_token_id"], name: "index_web_push_subscriptions_on_access_token_id"
     t.index ["user_id"], name: "index_web_push_subscriptions_on_user_id"
   end
@@ -1049,6 +1106,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_193025) do
   add_foreign_key "statuses_tags", "statuses", on_delete: :cascade
   add_foreign_key "statuses_tags", "tags", name: "fk_3081861e21", on_delete: :cascade
   add_foreign_key "tombstones", "accounts", on_delete: :cascade
+  add_foreign_key "trendings", "statuses"
+  add_foreign_key "trendings", "users"
   add_foreign_key "user_invite_requests", "users", on_delete: :cascade
   add_foreign_key "users", "accounts", name: "fk_50500f500d", on_delete: :cascade
   add_foreign_key "users", "invites", on_delete: :nullify

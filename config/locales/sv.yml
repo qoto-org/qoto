@@ -117,6 +117,8 @@ sv:
       disable_two_factor_authentication: Inaktivera 2FA
       disabled: inaktiverad
       display_name: Visningsnamn
+      location: plats
+      website: hemsida
       domain: Domän
       edit: Redigera
       email: E-post

@@ -686,11 +686,11 @@ $small-breakpoint: 960px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 50px;
+    padding: 35px 50px;
 
     svg {
       fill: $primary-text-color;
-      height: 52px;
+      height: 60px;
     }
 
     @media screen and (max-width: $no-gap-breakpoint) {
@@ -797,7 +797,6 @@ $small-breakpoint: 960px;
         flex-direction: column;
 
         .box-widget {
-          order: 2;
           flex: 0 0 auto;
         }
 
@@ -815,6 +814,8 @@ $small-breakpoint: 960px;
 
       .directory {
         margin-top: 10px;
+        order: 2;
+
       }
     }
 

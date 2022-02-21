@@ -112,6 +112,8 @@ et:
         data: Andmed
         discoverable: Lisage see konto kataloogi
         display_name: Kuvanimi
+        location: asukoht
+        website: veebisait
         email: E-posti aadress
         expires_in: Aegu pärast
         fields: Profiili metaandmed

@@ -116,6 +116,8 @@ vi:
       disable_two_factor_authentication: Vô hiệu hóa xác thực hai bước
       disabled: Đã vô hiệu hóa
       display_name: Tên hiển thị
+      location: vị trí
+      website: trang mạng
       domain: Máy chủ
       edit: Chỉnh sửa
       email: Email
@@ -1356,6 +1358,8 @@ vi:
         sensitive: Ảnh và video tải lên của bạn sẽ bị đánh dấu là nhạy cảm.
         silence: Bạn vẫn có thể dùng tài khoản của bạn. Tuy nhiên, chỉ có những người đang theo dõi bạn mới có thể thấy tút của bạn. Bạn sẽ bị loại khỏi danh sách của một số người. Những người mới khác vẫn có thể theo dõi bạn bình thường.
         suspend: Tài khoản của bạn đã bị vô hiệu hóa. Tất cả tút và tập tin mà bạn đã tải lên sẽ không thể truy cập được nữa. Bạn vẫn có thể đăng nhập để yêu cầu tải về bản sao dữ liệu của bạn. Tuy nhiên, chúng tôi sẽ giữ lại một vài dữ liệu để ngăn ngừa bạn trốn tránh trách nhiệm.
+        verify: Bạn là thành viên được chứng nhận của cộng đồng
+        unverify: Bạn không còn là thành viên được chứng nhận của cộng đồng.
       get_in_touch: Bạn có thể trả lời e-mail này để liên hệ với đội ngũ của %{instance}.
       review_server_policies: Xem lại quy tắc của máy chủ
       statuses: 'Cụ thể, cho:'
@@ -1365,12 +1369,16 @@ vi:
         sensitive: Ảnh và video tải lên của %{acct} sẽ bị đánh dấu là nhạy cảm
         silence: Tài khoản %{acct} của bạn đã bị tạm ẩn
         suspend: Tài khoản %{acct} của bạn đã bị vô hiệu hóa
+        verify: Tài khoản% {acct} của bạn đã được xác minh
+        unverify: Xác minh% {acct} tài khoản của bạn đã bị xóa
       title:
         disable: Tài khoản bị đóng băng
         none: Cảnh báo
         sensitive: Ảnh và video của bạn sẽ bị đánh dấu nhạy cảm
         silence: Tài khoản bị tạm ẩn
         suspend: Toài khoản bị vô hiệu hóa
+        verify: Đã xác minh tài khoản
+        unverify: Xác minh tài khoản đã bị xóa
     welcome:
       edit_profile_action: Cài đặt trang cá nhân
       edit_profile_step: Bạn có thể tùy chỉnh trang cá nhân của mình bằng cách tải lên ảnh đại diện, ảnh bìa, thay đổi tên hiển thị và hơn thế nữa. Nếu bạn muốn những người theo dõi mới phải được phê duyệt, hãy chuyển tài khoản sang trạng thái khóa.

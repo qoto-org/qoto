@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import api from '../api';
 
 export const CUSTOM_EMOJIS_FETCH_REQUEST = 'CUSTOM_EMOJIS_FETCH_REQUEST';
@@ -8,11 +9,21 @@ export function fetchCustomEmojis() {
   return (dispatch, getState) => {
     dispatch(fetchCustomEmojisRequest());
 
-    api(getState).get('/api/v1/custom_emojis').then(response => {
-      dispatch(fetchCustomEmojisSuccess(response.data));
-    }).catch(error => {
-      dispatch(fetchCustomEmojisFail(error));
-    });
+    dispatch(fetchCustomEmojisSuccess([]));
+    /**
+     * TODO: @features custom emoji
+     * We have disabled custom emojis
+     * when re-enabled, remove the dispatch
+     * above and uncomment this api call.
+     *
+     * api(getState).get('/api/v1/custom_emojis').then(response => {
+     *   dispatch(fetchCustomEmojisSuccess(response.data));
+     * }).catch(error => {
+     *   dispatch(fetchCustomEmojisFail(error));
+     * });
+     *
+     *
+     */
   };
 };
 

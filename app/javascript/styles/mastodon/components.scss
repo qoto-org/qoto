@@ -42,7 +42,7 @@
 }
 
 .button {
-  background-color: $ui-highlight-color;
+  background-color: $color-4;
   border: 10px none;
   border-radius: 4px;
   box-sizing: border-box;
@@ -59,17 +59,28 @@
   padding: 0 16px;
   position: relative;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: capitalize;
   text-decoration: none;
   text-overflow: ellipsis;
   transition: all 100ms ease-in;
   white-space: nowrap;
   width: auto;
 
+  &.button-warning {
+    background-color: $color-2;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: $color-2-dark;
+      transition: all 200ms ease-out;
+    }
+  }
+
   &:active,
   &:focus,
   &:hover {
-    background-color: lighten($ui-highlight-color, 10%);
+    background-color: $color-4-dark;
     transition: all 200ms ease-out;
   }
 
@@ -183,13 +194,8 @@
   &:active,
   &:focus {
     color: lighten($action-button-color, 7%);
-    background-color: rgba($action-button-color, 0.15);
     transition: all 200ms ease-out;
     transition-property: background-color, color;
-  }
-
-  &:focus {
-    background-color: rgba($action-button-color, 0.3);
   }
 
   &.disabled {
@@ -199,7 +205,7 @@
   }
 
   &.active {
-    color: $highlight-text-color;
+    color: $success-green;
   }
 
   &::-moz-focus-inner {
@@ -1018,7 +1024,7 @@
   padding-left: 68px;
   position: relative;
   min-height: 54px;
-  border-bottom: 1px solid lighten($ui-base-color, 8%);
+  border-bottom: 10px solid rgba(0,0,0,.08);
   cursor: auto;
 
   @supports (-ms-overflow-style: -ms-autohiding-scrollbar) {
@@ -1163,14 +1169,36 @@
 .status__action-bar {
   align-items: center;
   display: flex;
-  margin-top: 8px;
+  margin-top: 15px;
 }
 
 .status__action-bar-button {
-  margin-right: 18px;
+  margin-right: 15px;
 
   &.icon-button--with-counter {
-    margin-right: 14px;
+    margin-right: 15px;
+  }
+
+  @media screen and (min-width: 325px) {
+    margin-right: 30px;
+
+    &.icon-button--with-counter {
+      margin-right: 30px;
+    }
+  }
+
+
+  @media screen and (min-width: 768px) {
+    margin-right: 40px;
+
+    &.icon-button--with-counter {
+      margin-right: 40px;
+    }
+  }
+
+
+  svg{
+    height: 20px;
   }
 }
 
@@ -1344,7 +1372,7 @@
 }
 
 .account__avatar {
-  @include avatar-radius;
+  @include avatar-radius-full;
   display: block;
   position: relative;
 
@@ -1720,7 +1748,8 @@ a.account__display-name {
 }
 
 .display-name {
-  display: block;
+  display: flex;
+  align-items: center;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2071,13 +2100,9 @@ a.account__display-name {
 .tabs-bar__wrapper {
   background: darken($ui-base-color, 8%);
   position: sticky;
-  top: 0;
+  bottom:  0;
   z-index: 2;
   padding-top: 0;
-
-  @media screen and (min-width: $no-gap-breakpoint) {
-    padding-top: 10px;
-  }
 
   .tabs-bar {
     margin-bottom: 0;
@@ -2085,6 +2110,10 @@ a.account__display-name {
     @media screen and (min-width: $no-gap-breakpoint) {
       margin-bottom: 10px;
     }
+  }
+
+  svg {
+    height: 25px;
   }
 }
 
@@ -2190,14 +2219,13 @@ a.account__display-name {
 .tabs-bar__link {
   display: block;
   flex: 1 1 auto;
-  padding: 15px 10px;
+  padding: 10px 10px;
   padding-bottom: 13px;
   color: $primary-text-color;
   text-decoration: none;
   text-align: center;
   font-size: 14px;
   font-weight: 500;
-  border-bottom: 2px solid lighten($ui-base-color, 8%);
   transition: all 50ms linear;
   transition-property: border-bottom, background, color;
 
@@ -2211,13 +2239,7 @@ a.account__display-name {
   &:active {
     @media screen and (min-width: 631px) {
       background: lighten($ui-base-color, 14%);
-      border-bottom-color: lighten($ui-base-color, 14%);
     }
-  }
-
-  &.active {
-    border-bottom: 2px solid $highlight-text-color;
-    color: $highlight-text-color;
   }
 
   span {
@@ -2343,7 +2365,7 @@ a.account__display-name {
       &__action-bar,
       .video-player,
       .audio-player {
-        margin-top: 10px;
+        margin-top: 15px;
       }
     }
 
@@ -2386,22 +2408,17 @@ a.account__display-name {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 3.9375rem;
-  height: 3.9375rem;
-  bottom: 1.3125rem;
+  width: 4.7rem;
+  height: 4.7rem;
+  bottom: 4rem;
   right: 1.3125rem;
-  background: darken($ui-highlight-color, 3%);
   color: $white;
-  border-radius: 50%;
   font-size: 21px;
   line-height: 21px;
   text-decoration: none;
-  box-shadow: 2px 3px 9px rgba($base-shadow-color, 0.4);
 
-  &:hover,
-  &:focus,
-  &:active {
-    background: lighten($ui-highlight-color, 7%);
+  img {
+    width: 100%;
   }
 }
 
@@ -2449,13 +2466,42 @@ a.account__display-name {
   }
 }
 
+.header__wrapper {
+  background: darken($ui-base-color, 8%);
+  padding-top: 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+    
+  .logo-wrapper {
+      background-color: $white;
+      border: 1px solid #c0cdd9;
+      border-bottom: 10px solid rgba(0,0,0,.08);
+      padding: 10px 0 5px 0;
+      text-align: center;
+      
+      svg {
+        height: 35px;
+      }
+    }
+
+@media screen and (min-width: 600px + (285px * 2) + (10px * 2)) {
+  .logo-wrapper {
+    display: none;
+  }
+}
+@media screen and (min-width: $no-gap-breakpoint) {
+  padding-top: 10px;
+  }
+}
+
 .icon-with-badge {
   position: relative;
 
   &__badge {
     position: absolute;
-    left: 9px;
-    top: -13px;
+    left: 25px;
+    top: -25px;
     background: $ui-highlight-color;
     border: 2px solid lighten($ui-base-color, 8%);
     padding: 1px 6px;
@@ -2484,13 +2530,13 @@ a.account__display-name {
 
 .column-title {
   text-align: center;
-  padding: 40px;
+  padding: 20px;
 
   .logo {
     fill: $primary-text-color;
-    width: 50px;
+    width: 150px;
     margin: 0 auto;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 
   h3 {
@@ -2615,6 +2661,16 @@ a.account__display-name {
 
   .flex-spacer {
     background: transparent;
+  }
+
+  .logo{
+    height: 50px;
+    align-self: self-start;
+    padding: 5px;
+  }
+
+  .logo-link{
+    padding: 0;
   }
 }
 
@@ -3121,11 +3177,12 @@ button.icon-button.active i.fa-retweet {
   display: flex;
   font-size: 14px;
   border: 1px solid lighten($ui-base-color, 8%);
-  border-radius: 4px;
+  border-radius: 10px;
   color: $dark-text-color;
   margin-top: 14px;
   text-decoration: none;
   overflow: hidden;
+  flex-direction: column;
 
   &__actions {
     bottom: 0;
@@ -3251,7 +3308,7 @@ a.status-card {
 
   .status-card__image-image,
   .status-card__image-preview {
-    border-radius: 4px 4px 0 0;
+    border-radius: 10px 10px 0 0;
   }
 
   .status-card__title {
@@ -3285,7 +3342,7 @@ a.status-card.compact:hover {
 }
 
 .status-card__image-image {
-  border-radius: 4px 0 0 4px;
+  border-radius: 10px 0 0 10px;
   display: block;
   margin: 0;
   width: 100%;
@@ -3296,7 +3353,7 @@ a.status-card.compact:hover {
 }
 
 .status-card__image-preview {
-  border-radius: 4px 0 0 4px;
+  border-radius: 10px 0 0 10px;
   display: block;
   margin: 0;
   width: 100%;
@@ -3434,6 +3491,15 @@ a.status-card.compact:hover {
     z-index: 1;
     position: relative;
   }
+
+  
+  @media screen and (max-width: 768px) {
+    &.home-timeline{
+      display:none;
+    } 
+  }
+
+
 }
 
 .column-header {
@@ -4559,7 +4625,7 @@ a.status-card.compact:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba($base-overlay-background, 0.7);
+  background: rgba($base-overlay-background, 1);
   transition: background 0.5s;
 }
 
@@ -5426,7 +5492,7 @@ a.status-card.compact:hover {
   display: block;
   float: left;
   position: relative;
-  border-radius: 4px;
+  border-radius: 10px;
   overflow: hidden;
 
   &.standalone {
@@ -5515,7 +5581,7 @@ a.status-card.compact:hover {
   box-sizing: border-box;
   position: relative;
   background: darken($ui-base-color, 8%);
-  border-radius: 4px;
+  border-radius: 10px;
   padding-bottom: 44px;
   direction: ltr;
 
@@ -6737,7 +6803,7 @@ noscript {
       }
 
       h1 {
-        font-size: 16px;
+        font-size: 19px;
         line-height: 24px;
         color: $primary-text-color;
         font-weight: 500;
@@ -6752,6 +6818,11 @@ noscript {
           font-weight: 400;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+     
+        svg {
+          height: 25px;
+          vertical-align: text-bottom;
         }
       }
     }

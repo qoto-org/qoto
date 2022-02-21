@@ -112,6 +112,8 @@ ro:
         data: Date
         discoverable: Listează acest cont in director
         display_name: Numele afișat
+        location: Locație
+        website: site-ul web
         email: Adresa de e-mail
         expires_in: Expiră după
         fields: Rețele externe - Unde mai poți fi găsit

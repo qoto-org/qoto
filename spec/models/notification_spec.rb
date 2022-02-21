@@ -7,6 +7,8 @@ RSpec.describe Notification, type: :model do
     let(:reblog)       { Fabricate(:status, reblog: status) }
     let(:favourite)    { Fabricate(:favourite, status: status) }
     let(:mention)      { Fabricate(:mention, status: status) }
+    let(:invite)       { Fabricate(:invite) }
+    let(:user)         { Fabricate(:user, approved: false) }
 
     context 'activity is reblog' do
       let(:activity) { reblog }
@@ -54,6 +56,16 @@ RSpec.describe Notification, type: :model do
       notification = Notification.new(activity: Follow.new)
       expect(notification.type).to eq :follow
     end
+
+    it 'returns :invite for a Invite' do
+      notification = Notification.new(activity: Invite.new)
+      expect(notification.type).to eq :invite
+    end
+
+    it 'returns :user_approved for a User' do
+      notification = Notification.new(activity: User.new)
+      expect(notification.type).to eq :user_approved
+    end
   end
 
   describe '.preload_cache_collection_target_statuses' do
@@ -77,13 +89,15 @@ RSpec.describe Notification, type: :model do
         notifications.each(&:reload)
       end
 
-      let(:mention) { Fabricate(:mention) }
-      let(:status) { Fabricate(:status) }
-      let(:reblog) { Fabricate(:status, reblog: Fabricate(:status)) }
-      let(:follow) { Fabricate(:follow) }
+      let(:mention)        { Fabricate(:mention) }
+      let(:status)         { Fabricate(:status) }
+      let(:reblog)         { Fabricate(:status, reblog: Fabricate(:status)) }
+      let(:follow)         { Fabricate(:follow) }
       let(:follow_request) { Fabricate(:follow_request) }
-      let(:favourite) { Fabricate(:favourite) }
-      let(:poll) { Fabricate(:poll) }
+      let(:favourite)      { Fabricate(:favourite) }
+      let(:poll)           { Fabricate(:poll) }
+      let(:invite)         { Fabricate(:invite) }
+      let(:user)           { Fabricate(:user, approved: true) }
 
       let(:notifications) do
         [
@@ -94,6 +108,8 @@ RSpec.describe Notification, type: :model do
           Fabricate(:notification, type: :follow_request, activity: follow_request),
           Fabricate(:notification, type: :favourite, activity: favourite),
           Fabricate(:notification, type: :poll, activity: poll),
+          Fabricate(:notification, type: :invite, activity: invite),
+          Fabricate(:notification, type: :user_approved, activity: user),
         ]
       end
 
@@ -129,6 +145,14 @@ RSpec.describe Notification, type: :model do
         expect(subject[6].type).to eq :poll
         expect(subject[6].association(:poll)).to be_loaded
         expect(subject[6].poll.association(:status)).to be_loaded
+
+        # invite
+        expect(subject[7].type).to eq :invite
+        expect(subject[7].invite.association(:users)).to be_loaded
+
+        # user_approved
+        expect(subject[8].type).to eq :user_approved
+        expect(subject[8].association(:user)).to be_loaded
       end
 
       it 'replaces to cached status' do

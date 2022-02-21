@@ -23,7 +23,7 @@ describe Admin::InvitesController do
   end
 
   describe 'POST #create' do
-    subject { post :create, params: { invite: { max_uses: '10', expires_in: 1800 } } }
+    subject { post :create, params: { invite: { email: 'test@testmail.com', max_uses: '10', expires_in: 1800 } } }
 
     it 'succeeds to create a invite' do
       expect { subject }.to change { Invite.count }.by(1)
@@ -45,11 +45,12 @@ describe Admin::InvitesController do
 
   describe 'POST #deactivate_all' do
     it 'expires all invites, then redirects to admin_invites_path' do
-      invites = Fabricate.times(2, :invite, expires_at: nil)
+      invite_1 = Fabricate(:invite, expires_at: nil, email: "testemail1@fakeemail.com")
+      invite_2 = Fabricate(:invite, expires_at: nil, email: "testemail2@fakeemail.com")
 
       post :deactivate_all
 
-      invites.each do |invite|
+      [invite_1, invite_2].each do |invite|
         expect(invite.reload).to be_expired
       end
 

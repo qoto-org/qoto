@@ -8,15 +8,34 @@ Doorkeeper.configure do
   end
 
   resource_owner_from_credentials do |_routes|
-    user   = User.authenticate_with_ldap(email: request.params[:username], password: request.params[:password]) if Devise.ldap_authentication
-    user ||= User.authenticate_with_pam(email: request.params[:username], password: request.params[:password]) if Devise.pam_authentication
+    username = request.params[:username]
 
-    if user.nil?
-      user = User.find_by(email: request.params[:username])
+    if (username.present?)
+      user = if username.include?("@")
+        # Emails on the user table are all stored in lowercase, so this should allow us to login with case-insensitive email
+        User.find_by(email: username.downcase)
+      else
+        # Unlike emails usernames are stored as they are entered so we need to query case insensitive
+        Account.ci_find_by_username(username)&.user
+      end
+
       user = nil unless user&.valid_password?(request.params[:password])
+    elsif request.params[:mfa_token].present?
+      user = User.get_user_from_token(request.params[:mfa_token])
+
+      if user.present?
+        user = nil unless user.validate_user_token(request.params[:mfa_token])
+        user = nil unless (user.validate_and_consume_otp!(request.params[:code]) ||
+                           user.invalidate_otp_backup_code!(request.params[:code]))
+      end
+    else
+      user = nil
     end
 
-    user unless user&.otp_required_for_login?
+    login_status = user ? :success : :fail
+    Prometheus::ApplicationExporter::increment(:login_attempts, {status: login_status})
+
+    user
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
@@ -80,6 +99,7 @@ Doorkeeper.configure do
                   :'write:mutes',
                   :'write:notifications',
                   :'write:reports',
+                  :'write:security',
                   :'write:statuses',
                   :read,
                   :'read:accounts',
@@ -92,9 +112,11 @@ Doorkeeper.configure do
                   :'read:mutes',
                   :'read:notifications',
                   :'read:search',
+                  :'read:security',
                   :'read:statuses',
                   :follow,
                   :push,
+                  :admin,
                   :'admin:read',
                   :'admin:read:accounts',
                   :'admin:read:reports',
