@@ -71,10 +71,10 @@ en:
       confirmations:
         revoke: Are you sure?
       index:
-        application: Application
-        created_at: Authorized
-        date_format: "%Y-%m-%d %H:%M:%S"
-        scopes: Scopes
+        authorized_at: Authorized on %{date}
+        last_used_at: Last used on %{date}
+        never_used: Never used
+        scopes: Permissions
         title: Your authorized applications
     errors:
       messages:
@@ -117,6 +117,43 @@ en:
           oauth2_provider: OAuth2 Provider
       application:
         title: OAuth authorization required
+    grouped_scopes:
+      all:
+        title: Everything
+      follow:
+        title: Relationships with other accounts
+      push:
+        title: Push notifications
+      accounts:
+        title: Profile information
+      blocks:
+        title: Blocks
+      bookmarks:
+        title: Bookmarks
+      favourites:
+        title: Favourites
+      filters:
+        title: Word filters
+      follows:
+        title: Follow relationships
+      lists:
+        title: Lists
+      mutes:
+        title: Mutes
+      notifications:
+        title: Notifications
+      reports:
+        title: Reports
+      search:
+        title: Search
+      statuses:
+        title: Posts
+      crypto:
+        title: End-to-end encryption
+    scope_types:
+      read: Read-only access
+      write: Write-only access
+      read/write: Read and write access
     scopes:
       admin:read: read all data on the server
       admin:read:accounts: read sensitive information of all accounts
