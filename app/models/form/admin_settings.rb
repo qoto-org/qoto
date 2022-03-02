@@ -13,7 +13,6 @@ class Form::AdminSettings
     site_terms
     registrations_mode
     closed_registrations_message
-    open_deletion
     timeline_preview
     show_staff_badge
     bootstrap_timeline_accounts
@@ -37,7 +36,6 @@ class Form::AdminSettings
   ).freeze
 
   BOOLEAN_KEYS = %i(
-    open_deletion
     timeline_preview
     show_staff_badge
     activity_api_enabled
