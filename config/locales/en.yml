@@ -496,6 +496,10 @@ en:
       title: Follow recommendations
       unsuppress: Restore follow recommendation
     instances:
+      dashboard:
+        instance_accounts_measure: known accounts
+        instance_media_attachments_measure: cached media attachments
+        instance_reports_measure: reports about them
       back_to_all: All
       back_to_limited: Limited
       back_to_warning: Warning

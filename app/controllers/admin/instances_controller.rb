@@ -12,6 +12,8 @@ module Admin
 
     def show
       authorize :instance, :show?
+
+      @time_period = (6.days.ago.to_date...Time.now.utc.to_date)
     end
 
     def destroy

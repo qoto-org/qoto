@@ -1,52 +1,35 @@
 - content_for :page_title do
   = @instance.domain
 
-.filters
-  .back-link
-    = link_to admin_instances_path() do
-      %i.fa.fa-chevron-left.fa-fw
-      = t('admin.instances.back_to_all')
-    = link_to admin_instances_path(limited: 1) do
-      %i.fa.fa-chevron-left.fa-fw
-      = t('admin.instances.back_to_limited')
-    = link_to admin_instances_path(warning: 1) do
-      %i.fa.fa-chevron-left.fa-fw
-      = t('admin.instances.back_to_warning')
+- content_for :header_tags do
+  = javascript_pack_tag 'admin', async: true, crossorigin: 'anonymous'
 
-.dashboard__counters
-  %div
-    = link_to admin_accounts_path(origin: 'remote', by_domain: @instance.domain) do
-      .dashboard__counters__num= number_with_delimiter @instance.accounts_count
-      .dashboard__counters__label= t 'admin.accounts.title'
-  %div
-    = link_to admin_reports_path(by_target_domain: @instance.domain) do
-      .dashboard__counters__num= number_with_delimiter @instance.reports_count
-      .dashboard__counters__label= t 'admin.instances.total_reported'
-  %div
-    %div
-      .dashboard__counters__num= number_to_human_size @instance.media_storage
-      .dashboard__counters__label= t 'admin.instances.total_storage'
-  %div
-    %div
-      .dashboard__counters__num= number_with_delimiter @instance.following_count
-      .dashboard__counters__label= t 'admin.instances.total_followed_by_them'
-  %div
-    %div
-      .dashboard__counters__num= number_with_delimiter @instance.followers_count
-      .dashboard__counters__label= t 'admin.instances.total_followed_by_us'
-  %div
-    %div
-      .dashboard__counters__num= number_with_delimiter @instance.blocks_count
-      .dashboard__counters__label= t 'admin.instances.total_blocked_by_us'
+- content_for :heading_actions do
+  = l(@time_period.first)
+  = ' - '
+  = l(@time_period.last)
 
-  %div
-    %div
-      .dashboard__counters__num
-        - if @instance.delivery_failure_tracker.available?
-          = fa_icon 'check'
-        - else
-          = fa_icon 'times'
-      .dashboard__counters__label= t 'admin.instances.delivery_available'
+.dashboard
+  .dashboard__item
+    = react_admin_component :counter, measure: 'instance_accounts', start_at: @time_period.first, end_at: @time_period.last, params: { domain: @instance.domain }, label: t('admin.instances.dashboard.instance_accounts_measure'), href: admin_accounts_path(origin: 'remote', by_domain: @instance.domain)
+  .dashboard__item
+    = react_admin_component :counter, measure: 'instance_media_attachments', start_at: @time_period.first, end_at: @time_period.last, params: { domain: @instance.domain }, label: t('admin.instances.dashboard.instance_media_attachments_measure')
+  .dashboard__item
+    = react_admin_component :counter, measure: 'instance_reports', start_at: @time_period.first, end_at: @time_period.last, params: { domain: @instance.domain }, label: t('admin.instances.dashboard.instance_reports_measure'), href: admin_reports_path(by_target_domain: @instance.domain)
+
+%hr.spacer/
+
+%h3= t('admin.instances.availability')
+
+%ul.availability-indicator
+  - failure_date_map = @exhausted_deliveries_days.index_with { true }
+  - (@time_period.first..@time_period.last).each do |date|
+    %li.availability-indicator__item{ class: failure_date_map[date] ? 'negative' : 'neutral', title: l(date) }
+
+%p
+  = @instance.delivery_failure_tracker.days
+  different days without successful delivery.
+  = t('admin.instances.delivery_error_hint', count: DeliveryFailureTracker::FAILURE_DAYS_THRESHOLD)
 
 - if @instance.private_comment.present?
   .speech-bubble
@@ -59,13 +42,6 @@
     .speech-bubble__bubble
       = simple_format(h(@instance.public_comment))
     .speech-bubble__owner= t 'admin.instances.public_comment'
-
-- unless @exhausted_deliveries_days.empty?
-  %h4= t 'admin.instances.delivery_error_days'
-  %ul
-    = render partial: 'exhausted_deliveries_days', collection: @exhausted_deliveries_days
-  %p.hint
-    = t 'admin.instances.delivery_error_hint', count: DeliveryFailureTracker::FAILURE_DAYS_THRESHOLD
 
 %hr.spacer/
 

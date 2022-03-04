@@ -1576,3 +1576,22 @@ a.sparkline {
     }
   }
 }
+
+.availability-indicator {
+  display: flex;
+  margin: 0 -2px;
+
+  &__item {
+    display: block;
+    flex: 0 0 auto;
+    width: 4px;
+    height: 18px;
+    background: lighten($ui-base-color, 8%);
+    margin: 0 2px;
+    border-radius: 2px;
+
+    &.negative {
+      background: $error-value-color;
+    }
+  }
+}
