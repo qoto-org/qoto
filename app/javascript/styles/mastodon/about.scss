@@ -71,7 +71,6 @@ $small-breakpoint: 960px;
   h4,
   h5,
   h6 {
-    font-family: $font-display, sans-serif;
     margin-top: 1.275em;
     margin-bottom: .85em;
     font-weight: 500;
@@ -229,7 +228,6 @@ $small-breakpoint: 960px;
     }
 
     strong {
-      font-family: $font-display, sans-serif;
       font-weight: 500;
       font-size: 32px;
       line-height: 48px;
@@ -237,81 +235,6 @@ $small-breakpoint: 960px;
 
     @media screen and (max-width: $column-breakpoint) {
       text-align: center;
-    }
-  }
-
-  .panel {
-    position: absolute;
-    width: 280px;
-    box-sizing: border-box;
-    background: darken($ui-base-color, 8%);
-    padding: 20px;
-    padding-top: 10px;
-    border-radius: 4px 4px 0 0;
-    right: 0;
-    bottom: -40px;
-
-    .panel-header {
-      font-family: $font-display, sans-serif;
-      font-size: 14px;
-      line-height: 24px;
-      font-weight: 500;
-      color: $darker-text-color;
-      padding-bottom: 5px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid lighten($ui-base-color, 4%);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-
-      a,
-      span {
-        font-weight: 400;
-        color: darken($darker-text-color, 10%);
-      }
-
-      a {
-        text-decoration: none;
-      }
-    }
-  }
-
-  .owner {
-    text-align: center;
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto;
-      margin-bottom: 15px;
-
-      img {
-        display: block;
-        width: 80px;
-        height: 80px;
-        border-radius: 48px;
-      }
-    }
-
-    .name {
-      font-size: 14px;
-
-      a {
-        display: block;
-        color: $primary-text-color;
-        text-decoration: none;
-
-        &:hover {
-          .display_name {
-            text-decoration: underline;
-          }
-        }
-      }
-
-      .username {
-        display: block;
-        color: $darker-text-color;
-      }
     }
   }
 }
@@ -345,7 +268,6 @@ $small-breakpoint: 960px;
   }
 
   h1 {
-    font-family: $font-display, sans-serif;
     font-size: 26px;
     line-height: 30px;
     font-weight: 500;
@@ -353,7 +275,6 @@ $small-breakpoint: 960px;
     color: $secondary-text-color;
 
     small {
-      font-family: $font-sans-serif, sans-serif;
       display: block;
       font-size: 18px;
       font-weight: 400;
@@ -362,7 +283,6 @@ $small-breakpoint: 960px;
   }
 
   h2 {
-    font-family: $font-display, sans-serif;
     font-size: 22px;
     line-height: 26px;
     font-weight: 500;
@@ -371,7 +291,6 @@ $small-breakpoint: 960px;
   }
 
   h3 {
-    font-family: $font-display, sans-serif;
     font-size: 18px;
     line-height: 24px;
     font-weight: 500;
@@ -380,7 +299,6 @@ $small-breakpoint: 960px;
   }
 
   h4 {
-    font-family: $font-display, sans-serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 500;
@@ -389,7 +307,6 @@ $small-breakpoint: 960px;
   }
 
   h5 {
-    font-family: $font-display, sans-serif;
     font-size: 14px;
     line-height: 24px;
     font-weight: 500;
@@ -398,7 +315,6 @@ $small-breakpoint: 960px;
   }
 
   h6 {
-    font-family: $font-display, sans-serif;
     font-size: 12px;
     line-height: 24px;
     font-weight: 500;
@@ -754,7 +670,6 @@ $small-breakpoint: 960px;
       width: 50%;
 
       strong {
-        font-family: $font-display, sans-serif;
         font-size: 15px;
         font-weight: 700;
         display: block;
