@@ -73,7 +73,7 @@ class Trends::Query
     if tmp_ids.empty?
       klass.none
     else
-      klass.joins("join unnest(array[#{tmp_ids.join(',')}]) with ordinality as x (id, ordering) on #{klass.table_name}.id = x.id").reorder('x.ordering')
+      klass.joins("join unnest(array[#{tmp_ids.join(',')}]) with ordinality as x (id, ordering) on #{klass.table_name}.id = x.id").reorder('x.ordering').offset(@offset).limit(@limit)
     end
   end
 
@@ -93,7 +93,7 @@ class Trends::Query
   end
 
   def ids
-    redis.zrevrange(key, @offset, @limit.positive? ? @limit - 1 : @limit).map(&:to_i)
+    redis.zrevrange(key, 0, -1).map(&:to_i)
   end
 
   def perform_queries
