@@ -31,7 +31,7 @@ ENV RUBY_VER="3.0.3"
 RUN apt-get update && \
   apt-get install -y --no-install-recommends build-essential \
     bison libyaml-dev libgdbm-dev libreadline-dev libjemalloc-dev \
-		libncurses5-dev libffi-dev zlib1g-dev libssl-dev && \
+		libncurses5-dev libffi-dev zlib1g-dev libssl-dev python3 && \
 	cd ~ && \
 	wget https://cache.ruby-lang.org/pub/ruby/${RUBY_VER%.*}/ruby-$RUBY_VER.tar.gz && \
 	tar xf ruby-$RUBY_VER.tar.gz && \
