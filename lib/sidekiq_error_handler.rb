@@ -4,12 +4,15 @@ class SidekiqErrorHandler
   BACKTRACE_LIMIT = 3
 
   def call(*)
+    Redis.current = RedisConfiguration.pool.checkout
+
     yield
   rescue Mastodon::HostValidationError
     # Do not retry
   rescue => e
     limit_backtrace_and_raise(e)
   ensure
+    RedisConfiguration.pool.checkin
     socket = Thread.current[:statsd_socket]
     socket&.close
     Thread.current[:statsd_socket] = nil
