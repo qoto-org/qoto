@@ -157,7 +157,6 @@ class SwitchingColumnsArea extends React.PureComponent {
           <WrappedRoute path={['/home', '/timelines/home']} component={HomeTimeline} content={children} />
           <WrappedRoute path={['/public', '/timelines/public']} exact component={PublicTimeline} content={children} />
           <WrappedRoute path={['/public/local', '/timelines/public/local']} exact component={CommunityTimeline} content={children} />
-          <WrappedRoute path={['/conversations', '/timelines/direct']} component={DirectTimeline} content={children} />
           <WrappedRoute path='/tags/:id' component={HashtagTimeline} content={children} />
           <WrappedRoute path='/lists/:id' component={ListTimeline} content={children} />
           <WrappedRoute path='/notifications' component={Notifications} content={children} />
@@ -475,10 +474,6 @@ class UI extends React.PureComponent {
     this.context.router.history.push('/public');
   }
 
-  handleHotkeyGoToDirect = () => {
-    this.context.router.history.push('/conversations');
-  }
-
   handleHotkeyGoToStart = () => {
     this.context.router.history.push('/getting-started');
   }
@@ -523,7 +518,6 @@ class UI extends React.PureComponent {
       goToNotifications: this.handleHotkeyGoToNotifications,
       goToLocal: this.handleHotkeyGoToLocal,
       goToFederated: this.handleHotkeyGoToFederated,
-      goToDirect: this.handleHotkeyGoToDirect,
       goToStart: this.handleHotkeyGoToStart,
       goToFavourites: this.handleHotkeyGoToFavourites,
       goToPinned: this.handleHotkeyGoToPinned,

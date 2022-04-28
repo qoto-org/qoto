@@ -659,7 +659,7 @@
         "id": "privacy.private.short"
       },
       {
-        "defaultMessage": "Direct",
+        "defaultMessage": "Mentioned people only",
         "id": "privacy.direct.short"
       },
       {
@@ -1306,7 +1306,7 @@
         "id": "privacy.public.short"
       },
       {
-        "defaultMessage": "Visible for all, shown in public timelines",
+        "defaultMessage": "Visible for all",
         "id": "privacy.public.long"
       },
       {
@@ -1314,11 +1314,11 @@
         "id": "privacy.unlisted.short"
       },
       {
-        "defaultMessage": "Visible for all, but not in public timelines",
+        "defaultMessage": "Visible for all, but opted-out of discovery features",
         "id": "privacy.unlisted.long"
       },
       {
-        "defaultMessage": "Followers-only",
+        "defaultMessage": "Followers only",
         "id": "privacy.private.short"
       },
       {
@@ -1326,7 +1326,7 @@
         "id": "privacy.private.long"
       },
       {
-        "defaultMessage": "Direct",
+        "defaultMessage": "Only people I mention",
         "id": "privacy.direct.short"
       },
       {
@@ -2220,10 +2220,6 @@
       {
         "defaultMessage": "to open federated timeline",
         "id": "keyboard_shortcuts.federated"
-      },
-      {
-        "defaultMessage": "to open direct messages column",
-        "id": "keyboard_shortcuts.direct"
       },
       {
         "defaultMessage": "to open \"get started\" column",
@@ -3511,10 +3507,6 @@
       {
         "defaultMessage": "Federated",
         "id": "tabs_bar.federated_timeline"
-      },
-      {
-        "defaultMessage": "Direct messages",
-        "id": "navigation_bar.direct"
       },
       {
         "defaultMessage": "Favourites",
