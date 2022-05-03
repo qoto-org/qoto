@@ -4,6 +4,8 @@ class Admin::Trends::StatusesController < Admin::BaseController
   def index
     authorize :status, :index?
 
+    @locales  = Trends::TrendingStatus.pluck('distinct language')
+    @ranks    = filtered_ranks
     @statuses = filtered_statuses.page(params[:page])
     @form     = Trends::StatusBatch.new
   end
@@ -29,6 +31,12 @@ class Admin::Trends::StatusesController < Admin::BaseController
 
   def trends_status_batch_params
     params.require(:trends_status_batch).permit(:action, status_ids: [])
+  end
+
+  def filtered_ranks
+    scope = Trends::TrendingStatus.allowed
+    scope = scope.where(language: params[:locale]) if params[:locale].present?
+    scope.pluck(Arel.sql('id, ROW_NUMBER() OVER(ORDER BY score DESC) AS rank')).to_h
   end
 
   def action_from_button

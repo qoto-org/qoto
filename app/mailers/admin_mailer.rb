@@ -41,7 +41,7 @@ class AdminMailer < ApplicationMailer
     @tags                   = tags
     @lowest_trending_tag    = Trends.tags.query.allowed.limit(Trends.tags.options[:review_threshold]).last
     @statuses               = statuses
-    @lowest_trending_status = Trends.statuses.query.allowed.limit(Trends.statuses.options[:review_threshold]).last
+    @lowest_trending_status = Trends.statuses.at_review_threshold
     @me                     = recipient
     @instance               = Rails.configuration.x.local_domain
 
