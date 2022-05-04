@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactSwipeableViews from 'react-swipeable-views';
 import classNames from 'classnames';
@@ -100,7 +100,7 @@ FrameInteractions.propTypes = {
 };
 
 export default @connect(state => ({ domain: state.getIn(['meta', 'domain']) }))
-class Introduction extends React.PureComponent {
+class Introduction extends PureComponent {
 
   static propTypes = {
     domain: PropTypes.string.isRequired,
@@ -111,7 +111,7 @@ class Introduction extends React.PureComponent {
     currentIndex: 0,
   };
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.pages = [
       <FrameWelcome domain={this.props.domain} onNext={this.handleNext} />,
       <FrameFederation onNext={this.handleNext} />,

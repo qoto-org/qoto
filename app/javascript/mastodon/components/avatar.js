@@ -1,9 +1,9 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { autoPlayGif } from '../initial_state';
 
-export default class Avatar extends React.PureComponent {
+export default class Avatar extends PureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
