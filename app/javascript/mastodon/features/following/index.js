@@ -19,6 +19,7 @@ import ColumnBackButton from '../../components/column_back_button';
 import ScrollableList from '../../components/scrollable_list';
 import MissingIndicator from 'mastodon/components/missing_indicator';
 import TimelineHint from 'mastodon/components/timeline_hint';
+import LimitedAccountHint from '../account_timeline/components/limited_account_hint';
 
 const mapStateToProps = (state, { params: { acct, id } }) => {
   const accountId = id || state.getIn(['accounts_map', acct]);
@@ -37,6 +38,8 @@ const mapStateToProps = (state, { params: { acct, id } }) => {
     accountIds: state.getIn(['user_lists', 'following', accountId, 'items']),
     hasMore: !!state.getIn(['user_lists', 'following', accountId, 'next']),
     isLoading: state.getIn(['user_lists', 'following', accountId, 'isLoading'], true),
+    suspended: state.getIn(['accounts', accountId, 'suspended'], false),
+    hidden: state.getIn(['accounts', accountId, 'hidden'], false),
     blockedBy: state.getIn(['relationships', accountId, 'blocked_by'], false),
   };
 };
@@ -64,6 +67,8 @@ class Following extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     blockedBy: PropTypes.bool,
     isAccount: PropTypes.bool,
+    suspended: PropTypes.bool,
+    hidden: PropTypes.bool,
     remote: PropTypes.bool,
     remoteUrl: PropTypes.string,
     multiColumn: PropTypes.bool,
@@ -101,7 +106,7 @@ class Following extends ImmutablePureComponent {
   }, 300, { leading: true });
 
   render () {
-    const { accountIds, hasMore, blockedBy, isAccount, multiColumn, isLoading, remote, remoteUrl } = this.props;
+    const { accountId, accountIds, hasMore, blockedBy, isAccount, multiColumn, isLoading, suspended, hidden, remote, remoteUrl } = this.props;
 
     if (!isAccount) {
       return (
@@ -121,7 +126,11 @@ class Following extends ImmutablePureComponent {
 
     let emptyMessage;
 
-    if (blockedBy) {
+    if (suspended) {
+      emptyMessage = <FormattedMessage id='empty_column.account_suspended' defaultMessage='Account suspended' />;
+    } else if (hidden) {
+      emptyMessage = <LimitedAccountHint accountId={accountId} />;
+    } else if (blockedBy) {
       emptyMessage = <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />;
     } else if (remote && accountIds.isEmpty()) {
       emptyMessage = <RemoteHint url={remoteUrl} />;
@@ -146,7 +155,7 @@ class Following extends ImmutablePureComponent {
           emptyMessage={emptyMessage}
           bindToDocument={!multiColumn}
         >
-          {blockedBy ? [] : accountIds.map(id =>
+          {(blockedBy || suspended || hidden) ? [] : accountIds.map(id =>
             <AccountContainer key={id} id={id} withNote={false} />,
           )}
         </ScrollableList>

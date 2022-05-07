@@ -99,7 +99,7 @@ export default class Header extends ImmutablePureComponent {
 
     return (
       <div className='account-timeline__header'>
-        {account.get('moved') && <MovedNote from={account} to={account.get('moved')} />}
+        {(!account.get('hidden') && account.get('moved')) && <MovedNote from={account} to={account.get('moved')} />}
 
         <InnerHeader
           account={account}
@@ -119,7 +119,7 @@ export default class Header extends ImmutablePureComponent {
           domain={this.props.domain}
         />
 
-        {!hideTabs && (
+        {!(hideTabs || account.get('hidden')) && (
           <div className='account__section-headline'>
             <NavLink exact to={`/@${account.get('acct')}`}><FormattedMessage id='account.posts' defaultMessage='Posts' /></NavLink>
             <NavLink exact to={`/@${account.get('acct')}/with_replies`}><FormattedMessage id='account.posts_with_replies' defaultMessage='Posts and replies' /></NavLink>

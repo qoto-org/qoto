@@ -16,6 +16,7 @@ import MissingIndicator from 'mastodon/components/missing_indicator';
 import TimelineHint from 'mastodon/components/timeline_hint';
 import { me } from 'mastodon/initial_state';
 import { connectTimeline, disconnectTimeline } from 'mastodon/actions/timelines';
+import LimitedAccountHint from './components/limited_account_hint';
 
 const emptyList = ImmutableList();
 
@@ -40,6 +41,7 @@ const mapStateToProps = (state, { params: { acct, id }, withReplies = false }) =
     isLoading: state.getIn(['timelines', `account:${path}`, 'isLoading']),
     hasMore: state.getIn(['timelines', `account:${path}`, 'hasMore']),
     suspended: state.getIn(['accounts', accountId, 'suspended'], false),
+    hidden: state.getIn(['accounts', accountId, 'hidden'], false),
     blockedBy: state.getIn(['relationships', accountId, 'blocked_by'], false),
   };
 };
@@ -70,6 +72,7 @@ class AccountTimeline extends ImmutablePureComponent {
     blockedBy: PropTypes.bool,
     isAccount: PropTypes.bool,
     suspended: PropTypes.bool,
+    hidden: PropTypes.bool,
     remote: PropTypes.bool,
     remoteUrl: PropTypes.string,
     multiColumn: PropTypes.bool,
@@ -128,7 +131,7 @@ class AccountTimeline extends ImmutablePureComponent {
   }
 
   render () {
-    const { statusIds, featuredStatusIds, isLoading, hasMore, blockedBy, suspended, isAccount, multiColumn, remote, remoteUrl } = this.props;
+    const { accountId, statusIds, featuredStatusIds, isLoading, hasMore, blockedBy, suspended, isAccount, hidden, multiColumn, remote, remoteUrl } = this.props;
 
     if (!isAccount) {
       return (
@@ -151,6 +154,8 @@ class AccountTimeline extends ImmutablePureComponent {
 
     if (suspended) {
       emptyMessage = <FormattedMessage id='empty_column.account_suspended' defaultMessage='Account suspended' />;
+    } else if (hidden) {
+      emptyMessage = <LimitedAccountHint accountId={accountId} />;
     } else if (blockedBy) {
       emptyMessage = <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />;
     } else if (remote && statusIds.isEmpty()) {
@@ -170,7 +175,7 @@ class AccountTimeline extends ImmutablePureComponent {
           alwaysPrepend
           append={remoteMessage}
           scrollKey='account_timeline'
-          statusIds={(suspended || blockedBy) ? emptyList : statusIds}
+          statusIds={(suspended || blockedBy || hidden) ? emptyList : statusIds}
           featuredStatusIds={featuredStatusIds}
           isLoading={isLoading}
           hasMore={hasMore}

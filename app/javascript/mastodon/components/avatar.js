@@ -39,6 +39,7 @@ export default class Avatar extends React.PureComponent {
 
     const src = account.get('avatar');
     const staticSrc = account.get('avatar_static');
+    const hidden = account.get('hidden');
 
     let className = 'account__avatar';
 
@@ -53,10 +54,12 @@ export default class Avatar extends React.PureComponent {
       backgroundSize: `${size}px ${size}px`,
     };
 
-    if (hovering || animate) {
-      style.backgroundImage = `url(${src})`;
-    } else {
-      style.backgroundImage = `url(${staticSrc})`;
+    if (!hidden) {
+      if (hovering || animate) {
+        style.backgroundImage = `url(${src})`;
+      } else {
+        style.backgroundImage = `url(${staticSrc})`;
+      }
     }
 
     return (
