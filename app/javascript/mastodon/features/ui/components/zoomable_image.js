@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'mastodon/components/icon_button';
 import { defineMessages, injectIntl } from 'react-intl';
@@ -91,8 +91,7 @@ const normalizeWheel = event => {
   };
 };
 
-export default @injectIntl
-class ZoomableImage extends React.PureComponent {
+class ZoomableImage extends PureComponent {
 
   static propTypes = {
     alt: PropTypes.string,
@@ -410,7 +409,7 @@ class ZoomableImage extends React.PureComponent {
     const zoomButtonTitle = this.state.zoomState === 'compress' ? intl.formatMessage(messages.compress) : intl.formatMessage(messages.expand);
 
     return (
-      <React.Fragment>
+      <>
         <IconButton
           className={`media-modal__zoom-button ${zoomButtonShouldHide}`}
           title={zoomButtonTitle}
@@ -443,8 +442,10 @@ class ZoomableImage extends React.PureComponent {
             onMouseDown={this.handleMouseDown}
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
 }
+
+export default injectIntl(ZoomableImage);

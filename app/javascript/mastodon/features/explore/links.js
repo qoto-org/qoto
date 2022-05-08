@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Story from './components/story';
@@ -11,8 +11,7 @@ const mapStateToProps = state => ({
   isLoading: state.getIn(['trends', 'links', 'isLoading']),
 });
 
-export default @connect(mapStateToProps)
-class Links extends React.PureComponent {
+class Links extends PureComponent {
 
   static propTypes = {
     links: ImmutablePropTypes.list,
@@ -46,3 +45,5 @@ class Links extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(Links);

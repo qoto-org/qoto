@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import DropdownMenuContainer from '../../../containers/dropdown_menu_container';
@@ -19,8 +19,7 @@ const messages = defineMessages({
   bookmarks: { id: 'navigation_bar.bookmarks', defaultMessage: 'Bookmarks' },
 });
 
-export default @injectIntl
-class ActionBar extends React.PureComponent {
+class ActionBar extends PureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
@@ -63,3 +62,5 @@ class ActionBar extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(ActionBar);

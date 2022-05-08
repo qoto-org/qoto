@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -24,9 +24,7 @@ export function getLink (index) {
   return links[index].props.to;
 }
 
-export default @injectIntl
-@withRouter
-class TabsBar extends React.PureComponent {
+class TabsBar extends PureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
@@ -84,3 +82,5 @@ class TabsBar extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(withRouter(TabsBar));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import StatusListContainer from '../ui/containers/status_list_container';
@@ -15,8 +15,7 @@ const mapStateToProps = (state, props) => ({
   hasUnread: state.getIn(['timelines', `hashtag:${props.params.id}${props.params.local ? ':local' : ''}`, 'unread']) > 0,
 });
 
-export default @connect(mapStateToProps)
-class HashtagTimeline extends React.PureComponent {
+class HashtagTimeline extends PureComponent {
 
   disconnects = [];
 
@@ -162,3 +161,5 @@ class HashtagTimeline extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(HashtagTimeline);

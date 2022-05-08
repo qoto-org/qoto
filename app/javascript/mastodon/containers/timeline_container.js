@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -46,14 +46,14 @@ export default class TimelineContainer extends React.PureComponent {
     return (
       <IntlProvider locale={locale} messages={messages}>
         <Provider store={store}>
-          <Fragment>
+          <>
             {timeline}
 
             {ReactDOM.createPortal(
               <ModalContainer />,
               document.getElementById('modal-container'),
             )}
-          </Fragment>
+          </>
         </Provider>
       </IntlProvider>
     );

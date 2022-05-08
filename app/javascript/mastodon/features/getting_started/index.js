@@ -60,8 +60,6 @@ const badgeDisplay = (number, limit) => {
 
 const NAVIGATION_PANEL_BREAKPOINT = 600 + (285 * 2) + (10 * 2);
 
-export default @connect(mapStateToProps, mapDispatchToProps)
-@injectIntl
 class GettingStarted extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -180,3 +178,5 @@ class GettingStarted extends ImmutablePureComponent {
   }
 
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GettingStarted));

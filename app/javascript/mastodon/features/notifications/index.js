@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -65,9 +65,7 @@ const mapStateToProps = state => ({
   needsNotificationPermission: state.getIn(['settings', 'notifications', 'alerts']).includes(true) && state.getIn(['notifications', 'browserSupport']) && state.getIn(['notifications', 'browserPermission']) === 'default' && !state.getIn(['settings', 'notifications', 'dismissPermissionBanner']),
 });
 
-export default @connect(mapStateToProps)
-@injectIntl
-class Notifications extends React.PureComponent {
+class Notifications extends PureComponent {
 
   static propTypes = {
     columnId: PropTypes.string,
@@ -269,3 +267,5 @@ class Notifications extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(Notifications));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import { formatTime } from 'mastodon/features/video';
@@ -20,8 +20,7 @@ const messages = defineMessages({
 const TICK_SIZE = 10;
 const PADDING   = 180;
 
-export default @injectIntl
-class Audio extends React.PureComponent {
+class Audio extends PureComponent {
 
   static propTypes = {
     src: PropTypes.string.isRequired,
@@ -519,3 +518,5 @@ class Audio extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(Audio);

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Avatar from './avatar';
@@ -20,7 +20,6 @@ const messages = defineMessages({
   unmute_notifications: { id: 'account.unmute_notifications', defaultMessage: 'Unmute notifications from @{name}' },
 });
 
-export default @injectIntl
 class Account extends ImmutablePureComponent {
 
   static propTypes = {
@@ -69,10 +68,10 @@ class Account extends ImmutablePureComponent {
 
     if (hidden) {
       return (
-        <Fragment>
+        <>
           {account.get('display_name')}
           {account.get('username')}
-        </Fragment>
+        </>
       );
     }
 
@@ -100,10 +99,10 @@ class Account extends ImmutablePureComponent {
           hidingNotificationsButton = <IconButton active icon='bell-slash' title={intl.formatMessage(messages.mute_notifications, { name: account.get('username')  })} onClick={this.handleMuteNotifications} />;
         }
         buttons = (
-          <Fragment>
+          <>
             <IconButton active icon='volume-up' title={intl.formatMessage(messages.unmute, { name: account.get('username') })} onClick={this.handleMute} />
             {hidingNotificationsButton}
-          </Fragment>
+          </>
         );
       } else if (!account.get('moved') || following) {
         buttons = <IconButton icon={following ? 'user-times' : 'user-plus'} title={intl.formatMessage(following ? messages.unfollow : messages.follow)} onClick={this.handleFollow} active={following} />;
@@ -133,3 +132,5 @@ class Account extends ImmutablePureComponent {
   }
 
 }
+
+export default injectIntl(Account);

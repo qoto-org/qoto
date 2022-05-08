@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { EmojiPicker as EmojiPickerAsync } from '../../ui/util/async-components';
@@ -47,7 +47,7 @@ const notFoundFn = () => (
   </div>
 );
 
-class ModifierPickerMenu extends React.PureComponent {
+class ModifierPickerMenu extends PureComponent {
 
   static propTypes = {
     active: PropTypes.bool,
@@ -108,7 +108,7 @@ class ModifierPickerMenu extends React.PureComponent {
 
 }
 
-class ModifierPicker extends React.PureComponent {
+class ModifierPicker extends PureComponent {
 
   static propTypes = {
     active: PropTypes.bool,
@@ -144,8 +144,7 @@ class ModifierPicker extends React.PureComponent {
 
 }
 
-@injectIntl
-class EmojiPickerMenu extends React.PureComponent {
+class EmojiPickerMenuImpl extends PureComponent {
 
   static propTypes = {
     custom_emojis: ImmutablePropTypes.list,
@@ -308,8 +307,9 @@ class EmojiPickerMenu extends React.PureComponent {
 
 }
 
-export default @injectIntl
-class EmojiPickerDropdown extends React.PureComponent {
+const EmojiPickerMenu = injectIntl(EmojiPickerMenuImpl);
+
+class EmojiPickerDropdown extends PureComponent {
 
   static propTypes = {
     custom_emojis: ImmutablePropTypes.list,
@@ -410,3 +410,5 @@ class EmojiPickerDropdown extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(EmojiPickerDropdown);

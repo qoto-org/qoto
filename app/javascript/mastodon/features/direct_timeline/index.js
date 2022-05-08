@@ -13,8 +13,6 @@ const messages = defineMessages({
   title: { id: 'column.direct', defaultMessage: 'Direct messages' },
 });
 
-export default @connect()
-@injectIntl
 class DirectTimeline extends React.PureComponent {
 
   static propTypes = {
@@ -99,3 +97,5 @@ class DirectTimeline extends React.PureComponent {
   }
 
 }
+
+export default connect()(injectIntl(DirectTimeline));

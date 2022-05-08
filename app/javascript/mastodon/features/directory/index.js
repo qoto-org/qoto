@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -28,9 +28,7 @@ const mapStateToProps = state => ({
   domain: state.getIn(['meta', 'domain']),
 });
 
-export default @connect(mapStateToProps)
-@injectIntl
-class Directory extends React.PureComponent {
+class Directory extends PureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -170,3 +168,5 @@ class Directory extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(Directory));

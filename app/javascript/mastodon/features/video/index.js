@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { is } from 'immutable';
@@ -94,8 +94,7 @@ export const fileNameFromURL = str => {
   return pathname.slice(index + 1);
 };
 
-export default @injectIntl
-class Video extends React.PureComponent {
+class Video extends PureComponent {
 
   static propTypes = {
     preview: PropTypes.string,
@@ -652,3 +651,5 @@ class Video extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(Video);

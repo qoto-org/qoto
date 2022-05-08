@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SearchContainer from 'mastodon/features/compose/containers/search_container';
@@ -7,8 +7,7 @@ import NavigationContainer from 'mastodon/features/compose/containers/navigation
 import LinkFooter from './link_footer';
 import { changeComposing } from 'mastodon/actions/compose';
 
-export default @connect()
-class ComposePanel extends React.PureComponent {
+class ComposePanel extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -34,3 +33,5 @@ class ComposePanel extends React.PureComponent {
   }
 
 }
+
+export default connect()(ComposePanel);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fetchFollowRequests } from 'mastodon/actions/accounts';
 import { connect } from 'react-redux';
@@ -11,9 +11,7 @@ const mapStateToProps = state => ({
   count: state.getIn(['user_lists', 'follow_requests', 'items'], ImmutableList()).size,
 });
 
-export default @withRouter
-@connect(mapStateToProps)
-class FollowRequestsNavLink extends React.Component {
+class FollowRequestsNavLink extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -37,3 +35,5 @@ class FollowRequestsNavLink extends React.Component {
   }
 
 }
+
+export default withRouter(connect(mapStateToProps)(FollowRequestsNavLink));

@@ -15,8 +15,8 @@
     "test:lint:js": "eslint --ext=js . --cache",
     "test:lint:sass": "sass-lint -v",
     "test:jest": "cross-env NODE_ENV=test jest",
-    "format": "prettier --write '**/*.{json,yml}",
-    "format-check": "prettier --write '**/*.{json,yml}"
+    "format": "prettier --write '**/*.{json,yml}'",
+    "format-check": "prettier --write '**/*.{json,yml}'"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,6 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.17.10",
-    "@babel/plugin-proposal-decorators": "^7.17.9",
     "@babel/plugin-transform-react-inline-elements": "^7.16.7",
     "@babel/plugin-transform-runtime": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
@@ -142,9 +141,9 @@
     "ws": "^8.6.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^28.0.3",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "~2.26.0",

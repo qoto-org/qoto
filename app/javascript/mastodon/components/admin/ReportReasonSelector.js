@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import api from 'mastodon/api';
 import { injectIntl, defineMessages } from 'react-intl';
@@ -10,7 +10,7 @@ const messages = defineMessages({
   violation: { id: 'report.categories.violation', defaultMessage: 'Content violates one or more server rules' },
 });
 
-class Category extends React.PureComponent {
+class Category extends PureComponent {
 
   static propTypes = {
     id: PropTypes.string.isRequired,
@@ -84,7 +84,6 @@ class Rule extends React.PureComponent {
 
 }
 
-export default @injectIntl
 class ReportReasonSelector extends React.PureComponent {
 
   static propTypes = {
@@ -157,3 +156,5 @@ class ReportReasonSelector extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(ReportReasonSelector);

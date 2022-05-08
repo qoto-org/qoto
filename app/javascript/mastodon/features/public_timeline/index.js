@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -29,9 +29,7 @@ const mapStateToProps = (state, { columnId }) => {
   };
 };
 
-export default @connect(mapStateToProps)
-@injectIntl
-class PublicTimeline extends React.PureComponent {
+class PublicTimeline extends PureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -136,3 +134,5 @@ class PublicTimeline extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(PublicTimeline));

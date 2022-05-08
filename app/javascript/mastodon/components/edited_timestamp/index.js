@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Icon from 'mastodon/components/icon';
@@ -16,9 +16,7 @@ const mapDispatchToProps = (dispatch, { statusId }) => ({
 
 });
 
-export default @connect(null, mapDispatchToProps)
-@injectIntl
-class EditedTimestamp extends React.PureComponent {
+class EditedTimestamp extends PureComponent {
 
   static propTypes = {
     statusId: PropTypes.string.isRequired,
@@ -68,3 +66,5 @@ class EditedTimestamp extends React.PureComponent {
   }
 
 }
+
+export default connect(null, mapDispatchToProps)(injectIntl(EditedTimestamp));

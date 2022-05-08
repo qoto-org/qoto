@@ -7,7 +7,6 @@ const mapStateToProps = state => ({
   unread: state.getIn(['missed_updates', 'unread']),
 });
 
-export default @connect(mapStateToProps)
 class DocumentTitle extends PureComponent {
 
   static propTypes = {
@@ -39,3 +38,5 @@ class DocumentTitle extends PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(DocumentTitle);

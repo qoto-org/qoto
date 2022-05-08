@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactSwipeableViews from 'react-swipeable-views';
 import classNames from 'classnames';
@@ -99,8 +99,7 @@ FrameInteractions.propTypes = {
   onNext: PropTypes.func.isRequired,
 };
 
-export default @connect(state => ({ domain: state.getIn(['meta', 'domain']) }))
-class Introduction extends React.PureComponent {
+class Introduction extends PureComponent {
 
   static propTypes = {
     domain: PropTypes.string.isRequired,
@@ -195,3 +194,5 @@ class Introduction extends React.PureComponent {
   }
 
 }
+
+export default connect(state => ({ domain: state.getIn(['meta', 'domain']) }))(Introduction);

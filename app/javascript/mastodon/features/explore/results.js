@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
@@ -36,8 +36,7 @@ const renderStatuses = (results, onLoadMore) => appendLoadMore('statuses', resul
   <Status key={`status-${item}`} id={item} />
 )), onLoadMore);
 
-export default @connect(mapStateToProps)
-class Results extends React.PureComponent {
+class Results extends PureComponent {
 
   static propTypes = {
     results: ImmutablePropTypes.map,
@@ -95,7 +94,7 @@ class Results extends React.PureComponent {
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className='account__section-headline'>
           <button onClick={this.handleSelectAll} className={type === 'all' && 'active'}><FormattedMessage id='search_results.all' defaultMessage='All' /></button>
           <button onClick={this.handleSelectAccounts} className={type === 'accounts' && 'active'}><FormattedMessage id='search_results.accounts' defaultMessage='People' /></button>
@@ -106,8 +105,10 @@ class Results extends React.PureComponent {
         <div className='explore__search-results'>
           {isLoading ? <LoadingIndicator /> : filteredResults}
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
 }
+
+export default connect(mapStateToProps)(Results);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
@@ -20,8 +20,7 @@ const messages = defineMessages({
   days: { id: 'intervals.full.days', defaultMessage: '{number, plural, one {# day} other {# days}}' },
 });
 
-@injectIntl
-class Option extends React.PureComponent {
+class OptionIntl extends PureComponent {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -110,8 +109,8 @@ class Option extends React.PureComponent {
 
 }
 
-export default
-@injectIntl
+const Option = injectIntl(OptionIntl);
+
 class PollForm extends ImmutablePureComponent {
 
   static propTypes = {
@@ -175,3 +174,5 @@ class PollForm extends ImmutablePureComponent {
   }
 
 }
+
+export default injectIntl(PollForm);

@@ -335,7 +335,7 @@ export default class Dropdown extends React.PureComponent {
     );
 
     return (
-      <React.Fragment>
+      <>
         {button}
 
         <Overlay show={open} placement={dropdownPlacement} target={this.findTarget}>
@@ -350,7 +350,7 @@ export default class Dropdown extends React.PureComponent {
             onItemClick={this.handleItemClick}
           />
         </Overlay>
-      </React.Fragment>
+      </>
     );
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { injectIntl, defineMessages } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -121,8 +121,7 @@ const timeRemainingString = (intl, date, now, timeGiven = true) => {
   return relativeTime;
 };
 
-export default @injectIntl
-class RelativeTimestamp extends React.Component {
+class RelativeTimestamp extends Component {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
@@ -197,3 +196,5 @@ class RelativeTimestamp extends React.Component {
   }
 
 }
+
+export default injectIntl(RelativeTimestamp);

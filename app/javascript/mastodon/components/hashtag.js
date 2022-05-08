@@ -68,7 +68,7 @@ const Hashtag = ({ name, href, to, people, uses, history, className }) => (
   <div className={classNames('trends__item', className)}>
     <div className='trends__item__name'>
       <Permalink href={href} to={to}>
-        {name ? <React.Fragment>#<span>{name}</span></React.Fragment> : <Skeleton width={50} />}
+        {name ? <>#<span>{name}</span></> : <Skeleton width={50} />}
       </Permalink>
 
       {typeof people !== 'undefined' ? <ShortNumber value={people} renderer={accountsCountRenderer} /> : <Skeleton width={100} />}

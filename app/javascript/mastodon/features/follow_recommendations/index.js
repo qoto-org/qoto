@@ -19,7 +19,6 @@ const mapStateToProps = state => ({
   isLoading: state.getIn(['suggestions', 'isLoading']),
 });
 
-export default @connect(mapStateToProps)
 class FollowRecommendations extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -84,7 +83,7 @@ class FollowRecommendations extends ImmutablePureComponent {
           </div>
 
           {!isLoading && (
-            <React.Fragment>
+            <>
               <div className='column-list'>
                 {suggestions.size > 0 ? suggestions.map(suggestion => (
                   <Account key={suggestion.get('account')} id={suggestion.get('account')} />
@@ -99,7 +98,7 @@ class FollowRecommendations extends ImmutablePureComponent {
                 <img src={imageGreeting} alt='' className='column-actions__background' />
                 <Button onClick={this.handleDone}><FormattedMessage id='follow_recommendations.done' defaultMessage='Done' /></Button>
               </div>
-            </React.Fragment>
+            </>
           )}
         </div>
       </Column>
@@ -107,3 +106,5 @@ class FollowRecommendations extends ImmutablePureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(FollowRecommendations);

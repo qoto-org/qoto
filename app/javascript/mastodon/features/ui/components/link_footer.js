@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -23,9 +23,7 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   },
 });
 
-export default @injectIntl
-@connect(null, mapDispatchToProps)
-class LinkFooter extends React.PureComponent {
+class LinkFooter extends PureComponent {
 
   static propTypes = {
     withHotkeys: PropTypes.bool,
@@ -71,4 +69,6 @@ class LinkFooter extends React.PureComponent {
     );
   }
 
-};
+}
+
+export default injectIntl(connect(null, mapDispatchToProps)(LinkFooter));
