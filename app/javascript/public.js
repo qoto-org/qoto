@@ -1,9 +1,9 @@
-import './public-path';
+import 'mastodon/public-path';
 import escapeTextContentForBrowser from 'escape-html';
-import loadPolyfills from '../mastodon/load_polyfills';
-import ready from '../mastodon/ready';
-import { start } from '../mastodon/common';
-import loadKeyboardExtensions from '../mastodon/load_keyboard_extensions';
+import loadPolyfills from 'mastodon/load_polyfills';
+import ready from 'mastodon/ready';
+import { start } from 'mastodon/common';
+import loadKeyboardExtensions from 'mastodon/load_keyboard_extensions';
 
 start();
 
@@ -25,10 +25,10 @@ window.addEventListener('message', e => {
 
 function main() {
   const IntlMessageFormat = require('intl-messageformat').default;
-  const { timeAgoString } = require('../mastodon/components/relative_timestamp');
+  const { timeAgoString } = require('mastodon/components/relative_timestamp');
   const { delegate } = require('@rails/ujs');
-  const emojify = require('../mastodon/features/emoji/emoji').default;
-  const { getLocale } = require('../mastodon/locales');
+  const emojify = require('mastodon/features/emoji/emoji').default;
+  const { getLocale } = require('mastodon/locales');
   const { messages } = getLocale();
   const React = require('react');
   const ReactDOM = require('react-dom');
@@ -89,7 +89,7 @@ function main() {
     const reactComponents = document.querySelectorAll('[data-component]');
 
     if (reactComponents.length > 0) {
-      import(/* webpackChunkName: "containers/media_container" */ '../mastodon/containers/media_container')
+      import(/* webpackChunkName: "containers/media_container" */ 'mastodon/containers/media_container')
         .then(({ default: MediaContainer }) => {
           [].forEach.call(reactComponents, (component) => {
             [].forEach.call(component.children, (child) => {
