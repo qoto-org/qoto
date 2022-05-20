@@ -23,7 +23,7 @@ class TagsIndex < Chewy::Index
     },
   }
 
-  index_scope ::Tag.listable, delete_if: ->(tag) { tag.destroyed? || !tag.listable? }
+  index_scope ::Tag.listable
 
   root date_detection: false do
     field :name, type: 'text', analyzer: 'content' do
