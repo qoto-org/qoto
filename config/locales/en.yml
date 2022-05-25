@@ -915,7 +915,6 @@ en:
   applications:
     created: Application successfully created
     destroyed: Application successfully deleted
-    invalid_url: The provided URL is invalid
     regenerate_token: Regenerate access token
     token_regenerated: Access token successfully regenerated
     warning: Be very careful with this data. Never share it with anyone!

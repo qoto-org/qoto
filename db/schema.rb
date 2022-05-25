@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_29_101850) do
+ActiveRecord::Schema.define(version: 2022_05_25_191041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,6 +210,15 @@ ActiveRecord::Schema.define(version: 2022_04_29_101850) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_admin_action_logs_on_account_id"
     t.index ["target_type", "target_id"], name: "index_admin_action_logs_on_target_type_and_target_id"
+  end
+
+  create_table "admin_webhooks", force: :cascade do |t|
+    t.string "url", null: false
+    t.string "events", default: [], null: false, array: true
+    t.boolean "enabled", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["url"], name: "index_admin_webhooks_on_url", unique: true
   end
 
   create_table "announcement_mutes", force: :cascade do |t|
@@ -945,6 +954,13 @@ ActiveRecord::Schema.define(version: 2022_04_29_101850) do
     t.index ["uri"], name: "index_tombstones_on_uri"
   end
 
+  create_table "trends_trending_statuses", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.boolean "allowed", default: false, null: false
+    t.float "score", default: 0.0, null: false
+    t.string "language"
+  end
+
   create_table "unavailable_domains", force: :cascade do |t|
     t.string "domain", default: "", null: false
     t.datetime "created_at", null: false
@@ -1170,28 +1186,6 @@ ActiveRecord::Schema.define(version: 2022_04_29_101850) do
   SQL
   add_index "instances", ["domain"], name: "index_instances_on_domain", unique: true
 
-  create_view "user_ips", sql_definition: <<-SQL
-      SELECT t0.user_id,
-      t0.ip,
-      max(t0.used_at) AS used_at
-     FROM ( SELECT users.id AS user_id,
-              users.sign_up_ip AS ip,
-              users.created_at AS used_at
-             FROM users
-            WHERE (users.sign_up_ip IS NOT NULL)
-          UNION ALL
-           SELECT session_activations.user_id,
-              session_activations.ip,
-              session_activations.updated_at
-             FROM session_activations
-          UNION ALL
-           SELECT login_activities.user_id,
-              login_activities.ip,
-              login_activities.created_at
-             FROM login_activities
-            WHERE (login_activities.success = true)) t0
-    GROUP BY t0.user_id, t0.ip;
-  SQL
   create_view "account_summaries", materialized: true, sql_definition: <<-SQL
       SELECT accounts.id AS account_id,
       mode() WITHIN GROUP (ORDER BY t0.language) AS language,
@@ -1239,4 +1233,41 @@ ActiveRecord::Schema.define(version: 2022_04_29_101850) do
   SQL
   add_index "follow_recommendations", ["account_id"], name: "index_follow_recommendations_on_account_id", unique: true
 
+  create_view "user_ips", sql_definition: <<-SQL
+      SELECT t0.user_id,
+      t0.ip,
+      max(t0.used_at) AS used_at
+     FROM ( SELECT users.id AS user_id,
+              users.sign_up_ip AS ip,
+              users.created_at AS used_at
+             FROM users
+            WHERE (users.sign_up_ip IS NOT NULL)
+          UNION ALL
+           SELECT session_activations.user_id,
+              session_activations.ip,
+              session_activations.updated_at
+             FROM session_activations
+          UNION ALL
+           SELECT login_activities.user_id,
+              login_activities.ip,
+              login_activities.created_at
+             FROM login_activities
+            WHERE (login_activities.success = true)) t0
+    GROUP BY t0.user_id, t0.ip;
+  SQL
+  create_view "trends_filtered_trending_statuses", sql_definition: <<-SQL
+      SELECT t0.id,
+      t0.account_id,
+      t0.allowed,
+      t0.score,
+      t0.language
+     FROM ( SELECT DISTINCT ON (trends_trending_statuses.account_id) trends_trending_statuses.id,
+              trends_trending_statuses.account_id,
+              trends_trending_statuses.allowed,
+              trends_trending_statuses.score,
+              trends_trending_statuses.language
+             FROM trends_trending_statuses
+            ORDER BY trends_trending_statuses.account_id, trends_trending_statuses.score DESC) t0
+    ORDER BY t0.score DESC;
+  SQL
 end
