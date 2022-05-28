@@ -133,4 +133,51 @@ namespace :repo do
       puts pastel.green('OK')
     end
   end
+
+  task generate_mailer_assets: :environment do
+    rsvg_convert = Terrapin::CommandLine.new('rsvg-convert', '-w :w -h :h :input -o :output')
+    output_dest  = Rails.root.join('app', 'javascript', 'images', 'mailer')
+
+    # Displayed size is 64px, at 3x it's 192px
+    Dir[Rails.root.join('app', 'javascript', 'images', 'icons', '*.svg')].each do |path|
+      rsvg_convert.run(input: path, w: 192, h: 192, output: output_dest.join("#{File.basename(path, '.svg')}.png"))
+    end
+
+    # Displayed size is 34px, at 3x it's 102px
+    rsvg_convert.run(input: Rails.root.join('app', 'javascript', 'images', 'logo-symbol-wordmark.svg'), w: (102 * (261.0/66)).ceil, h: 102, output: output_dest.join("wordmark.png"))
+
+    # Displayed size is 24px, at 3x it's 72px
+    rsvg_convert.run(input: Rails.root.join('app', 'javascript', 'images', 'logo-symbol-icon.svg'), w: (72 * (61.0/65)).ceil, h: 72, output: output_dest.join("logo.png"))
+  end
+
+  task generate_app_icons: :environment do
+    favicon_source  = Rails.root.join('app', 'javascript', 'images', 'logo.svg')
+    app_icon_source = Rails.root.join('app', 'javascript', 'images', 'app-icon.svg')
+    output_dest     = Rails.root.join('app', 'javascript', 'icons')
+
+    rsvg_convert = Terrapin::CommandLine.new('rsvg-convert', '-w :size -h :size :input -o :output')
+    convert = Terrapin::CommandLine.new('convert', ':input :output')
+
+    favicon_sizes      = [16, 32, 48]
+    apple_icon_sizes   = [57, 60, 72, 76, 114, 120, 144, 152, 167, 180, 1024]
+    android_icon_sizes = [36, 48, 72, 96, 144, 192, 256, 384, 512]
+
+    favicons = []
+
+    favicon_sizes.each do |size|
+      output_path = output_dest.join("favicon-#{size}x#{size}.png")
+      favicons << output_path
+      rsvg_convert.run(size: size, input: favicon_source, output: output_path)
+    end
+
+    convert.run(input: favicons, output: Rails.root.join('public', 'favicon.ico'))
+
+    apple_icon_sizes.each do |size|
+      rsvg_convert.run(size: size, input: app_icon_source, output: output_dest.join("apple-touch-icon-#{size}x#{size}.png"))
+    end
+
+    android_icon_sizes.each do |size|
+      rsvg_convert.run(size: size, input: app_icon_source, output: output_dest.join("android-chrome-#{size}x#{size}.png"))
+    end
+  end
 end
