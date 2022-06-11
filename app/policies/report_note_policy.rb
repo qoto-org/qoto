@@ -2,11 +2,11 @@
 
 class ReportNotePolicy < ApplicationPolicy
   def create?
-    staff?
+    role.can?(:manage_reports)
   end
 
   def destroy?
-    admin? || owner?
+    owner?
   end
 
   private

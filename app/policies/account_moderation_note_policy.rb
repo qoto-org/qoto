@@ -2,11 +2,11 @@
 
 class AccountModerationNotePolicy < ApplicationPolicy
   def create?
-    staff?
+    can?(:manage_reports)
   end
 
   def destroy?
-    admin? || owner?
+    owner?
   end
 
   private

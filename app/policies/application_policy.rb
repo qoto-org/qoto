@@ -19,4 +19,8 @@ class ApplicationPolicy
   def user_signed_in?
     !current_user.nil?
   end
+
+  def role
+    current_user&.role || UserRole.nil_role
+  end
 end

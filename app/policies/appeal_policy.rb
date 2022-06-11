@@ -2,11 +2,11 @@
 
 class AppealPolicy < ApplicationPolicy
   def index?
-    staff?
+    role.can?(:manage_appeals)
   end
 
   def approve?
-    record.pending? && staff?
+    record.pending? && role.can?(:manage_appeals)
   end
 
   alias reject? approve?

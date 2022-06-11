@@ -2,11 +2,11 @@
 
 class AccountPolicy < ApplicationPolicy
   def index?
-    staff?
+    role.can?(:manage_accounts)
   end
 
   def show?
-    staff?
+    role.can?(:manage_accounts)
   end
 
   def warn?

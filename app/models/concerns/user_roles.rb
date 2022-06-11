@@ -27,16 +27,6 @@ module UserRoles
     end
   end
 
-  def role
-    if admin?
-      'admin'
-    elsif moderator?
-      'moderator'
-    else
-      'user'
-    end
-  end
-
   def role?(role)
     case role
     when 'user'

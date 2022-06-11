@@ -37,6 +37,7 @@
 #  sign_in_token_sent_at     :datetime
 #  webauthn_id               :string
 #  sign_up_ip                :inet
+#  role_id                   :bigint(8)
 #
 
 class User < ApplicationRecord
@@ -79,6 +80,7 @@ class User < ApplicationRecord
   belongs_to :account, inverse_of: :user
   belongs_to :invite, counter_cache: :uses, optional: true
   belongs_to :created_by_application, class_name: 'Doorkeeper::Application', optional: true
+  belongs_to :role, class_name: 'UserRole', optional: true
   accepts_nested_attributes_for :account
 
   has_many :applications, class_name: 'Doorkeeper::Application', as: :owner
@@ -134,6 +136,8 @@ class User < ApplicationRecord
            :advanced_layout, :use_blurhash, :use_pending_items, :trends, :crop_images,
            :disable_swiping, :always_send_emails,
            to: :settings, prefix: :setting, allow_nil: false
+
+  delegate :can?, to: :role, allow_nil: true
 
   attr_reader :invite_code
   attr_writer :external, :bypass_invite_request_check
