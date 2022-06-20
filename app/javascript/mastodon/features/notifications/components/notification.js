@@ -21,6 +21,7 @@ const messages = defineMessages({
   status: { id: 'notification.status', defaultMessage: '{name} just posted' },
   update: { id: 'notification.update', defaultMessage: '{name} edited a post' },
   adminSignUp: { id: 'notification.admin.sign_up', defaultMessage: '{name} signed up' },
+  adminReport: { id: 'notification.admin.report', defaultMessage: '{name} reported {target}' },
 });
 
 const notificationForScreenReader = (intl, message, timestamp) => {
@@ -367,6 +368,32 @@ class Notification extends ImmutablePureComponent {
     );
   }
 
+  renderAdminReport (notification, account, link) {
+    const { intl, unread, report } = this.props;
+
+    const targetAccount = report.get('target_account');
+    const targetDisplayNameHtml = { __html: targetAccount.get('display_name_html') };
+    const targetLink = <bdi><Permalink className='notification__display-name' href={targetAccount.get('url')} title={targetAccount.get('acct')} to={`/@${targetAccount.get('acct')}`} dangerouslySetInnerHTML={targetDisplayNameHtml} /></bdi>;
+
+    return (
+      <HotKeys handlers={this.getHandlers()}>
+        <div className={classNames('notification notification-admin-report focusable', { unread })} tabIndex='0' aria-label={notificationForScreenReader(intl, intl.formatMessage(messages.adminReport, { name: account.get('acct'), target: notification.getIn(['report', 'target_account', 'acct']) }), notification.get('created_at'))}>
+          <div className='notification__message'>
+            <div className='notification__favourite-icon-wrapper'>
+              <Icon id='flag' fixedWidth />
+            </div>
+
+            <span title={notification.get('created_at')}>
+              <FormattedMessage id='notification.admin.report' defaultMessage='{name} reported {target}' values={{ name: link, target: targetLink }} />
+            </span>
+          </div>
+
+          <AccountContainer id={targetAccount.get('id')} hidden={this.props.hidden} />
+        </div>
+      </HotKeys>
+    );
+  }
+
   render () {
     const { notification } = this.props;
     const account          = notification.get('account');
@@ -392,6 +419,8 @@ class Notification extends ImmutablePureComponent {
       return this.renderPoll(notification, account);
     case 'admin.sign_up':
       return this.renderAdminSignUp(notification, account, link);
+    case 'admin.report':
+      return this.renderAdminReport(notification, account, link);
     }
 
     return null;
