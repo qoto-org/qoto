@@ -7,7 +7,7 @@ class InitialStateSerializer < ActiveModel::Serializer
 
   has_one :push_subscription, serializer: REST::WebPushSubscriptionSerializer
 
-  def meta
+  def meta # rubocop:disable Metrics/AbcSize
     store = {
       streaming_api_base_url: Rails.configuration.x.streaming_api_base_url,
       access_token: object.token,

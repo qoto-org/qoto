@@ -106,7 +106,7 @@ module Mastodon
         user.errors.to_h.each do |key, error|
           say('Failure/Error: ', :red)
           say(key)
-          say('    ' + error, :red)
+          say("    #{error}", :red)
         end
 
         exit(1)
@@ -172,7 +172,7 @@ module Mastodon
         user.errors.to_h.each do |key, error|
           say('Failure/Error: ', :red)
           say(key)
-          say('    ' + error, :red)
+          say("    #{error}", :red)
         end
 
         exit(1)
@@ -319,7 +319,7 @@ module Mastodon
 
       unless skip_domains.empty?
         say('The following domains were not available during the check:', :yellow)
-        skip_domains.each { |domain| say('    ' + domain) }
+        skip_domains.each { |domain| say("    #{domain}") }
       end
     end
 
