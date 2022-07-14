@@ -530,6 +530,13 @@ Rails.application.routes.draw do
         resource :note, only: :create, controller: 'accounts/notes'
       end
 
+      resources :tags, only: [:show] do
+        member do
+          post :follow
+          post :unfollow
+        end
+      end
+
       resources :lists, only: [:index, :create, :show, :update, :destroy] do
         resource :accounts, only: [:show, :create, :destroy], controller: 'lists/accounts'
       end

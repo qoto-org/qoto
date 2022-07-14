@@ -45,6 +45,8 @@ class FeedManager
       filter_from_list?(status, receiver) || filter_from_home?(status, receiver.account_id, build_crutches(receiver.account_id, [status]))
     when :mentions
       filter_from_mentions?(status, receiver.id)
+    when :tags
+      filter_from_tags?(status, receiver.id, build_crutches(receiver.id, [status]))
     else
       false
     end
@@ -414,6 +416,16 @@ class FeedManager
     end
 
     false
+  end
+
+  # Check if a status should not be added to the home feed when it comes
+  # from a followed hashtag
+  # @param [Status] status
+  # @param [Integer] receiver_id
+  # @param [Hash] crutches
+  # @return [Boolean]
+  def filter_from_tags?(status, receiver_id, crutches)
+    receiver_id != status.account_id && (((crutches[:active_mentions][status.id] || []) + [status.account_id]).any? { |target_account_id| crutches[:blocking][target_account_id] || crutches[:muting][target_account_id] } || crutches[:blocked_by][status.account_id] || crutches[:domain_blocking][status.account.domain])
   end
 
   # Adds a status to an account's feed, returning true if a status was
