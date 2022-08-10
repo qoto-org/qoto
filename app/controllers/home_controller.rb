@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
-  before_action :redirect_unauthenticated_to_permalinks!
-  before_action :authenticate_user!
+  # before_action :redirect_unauthenticated_to_permalinks!
   before_action :set_referrer_policy_header
 
   def index
