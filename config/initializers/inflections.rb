@@ -25,6 +25,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'REST'
   inflect.acronym 'URL'
   inflect.acronym 'ASCII'
+  inflect.acronym 'IPs'
 
   inflect.singular 'data', 'data'
 end

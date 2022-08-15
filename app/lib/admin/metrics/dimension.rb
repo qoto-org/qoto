@@ -11,6 +11,8 @@ class Admin::Metrics::Dimension
     tag_languages: Admin::Metrics::Dimension::TagLanguagesDimension,
     instance_accounts: Admin::Metrics::Dimension::InstanceAccountsDimension,
     instance_languages: Admin::Metrics::Dimension::InstanceLanguagesDimension,
+    ips: Admin::Metrics::Dimension::IPsDimension,
+    email_domains: Admin::Metrics::Dimension::EmailDomainsDimension,
   }.freeze
 
   def self.retrieve(dimension_keys, start_at, end_at, limit, params)

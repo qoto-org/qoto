@@ -189,6 +189,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/dashboard', to: 'dashboard#index'
+    get '/abuse_metrics', to: 'abuse_metrics#index'
 
     resources :domain_allows, only: [:new, :create, :show, :destroy]
     resources :domain_blocks, only: [:new, :create, :destroy, :update, :edit]
